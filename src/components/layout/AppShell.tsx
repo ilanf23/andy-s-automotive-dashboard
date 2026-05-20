@@ -20,7 +20,14 @@ import {
 } from "lucide-react";
 import clsx from "clsx";
 
-const navItems = [
+type NavItem = {
+  to: string;
+  label: string;
+  icon: typeof LayoutDashboard;
+  exact?: boolean;
+};
+
+const navItems: NavItem[] = [
   { to: "/", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { to: "/repair-orders", label: "Repair Orders", icon: Wrench },
   { to: "/inspections", label: "Inspections", icon: ClipboardCheck },
@@ -34,7 +41,7 @@ const navItems = [
   { to: "/fleet-integrations", label: "Fleet Integrations", icon: Truck },
   { to: "/my-work", label: "My Work", icon: ListChecks },
   { to: "/settings", label: "Settings", icon: Settings },
-] as const satisfies ReadonlyArray<{ to: string; label: string; icon: typeof LayoutDashboard; exact?: boolean }>;
+];
 
 export function AppShell() {
   const [collapsed, setCollapsed] = useState(false);
