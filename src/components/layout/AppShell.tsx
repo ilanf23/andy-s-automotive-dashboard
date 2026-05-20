@@ -34,7 +34,7 @@ const navItems = [
   { to: "/fleet-integrations", label: "Fleet Integrations", icon: Truck },
   { to: "/my-work", label: "My Work", icon: ListChecks },
   { to: "/settings", label: "Settings", icon: Settings },
-] as const;
+] as const satisfies ReadonlyArray<{ to: string; label: string; icon: typeof LayoutDashboard; exact?: boolean }>;
 
 export function AppShell() {
   const [collapsed, setCollapsed] = useState(false);
