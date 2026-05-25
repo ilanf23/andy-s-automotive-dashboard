@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ClipboardCheck,
   Wrench,
@@ -13,6 +13,7 @@ import {
   Square,
 } from "lucide-react";
 import clsx from "clsx";
+import { toast } from "sonner";
 import { PageShell } from "@/components/shop/PageShell";
 import { TabStrip } from "@/components/shop/TabStrip";
 import { StatusBadge } from "@/components/shop/StatusBadge";
@@ -20,6 +21,16 @@ import { repairOrders } from "@/data/repairOrders";
 import { customers } from "@/data/customers";
 import { vehicles } from "@/data/vehicles";
 import { usd } from "@/lib/format";
+
+type ROState = "assigned" | "in-progress" | "paused" | "done";
+type ClockEntry = { type: string; at: Date };
+
+function formatTimer(seconds: number) {
+  const h = Math.floor(seconds / 3600);
+  const m = Math.floor((seconds % 3600) / 60);
+  const s = seconds % 60;
+  return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+}
 
 export const Route = createFileRoute("/my-work")({
   component: MyWorkPage,
@@ -34,6 +45,37 @@ function MyWorkPage() {
   const [clockState, setClockState] = useState<"clocked-in" | "on-break" | "clocked-out">(
     "clocked-in",
   );
+  const [roStates, setRoStates] = useState<Record<string, ROState>>({});
+  const [entries, setEntries] = useState<ClockEntry[]>([]);
+  // Header clock pill timer — counts up while clocked-in. Seed at ~04:38:12 to match prior literal.
+  const [seconds, setSeconds] = useState<number>(4 * 3600 + 38 * 60 + 12);
+
+  useEffect(() => {
+    if (clockState !== "clocked-in") return;
+    const id = setInterval(() => setSeconds((s) => s + 1), 1000);
+    return () => clearInterval(id);
+  }, [clockState]);
+
+  const setROState = (id: string, s: ROState) => {
+    setRoStates((prev) => ({ ...prev, [id]: s }));
+  };
+
+  const handleClockChange = (s: "clocked-in" | "on-break" | "clocked-out") => {
+    const labelMap: Record<typeof s, string> = {
+      "clocked-in": "clock-in",
+      "on-break": "break-start",
+      "clocked-out": "clock-out",
+    } as const;
+    setEntries((prev) => [...prev, { type: labelMap[s], at: new Date() }]);
+    setClockState(s);
+    if (s === "clocked-in") {
+      toast.success("Clocked in");
+    } else if (s === "on-break") {
+      toast.info("On break");
+    } else {
+      toast.success("Clocked out · today's hours: 8h 14m");
+    }
+  };
 
   const myROs = repairOrders.filter((r) => r.technicianId === ME);
   const inProgress = myROs.filter((r) => r.status === "in-progress");
@@ -82,7 +124,7 @@ function MyWorkPage() {
             )}
           />
           <span className="font-semibold capitalize">{clockState.replace("-", " ")}</span>
-          <span className="tabular-nums">· 04:38:12</span>
+          <span className="tabular-nums">· {formatTimer(seconds)}</span>
         </div>
       }
     >
@@ -100,7 +142,8 @@ function MyWorkPage() {
         {tab === "time-clock" ? (
           <TimeClockPanel
             state={clockState}
-            onChange={(s) => setClockState(s)}
+            onChange={handleClockChange}
+            entries={entries}
           />
         ) : (
           <div className="divide-y divide-border">
@@ -123,6 +166,19 @@ function MyWorkPage() {
                     description={r.description}
                     daysInShop={r.daysInShop}
                     active={tab === "in-progress"}
+                    roState={roStates[r.id]}
+                    onStart={() => {
+                      setROState(r.id, "in-progress");
+                      toast.success(`Started RO #${r.id}`);
+                    }}
+                    onPause={() => {
+                      setROState(r.id, "paused");
+                      toast.info(`Paused RO #${r.id}`);
+                    }}
+                    onDone={() => {
+                      setROState(r.id, "done");
+                      toast.success(`Completed RO #${r.id}`);
+                    }}
                   />
                 );
               })
@@ -143,6 +199,10 @@ function ROCard({
   description,
   daysInShop,
   active,
+  roState,
+  onStart,
+  onPause,
+  onDone,
 }: {
   roId: string;
   customer: string;
@@ -152,9 +212,19 @@ function ROCard({
   description: string;
   daysInShop: number;
   active: boolean;
+  roState?: ROState;
+  onStart: () => void;
+  onPause: () => void;
+  onDone: () => void;
 }) {
+  const isDone = roState === "done";
   return (
-    <div className="px-5 py-4 transition-colors hover:bg-surface/40">
+    <div
+      className={clsx(
+        "px-5 py-4 transition-colors hover:bg-surface/40",
+        isDone && "opacity-60",
+      )}
+    >
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-start gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-md bg-surface">
@@ -165,11 +235,19 @@ function ROCard({
               <Link
                 to="/repair-orders/$id"
                 params={{ id: roId }}
-                className="text-sm font-semibold hover:underline"
+                className={clsx(
+                  "text-sm font-semibold hover:underline",
+                  isDone && "line-through",
+                )}
               >
                 RO #{roId}
               </Link>
               <StatusBadge status={status} />
+              {roState && (
+                <span className="rounded-full bg-surface px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-muted-foreground">
+                  {roState}
+                </span>
+              )}
               {daysInShop >= 3 && (
                 <span className="inline-flex items-center gap-1 rounded-full bg-destructive/10 px-2 py-0.5 text-[10px] font-semibold text-destructive">
                   <Clock className="h-2.5 w-2.5" />
@@ -188,6 +266,7 @@ function ROCard({
           {active ? (
             <div className="flex items-center gap-1">
               <button
+                onClick={onPause}
                 className="inline-flex items-center gap-1 rounded-md border border-border bg-background px-2 py-1 text-[10px] font-medium hover:bg-surface"
                 title="Pause"
               >
@@ -195,6 +274,7 @@ function ROCard({
                 Pause
               </button>
               <button
+                onClick={onDone}
                 className="inline-flex items-center gap-1 rounded-md bg-success px-2 py-1 text-[10px] font-semibold text-success-foreground hover:opacity-90"
                 title="Complete"
               >
@@ -203,7 +283,10 @@ function ROCard({
               </button>
             </div>
           ) : (
-            <button className="inline-flex items-center gap-1 rounded-md bg-foreground px-2 py-1 text-[10px] font-semibold text-background hover:opacity-90">
+            <button
+              onClick={onStart}
+              className="inline-flex items-center gap-1 rounded-md bg-foreground px-2 py-1 text-[10px] font-semibold text-background hover:opacity-90"
+            >
               <Play className="h-3 w-3" />
               Start
             </button>
@@ -217,24 +300,33 @@ function ROCard({
 function TimeClockPanel({
   state,
   onChange,
+  entries,
 }: {
   state: "clocked-in" | "on-break" | "clocked-out";
   onChange: (s: "clocked-in" | "on-break" | "clocked-out") => void;
+  entries: ClockEntry[];
 }) {
-  const entries = [
-    { id: "1", type: "Clock In", time: "08:14 AM", duration: "" },
-    { id: "2", type: "RO #4847 — Started", time: "08:22 AM", duration: "2h 18m" },
-    { id: "3", type: "Break", time: "10:40 AM", duration: "12m" },
-    { id: "4", type: "RO #4847 — Resumed", time: "10:52 AM", duration: "1h 06m" },
-    { id: "5", type: "Lunch", time: "11:58 AM", duration: "32m" },
-    { id: "6", type: "RO #4842 — Started", time: "12:30 PM", duration: "Current" },
+  const seed = [
+    { id: "s1", type: "Clock In", time: "08:14 AM", duration: "" },
+    { id: "s2", type: "RO #4847 — Started", time: "08:22 AM", duration: "2h 18m" },
+    { id: "s3", type: "Break", time: "10:40 AM", duration: "12m" },
+    { id: "s4", type: "RO #4847 — Resumed", time: "10:52 AM", duration: "1h 06m" },
+    { id: "s5", type: "Lunch", time: "11:58 AM", duration: "32m" },
+    { id: "s6", type: "RO #4842 — Started", time: "12:30 PM", duration: "Current" },
   ];
+  const userEntries = entries.map((e, i) => ({
+    id: `u${i}`,
+    type: e.type,
+    time: e.at.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+    duration: "",
+  }));
+  const allEntries = [...seed, ...userEntries];
   return (
     <div className="grid grid-cols-1 gap-4 p-5 md:grid-cols-[1fr_320px]">
       <div className="space-y-3">
         <h3 className="text-xs font-semibold uppercase tracking-wider">Today's Time</h3>
         <ul className="space-y-1.5">
-          {entries.map((e) => (
+          {allEntries.map((e) => (
             <li
               key={e.id}
               className="flex items-center justify-between gap-3 rounded-md border border-border bg-background px-3 py-2 text-xs"

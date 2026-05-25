@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, Outlet, useRouterState } from "@tanstack/react-router";
 import {
   LayoutDashboard,
@@ -25,13 +25,35 @@ import {
   Plus,
   ScanLine,
   Sparkles,
+  Sun,
+  Moon,
+  Check,
 } from "lucide-react";
 import clsx from "clsx";
 import { useNavigate } from "@tanstack/react-router";
+import { toast } from "sonner";
 import { useModals } from "@/components/ui/ModalProvider";
 import { AICopilotBar } from "@/components/ai/AICopilotBar";
 import { TopNavSearch } from "@/components/layout/TopNavSearch";
 import { useAuth } from "@/lib/auth-context";
+
+type MockNotification = {
+  id: string;
+  title: string;
+  time: string;
+};
+
+const MOCK_NOTIFICATIONS: MockNotification[] = [
+  { id: "n1", title: "RO #4847 awaiting customer approval", time: "3m ago" },
+  { id: "n2", title: "Northpoint Logistics payment overdue · 32 days", time: "1h ago" },
+  { id: "n3", title: "Marcus completed inspection on MT-47", time: "2h ago" },
+  { id: "n4", title: "New parts received — WorldPac PO #88421", time: "4h ago" },
+];
+
+const MOCK_SHOPS = [
+  "Andy's Automotive — Heavy Duty",
+  "Andy's Automotive — South Bay",
+];
 
 type NavItem = {
   to: string;
@@ -116,10 +138,80 @@ export function AppShell() {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
 
+  // Topbar interactive state
+  const [notifOpen, setNotifOpen] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(4);
+  const [profileOpen, setProfileOpen] = useState(false);
+  const [shopOpen, setShopOpen] = useState(false);
+  const [selectedShop, setSelectedShop] = useState(MOCK_SHOPS[0]);
+  const [theme, setTheme] = useState<"light" | "dark">("light");
+
+  const notifRef = useRef<HTMLDivElement>(null);
+  const profileRef = useRef<HTMLDivElement>(null);
+  const shopRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      const target = e.target as Node;
+      if (notifRef.current && !notifRef.current.contains(target)) {
+        setNotifOpen(false);
+      }
+      if (profileRef.current && !profileRef.current.contains(target)) {
+        setProfileOpen(false);
+      }
+      if (shopRef.current && !shopRef.current.contains(target)) {
+        setShopOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
   const handleSignOut = () => {
-    signOut();
+    if (typeof signOut === "function") {
+      signOut();
+    }
     navigate({ to: "/" });
+    toast.success("Signed out");
   };
+
+  const handleProfileSignOut = () => {
+    setProfileOpen(false);
+    handleSignOut();
+  };
+
+  const handleHelp = () => {
+    toast.info("Help & Support", {
+      description: "Live chat with our team — coming soon",
+    });
+  };
+
+  const handleToggleTheme = () => {
+    const next = theme === "light" ? "dark" : "light";
+    setTheme(next);
+    document.documentElement.dataset.theme = next;
+    document.documentElement.classList.toggle("dark", next === "dark");
+    toast.success(`Switched to ${next} mode`);
+  };
+
+  const handleSelectShop = (name: string) => {
+    setSelectedShop(name);
+    setShopOpen(false);
+    toast.success(`Switched to ${name}`);
+  };
+
+  const handleNotificationClick = () => {
+    setNotifOpen(false);
+    toast.info("Opening notification…");
+  };
+
+  const handleMarkAllRead = () => {
+    setUnreadCount(0);
+    setNotifOpen(false);
+  };
+
+  // Parse selected shop into brand + suffix for display
+  const shopSuffix = selectedShop.split(" — ")[1] ?? "";
 
   // Derive display name + initials from authenticated user, with sensible fallback
   const displayName = user?.name ?? "Cameron Mills";
@@ -157,7 +249,7 @@ export function AppShell() {
       {/* ==================================================================== */}
       <aside
         className={clsx(
-          "fixed top-0 z-40 flex h-screen flex-col bg-foreground text-background transition-all duration-200 md:sticky md:z-auto md:shrink-0 md:self-start",
+          "fixed top-0 z-40 flex h-screen flex-col bg-[#0a0a0a] text-white transition-all duration-200 md:sticky md:z-auto md:shrink-0 md:self-start",
           collapsed ? "md:w-[68px]" : "md:w-[232px]",
           mobileOpen
             ? "w-[232px] translate-x-0"
@@ -167,28 +259,79 @@ export function AppShell() {
         {/* Brand / Shop selector */}
         <div
           className={clsx(
-            "flex h-14 items-center gap-2.5 border-b border-white/10 px-3",
-            collapsed && "md:justify-center md:px-2",
+            "relative flex items-center gap-2 border-b border-white/10",
+            collapsed
+              ? "h-14 justify-center px-2"
+              : "h-14 px-3",
           )}
+          ref={shopRef}
         >
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-accent text-sm font-bold text-accent-foreground">
-            A
-          </div>
-          {!collapsed && (
-            <button
-              type="button"
-              className="group flex min-w-0 flex-1 items-center justify-between rounded-md px-1.5 py-1 text-left transition-colors hover:bg-white/10"
+          {collapsed ? (
+            <Link
+              to="/dashboard"
+              aria-label="Andy's Automotive & Truck Services"
+              className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-md bg-black"
+              title={selectedShop}
             >
-              <div className="min-w-0">
-                <div className="truncate text-[13px] font-semibold leading-tight">
-                  Andy's Automotive
+              <img
+                src="/andys-logo.png"
+                alt=""
+                className="h-9 w-auto max-w-none object-cover object-left"
+                style={{ clipPath: "inset(0 60% 0 0)" }}
+              />
+            </Link>
+          ) : (
+            <>
+              <Link
+                to="/dashboard"
+                aria-label="Andy's Automotive & Truck Services"
+                className="flex shrink-0 items-center"
+              >
+                <img
+                  src="/andys-logo.png"
+                  alt="Andy's Automotive & Truck Services"
+                  className="h-9 w-auto object-contain"
+                />
+              </Link>
+              <button
+                type="button"
+                onClick={() => setShopOpen((v) => !v)}
+                aria-expanded={shopOpen}
+                title={selectedShop}
+                className="group ml-auto flex min-w-0 shrink items-center gap-1 rounded-md px-1.5 py-1 text-left transition-colors hover:bg-white/10"
+              >
+                <span className="truncate text-[10px] font-semibold uppercase tracking-wide text-white/55">
+                  {shopSuffix || "Shop"}
+                </span>
+                <ChevronsRight className="h-3 w-3 shrink-0 text-white/40 transition-transform group-hover:text-white/80" />
+              </button>
+              {shopOpen && (
+                <div className="absolute left-2 right-2 top-full z-50 mt-1 overflow-hidden rounded-md border border-border bg-background text-foreground shadow-lg">
+                  <div className="border-b border-border px-3 py-2 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
+                    Switch shop
+                  </div>
+                  <ul className="py-1">
+                    {MOCK_SHOPS.map((shop) => {
+                      const isSelected = shop === selectedShop;
+                      return (
+                        <li key={shop}>
+                          <button
+                            type="button"
+                            onClick={() => handleSelectShop(shop)}
+                            className="flex w-full items-center justify-between gap-2 px-3 py-2 text-left text-[12px] hover:bg-surface"
+                          >
+                            <span className="truncate">{shop}</span>
+                            {isSelected && (
+                              <Check className="h-3.5 w-3.5 shrink-0 text-accent" />
+                            )}
+                          </button>
+                        </li>
+                      );
+                    })}
+                  </ul>
                 </div>
-                <div className="truncate text-[10px] leading-tight text-white/50">
-                  Heavy Duty Shop
-                </div>
-              </div>
-              <ChevronsRight className="h-3.5 w-3.5 shrink-0 text-white/40 transition-transform group-hover:text-white/80" />
-            </button>
+              )}
+            </>
           )}
         </div>
 
@@ -348,6 +491,7 @@ export function AppShell() {
               <div className="flex items-center justify-between gap-1 border-t border-white/10 px-2 py-1.5">
                 <button
                   type="button"
+                  onClick={handleHelp}
                   title="Help & Support"
                   className="inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-[11px] font-medium text-white/55 transition-colors hover:bg-white/10 hover:text-white"
                 >
@@ -378,6 +522,7 @@ export function AppShell() {
               </button>
               <button
                 type="button"
+                onClick={handleHelp}
                 title="Help & Support"
                 className="flex h-8 w-8 items-center justify-center rounded-md text-white/55 transition-colors hover:bg-white/10 hover:text-white"
               >
@@ -422,22 +567,144 @@ export function AppShell() {
 
           <div className="ml-auto flex items-center gap-3">
             <button
-              className="relative rounded-md p-2 hover:bg-surface"
-              aria-label="Notifications"
+              type="button"
+              onClick={handleToggleTheme}
+              aria-label="Toggle theme"
+              title={theme === "light" ? "Switch to dark mode" : "Switch to light mode"}
+              className="rounded-md p-2 hover:bg-surface"
             >
-              <Bell className="h-5 w-5" />
-              <span className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-destructive" />
+              {theme === "light" ? (
+                <Moon className="h-5 w-5" />
+              ) : (
+                <Sun className="h-5 w-5" />
+              )}
             </button>
-            <div className="flex items-center gap-2 rounded-full border border-border bg-surface py-1 pl-1 pr-3">
-              <div className="flex h-7 w-7 items-center justify-center rounded-full bg-foreground text-xs font-semibold text-background">
-                CM
-              </div>
-              <div className="hidden text-left sm:block">
-                <div className="text-xs font-semibold leading-tight">Cameron</div>
-                <div className="text-[10px] leading-tight text-muted-foreground">
-                  Service Advisor
+
+            <div className="relative" ref={notifRef}>
+              <button
+                type="button"
+                onClick={() => setNotifOpen((v) => !v)}
+                className="relative rounded-md p-2 hover:bg-surface"
+                aria-label="Notifications"
+                aria-expanded={notifOpen}
+              >
+                <Bell className="h-5 w-5" />
+                {unreadCount > 0 && (
+                  <span className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-destructive" />
+                )}
+              </button>
+              {notifOpen && (
+                <div className="absolute right-0 top-full z-50 mt-2 w-80 overflow-hidden rounded-md border border-border bg-background text-foreground shadow-lg">
+                  <div className="flex items-center justify-between border-b border-border px-3 py-2">
+                    <div className="text-[12px] font-semibold">Notifications</div>
+                    <div className="text-[10px] text-muted-foreground">
+                      {unreadCount > 0 ? `${unreadCount} unread` : "All caught up"}
+                    </div>
+                  </div>
+                  <ul className="max-h-80 overflow-y-auto">
+                    {MOCK_NOTIFICATIONS.map((n) => (
+                      <li key={n.id}>
+                        <button
+                          type="button"
+                          onClick={handleNotificationClick}
+                          className="flex w-full items-start justify-between gap-3 border-b border-border/60 px-3 py-2.5 text-left transition-colors last:border-b-0 hover:bg-surface"
+                        >
+                          <span className="text-[12px] leading-snug">{n.title}</span>
+                          <span className="shrink-0 text-[10px] text-muted-foreground">
+                            {n.time}
+                          </span>
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="border-t border-border p-2">
+                    <button
+                      type="button"
+                      onClick={handleMarkAllRead}
+                      className="w-full rounded-md px-2 py-1.5 text-[11px] font-semibold text-muted-foreground transition-colors hover:bg-surface hover:text-foreground"
+                    >
+                      Mark all read
+                    </button>
+                  </div>
                 </div>
-              </div>
+              )}
+            </div>
+
+            <div className="relative" ref={profileRef}>
+              <button
+                type="button"
+                onClick={() => setProfileOpen((v) => !v)}
+                aria-expanded={profileOpen}
+                aria-label="Open profile menu"
+                className="flex items-center gap-2 rounded-full border border-border bg-surface py-1 pl-1 pr-3 transition-colors hover:bg-background"
+              >
+                <div className="flex h-7 w-7 items-center justify-center rounded-full bg-white text-xs font-semibold text-[#0a0a0a]">
+                  CM
+                </div>
+                <div className="hidden text-left sm:block">
+                  <div className="text-xs font-semibold leading-tight">Cameron</div>
+                  <div className="text-[10px] leading-tight text-muted-foreground">
+                    Service Advisor
+                  </div>
+                </div>
+              </button>
+              {profileOpen && (
+                <div className="absolute right-0 top-full z-50 mt-2 w-56 overflow-hidden rounded-md border border-border bg-background text-foreground shadow-lg">
+                  <ul className="py-1">
+                    <li>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setProfileOpen(false);
+                          toast.info("Profile", { description: "Coming soon" });
+                        }}
+                        className="w-full px-3 py-2 text-left text-[12px] hover:bg-surface"
+                      >
+                        Profile
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setProfileOpen(false);
+                          toast.info("Switch role", {
+                            description:
+                              "Service Advisor / Tech / Owner — coming soon",
+                          });
+                        }}
+                        className="w-full px-3 py-2 text-left text-[12px] hover:bg-surface"
+                      >
+                        Switch role
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setProfileOpen(false);
+                          navigate({ to: "/settings" });
+                        }}
+                        className="w-full px-3 py-2 text-left text-[12px] hover:bg-surface"
+                      >
+                        Settings
+                      </button>
+                    </li>
+                  </ul>
+                  <div className="border-t border-border" />
+                  <ul className="py-1">
+                    <li>
+                      <button
+                        type="button"
+                        onClick={handleProfileSignOut}
+                        className="w-full px-3 py-2 text-left text-[12px] text-destructive hover:bg-surface"
+                      >
+                        Sign out
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              )}
             </div>
           </div>
         </header>

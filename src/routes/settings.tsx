@@ -1,5 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useRef, useState } from "react";
 import {
   Settings as SettingsIcon,
   Building2,
@@ -11,13 +11,20 @@ import {
   Plug,
   CreditCard,
   Shield,
-  Printer,
-  Smartphone,
   Save,
   ChevronRight,
+  Plus,
+  Upload,
+  Eye,
+  EyeOff,
+  Copy,
+  RefreshCw,
+  Download,
 } from "lucide-react";
 import clsx from "clsx";
+import { toast } from "sonner";
 import { PageShell } from "@/components/shop/PageShell";
+import { Modal } from "@/components/ui/Modal";
 
 export const Route = createFileRoute("/settings")({
   component: SettingsPage,
@@ -145,7 +152,11 @@ function Panel({
           <h2 className="text-sm font-semibold">{title}</h2>
           <p className="mt-0.5 text-[11px] text-muted-foreground">{description}</p>
         </div>
-        <button className="inline-flex items-center gap-1.5 rounded-md bg-foreground px-3 py-1.5 text-[11px] font-semibold text-background hover:opacity-90">
+        <button
+          type="button"
+          onClick={() => toast.success("Settings saved")}
+          className="inline-flex items-center gap-1.5 rounded-md bg-foreground px-3 py-1.5 text-[11px] font-semibold text-background hover:opacity-90"
+        >
           <Save className="h-3 w-3" />
           Save
         </button>
@@ -206,8 +217,33 @@ function Toggle({
 }
 
 function ShopInfoPanel() {
+  const fileInputRef = useRef<HTMLInputElement>(null);
   return (
     <Panel title="Shop Information" description="Public-facing shop details">
+      <div className="mb-4 flex items-center gap-3 rounded-md border border-border bg-surface/30 p-3">
+        <div className="flex h-12 w-12 items-center justify-center rounded-md bg-foreground text-[10px] font-bold text-background">
+          LOGO
+        </div>
+        <div className="flex-1">
+          <div className="text-xs font-semibold">Shop Logo</div>
+          <div className="text-[10px] text-muted-foreground">PNG or SVG, square preferred</div>
+        </div>
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={() => toast.success("Logo uploaded")}
+        />
+        <button
+          type="button"
+          onClick={() => fileInputRef.current?.click()}
+          className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-xs font-medium hover:bg-surface"
+        >
+          <Upload className="h-3 w-3" />
+          Upload Logo
+        </button>
+      </div>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <Field label="Shop Name" value="Andy's Automotive" />
         <Field label="DBA / Legal" value="Andy's Automotive, LLC" />
@@ -224,11 +260,14 @@ function ShopInfoPanel() {
 
 function HoursPanel() {
   const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+  const [dayClosed, setDayClosed] = useState<Record<string, boolean>>({
+    Sunday: true,
+  });
   return (
     <Panel title="Business Hours" description="When customers can book online">
       <div className="space-y-2">
         {days.map((d, i) => {
-          const closed = i === 6;
+          const closed = !!dayClosed[d];
           return (
             <div
               key={d}
@@ -250,7 +289,13 @@ function HoursPanel() {
                   />
                 </>
               )}
-              <button className="ml-auto rounded-md border border-border bg-background px-2 py-1 text-[10px] font-medium hover:bg-surface">
+              <button
+                type="button"
+                onClick={() =>
+                  setDayClosed((p) => ({ ...p, [d]: !p[d] }))
+                }
+                className="ml-auto rounded-md border border-border bg-background px-2 py-1 text-[10px] font-medium hover:bg-surface"
+              >
                 {closed ? "Open" : "Close"}
               </button>
             </div>
@@ -284,6 +329,16 @@ function TaxPricingPanel() {
           defaultOn
         />
       </div>
+      <div className="mt-4 border-t border-border pt-4">
+        <button
+          type="button"
+          onClick={() => toast.success("Tax added")}
+          className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-xs font-medium hover:bg-surface"
+        >
+          <Plus className="h-3 w-3" />
+          Add Tax
+        </button>
+      </div>
     </Panel>
   );
 }
@@ -316,7 +371,11 @@ function LaborRatesPanel() {
                 ${r.rate}
               </td>
               <td className="px-3 py-2.5 text-right">
-                <button className="text-[10px] font-medium text-muted-foreground hover:text-foreground">
+                <button
+                  type="button"
+                  onClick={() => toast.info(`Edit ${r.name}`)}
+                  className="text-[10px] font-medium text-muted-foreground hover:text-foreground"
+                >
                   Edit
                 </button>
               </td>
@@ -339,8 +398,21 @@ function EmployeesPanel() {
     { name: "Trevor Hicks", role: "General Tech", email: "trevor@andysauto.com", active: true },
     { name: "Danny Pearce", role: "Apprentice", email: "danny@andysauto.com", active: true },
   ];
+  const [inviteOpen, setInviteOpen] = useState(false);
+  const [inviteEmail, setInviteEmail] = useState("");
+  const [inviteRole, setInviteRole] = useState("Service Advisor");
   return (
     <Panel title="Employees & Roles" description="Team members with platform access">
+      <div className="mb-3 flex justify-end">
+        <button
+          type="button"
+          onClick={() => setInviteOpen(true)}
+          className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-xs font-medium hover:bg-surface"
+        >
+          <Plus className="h-3 w-3" />
+          Invite User
+        </button>
+      </div>
       <div className="space-y-1">
         {employees.map((e) => (
           <div
@@ -367,12 +439,74 @@ function EmployeesPanel() {
                 Active
               </span>
             )}
-            <button className="text-[10px] font-medium text-muted-foreground hover:text-foreground">
+            <button
+              type="button"
+              onClick={() => toast.info(`Edit ${e.name}`)}
+              className="text-[10px] font-medium text-muted-foreground hover:text-foreground"
+            >
               Edit
             </button>
           </div>
         ))}
       </div>
+      <Modal
+        open={inviteOpen}
+        onOpenChange={setInviteOpen}
+        title="Invite User"
+        description="Send a platform invitation to a new team member"
+        size="sm"
+        footer={
+          <>
+            <button
+              type="button"
+              onClick={() => setInviteOpen(false)}
+              className="rounded-md border border-border bg-background px-3 py-1.5 text-xs font-medium hover:bg-surface"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                toast.success(`Invitation sent to ${inviteEmail || "user"}`);
+                setInviteEmail("");
+                setInviteOpen(false);
+              }}
+              className="rounded-md bg-foreground px-3 py-1.5 text-xs font-semibold text-background hover:opacity-90"
+            >
+              Save
+            </button>
+          </>
+        }
+      >
+        <div className="space-y-3">
+          <div>
+            <label className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+              Email
+            </label>
+            <input
+              type="email"
+              value={inviteEmail}
+              onChange={(e) => setInviteEmail(e.target.value)}
+              className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:border-accent"
+            />
+          </div>
+          <div>
+            <label className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+              Role
+            </label>
+            <select
+              value={inviteRole}
+              onChange={(e) => setInviteRole(e.target.value)}
+              className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:border-accent"
+            >
+              <option>Service Advisor</option>
+              <option>Technician</option>
+              <option>Manager</option>
+              <option>Owner</option>
+            </select>
+          </div>
+        </div>
+      </Modal>
     </Panel>
   );
 }
@@ -417,18 +551,82 @@ function NotificationsPanel() {
 }
 
 function IntegrationsPanel() {
+  const [showKey, setShowKey] = useState(false);
+  const apiKey = "sk_demo_placeholder_0000000000000000";
+  const masked = "sk_live_" + "•".repeat(apiKey.length - 8);
   return (
     <Panel title="Integrations" description="Connected platforms and APIs">
       <p className="text-xs text-muted-foreground">
         Manage individual integrations on the{" "}
-        <a
-          href="/fleet-integrations"
+        <Link
+          to="/fleet-integrations"
           className="font-semibold text-foreground underline-offset-2 hover:underline"
         >
           Fleet Integrations
-        </a>{" "}
+        </Link>{" "}
         page.
       </p>
+      <div className="mt-5 border-t border-border pt-4">
+        <div className="flex items-center justify-between gap-3">
+          <div className="min-w-0">
+            <h3 className="text-xs font-semibold">OpenAI Copilot</h3>
+            <p className="mt-0.5 text-[11px] text-muted-foreground">
+              Connected via{" "}
+              <code className="rounded bg-surface px-1 py-0.5 font-mono text-[10px]">
+                OPENAI_API_KEY
+              </code>{" "}
+              (.env.local) — server-managed, never exposed to the client.
+            </p>
+          </div>
+          <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-success/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-success">
+            <span className="h-1.5 w-1.5 rounded-full bg-success" />
+            Connected
+          </span>
+        </div>
+      </div>
+      <div className="mt-5 border-t border-border pt-4">
+        <h3 className="text-xs font-semibold">API Access</h3>
+        <p className="mt-0.5 text-[11px] text-muted-foreground">
+          Use this key for API integrations or webhooks.
+        </p>
+        <div className="mt-2 flex items-center gap-2">
+          <input
+            type="text"
+            readOnly
+            value={showKey ? apiKey : masked}
+            className="flex-1 rounded-md border border-border bg-background px-3 py-2 font-mono text-xs outline-none"
+          />
+          <button
+            type="button"
+            onClick={() => setShowKey((s) => !s)}
+            className="rounded-md border border-border bg-background p-2 hover:bg-surface"
+            title={showKey ? "Hide" : "Show"}
+          >
+            {showKey ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              if (typeof navigator !== "undefined" && navigator.clipboard) {
+                navigator.clipboard.writeText(apiKey).catch(() => {});
+              }
+              toast.success("API key copied");
+            }}
+            className="inline-flex items-center gap-1 rounded-md border border-border bg-background px-2.5 py-1.5 text-[11px] font-medium hover:bg-surface"
+          >
+            <Copy className="h-3 w-3" />
+            Copy
+          </button>
+          <button
+            type="button"
+            onClick={() => toast.success("API key regenerated")}
+            className="inline-flex items-center gap-1 rounded-md border border-border bg-background px-2.5 py-1.5 text-[11px] font-medium hover:bg-surface"
+          >
+            <RefreshCw className="h-3 w-3" />
+            Regenerate
+          </button>
+        </div>
+      </div>
     </Panel>
   );
 }
@@ -443,6 +641,16 @@ function PaymentsPanel() {
         <Toggle label="Check" description="Manual entry, no auto-deposit" defaultOn />
         <Toggle label="In-bay tap-to-pay" description="iPhone NFC at the bay" />
       </div>
+      <div className="mt-4 border-t border-border pt-4">
+        <button
+          type="button"
+          onClick={() => toast.info("Add payment method — coming soon")}
+          className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-xs font-medium hover:bg-surface"
+        >
+          <Plus className="h-3 w-3" />
+          Add payment method
+        </button>
+      </div>
     </Panel>
   );
 }
@@ -456,7 +664,11 @@ function SecurityPanel() {
           <p className="mt-0.5 text-[11px] text-muted-foreground">
             Required for all owner accounts. Optional for technicians.
           </p>
-          <button className="mt-2 inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1 text-[11px] font-medium hover:bg-surface">
+          <button
+            type="button"
+            onClick={() => toast.info("2FA setup — coming soon")}
+            className="mt-2 inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1 text-[11px] font-medium hover:bg-surface"
+          >
             <Shield className="h-3 w-3" />
             Configure
           </button>
@@ -464,14 +676,35 @@ function SecurityPanel() {
         <div className="rounded-md border border-border bg-background p-3">
           <div className="text-xs font-semibold">Session timeout</div>
           <p className="mt-0.5 text-[11px] text-muted-foreground">
-            Sign out idle users after 30 minutes
+            Sign out idle users after a period of inactivity
           </p>
+          <select
+            defaultValue="30"
+            onChange={(e) =>
+              toast.success(
+                `Timeout set to ${e.target.value === "never" ? "Never" : e.target.value + " minutes"}`,
+              )
+            }
+            className="mt-2 rounded-md border border-border bg-background px-2.5 py-1 text-[11px] font-medium outline-none focus:border-accent"
+          >
+            <option value="15">15 minutes</option>
+            <option value="30">30 minutes</option>
+            <option value="60">60 minutes</option>
+            <option value="never">Never</option>
+          </select>
         </div>
         <div className="rounded-md border border-border bg-background p-3">
           <div className="text-xs font-semibold">Audit log</div>
           <p className="mt-0.5 text-[11px] text-muted-foreground">
             Track logins, RO posts, and AR adjustments
           </p>
+          <button
+            type="button"
+            onClick={() => toast.info("Audit log — coming soon")}
+            className="mt-2 inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1 text-[11px] font-medium hover:bg-surface"
+          >
+            View log
+          </button>
         </div>
       </div>
     </Panel>
@@ -479,6 +712,11 @@ function SecurityPanel() {
 }
 
 function BillingPanel() {
+  const invoices = [
+    { id: "INV-2026-05", date: "May 1, 2026", amount: 849.0 },
+    { id: "INV-2026-04", date: "April 1, 2026", amount: 849.0 },
+    { id: "INV-2026-03", date: "March 1, 2026", amount: 849.0 },
+  ];
   return (
     <Panel title="Subscription & Billing" description="Your platform plan and payment method">
       <div className="rounded-md border border-accent/40 bg-accent/10 p-4">
@@ -498,6 +736,41 @@ function BillingPanel() {
             <span className="text-muted-foreground">Next invoice</span>
             <span className="font-semibold tabular-nums">$849.00 · June 1</span>
           </div>
+        </div>
+        <div className="mt-3 border-t border-accent/30 pt-3">
+          <button
+            type="button"
+            onClick={() => toast.info("Plan management — coming soon")}
+            className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-xs font-medium hover:bg-surface"
+          >
+            Update plan
+          </button>
+        </div>
+      </div>
+      <div className="mt-4">
+        <h3 className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          Past Invoices
+        </h3>
+        <div className="divide-y divide-border rounded-md border border-border bg-background">
+          {invoices.map((inv) => (
+            <div key={inv.id} className="flex items-center justify-between px-3 py-2.5">
+              <div>
+                <div className="text-xs font-semibold">{inv.id}</div>
+                <div className="text-[10px] text-muted-foreground">{inv.date}</div>
+              </div>
+              <div className="flex items-center gap-3">
+                <span className="text-xs font-semibold tabular-nums">${inv.amount.toFixed(2)}</span>
+                <button
+                  type="button"
+                  onClick={() => toast.success("Invoice downloaded")}
+                  className="inline-flex items-center gap-1 rounded-md border border-border bg-background px-2.5 py-1 text-[11px] font-medium hover:bg-surface"
+                >
+                  <Download className="h-3 w-3" />
+                  Download
+                </button>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </Panel>

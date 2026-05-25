@@ -2,6 +2,12 @@ import { useSyncExternalStore } from "react";
 import { repairOrders as seedROs, type RepairOrder } from "@/data/repairOrders";
 import { customers as seedCustomers } from "@/data/customers";
 import { vehicles as seedVehicles } from "@/data/vehicles";
+import {
+  inspections as seedInspections,
+  type Inspection,
+  type InspectionItem,
+} from "@/data/inspections";
+import { getTemplate } from "@/data/inspectionTemplates";
 import type { ShopStatus } from "@/components/shop/StatusBadge";
 
 // ============================================================================
@@ -48,6 +54,9 @@ export type ShopState = {
   lostRevenueResolvedROs: Set<string>;
   /** Audit log of AI Builder runs */
   aiBuilderRuns: AIBuilderRun[];
+  inspections: Inspection[];
+  /** Inspection ids that were created in this session */
+  newlyCreatedInspections: Set<string>;
 };
 
 // ============================================================================
@@ -61,6 +70,8 @@ let state: ShopState = {
   aiLinesByRO: new Map(),
   lostRevenueResolvedROs: new Set(),
   aiBuilderRuns: [],
+  inspections: [...seedInspections],
+  newlyCreatedInspections: new Set(),
 };
 
 const listeners = new Set<() => void>();
@@ -126,6 +137,79 @@ export function createRepairOrder(input: {
     newlyCreatedROs: new Set([...prev.newlyCreatedROs, newRO.id]),
   }));
   return newRO;
+}
+
+let inspectionCounter = 4860; // continues from seed data
+function nextInspectionId(): string {
+  inspectionCounter += 1;
+  return `INS-${inspectionCounter}`;
+}
+
+export function createInspection(input: {
+  repairOrderId: string;
+  technicianId: string;
+  templateId?: string;
+  notes?: string;
+}): Inspection {
+  const templateId = input.templateId ?? "dvi-37";
+  const template = getTemplate(templateId);
+  if (!template) {
+    throw new Error(`Unknown inspection template: ${templateId}`);
+  }
+  const id = nextInspectionId();
+  const items: InspectionItem[] = template.items.map((t, i) => ({
+    id: `${id}-${String(i + 1).padStart(2, "0")}`,
+    category: t.category,
+    name: t.name,
+    status: "unset",
+  }));
+  const ins: Inspection = {
+    id,
+    repairOrderId: input.repairOrderId,
+    technicianId: input.technicianId,
+    items,
+  };
+  setState((prev) => ({
+    ...prev,
+    inspections: [ins, ...prev.inspections],
+    newlyCreatedInspections: new Set([...prev.newlyCreatedInspections, id]),
+  }));
+  return ins;
+}
+
+export function setInspectionItemStatus(
+  inspectionId: string,
+  itemId: string,
+  status: InspectionItem["status"],
+) {
+  setState((prev) => ({
+    ...prev,
+    inspections: prev.inspections.map((ins) =>
+      ins.id === inspectionId
+        ? {
+            ...ins,
+            items: ins.items.map((it) =>
+              it.id === itemId ? { ...it, status } : it,
+            ),
+          }
+        : ins,
+    ),
+  }));
+}
+
+export function completeInspection(inspectionId: string) {
+  setState((prev) => ({
+    ...prev,
+    inspections: prev.inspections.map((ins) =>
+      ins.id === inspectionId
+        ? { ...ins, completedAt: new Date().toISOString() }
+        : ins,
+    ),
+  }));
+}
+
+export function selectInspection(inspectionId: string): Inspection | undefined {
+  return state.inspections.find((i) => i.id === inspectionId);
 }
 
 export function updateROStatus(roId: string, status: ShopStatus) {

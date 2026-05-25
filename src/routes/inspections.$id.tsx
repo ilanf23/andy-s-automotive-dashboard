@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { format, parseISO } from "date-fns";
 import {
@@ -7,6 +7,7 @@ import {
   Check,
   X,
   Minus,
+  Circle,
   Sparkles,
   ClipboardCheck,
   Image as ImageIcon,
@@ -14,18 +15,24 @@ import {
   Send,
   Printer,
   FileText,
+  Upload,
 } from "lucide-react";
+import { toast } from "sonner";
 import clsx from "clsx";
 import { DetailPageShell, MetaPair } from "@/components/shop/DetailPageShell";
 import { PageShell } from "@/components/shop/PageShell";
 import { EmptyState } from "@/components/shop/EmptyState";
-import { inspections, type InspectionItemStatus } from "@/data/inspections";
-import { repairOrders } from "@/data/repairOrders";
+import {
+  type Inspection,
+  type InspectionItem,
+  type InspectionItemStatus,
+} from "@/data/inspections";
 import { customers } from "@/data/customers";
 import { vehicles } from "@/data/vehicles";
 import { technicians } from "@/data/technicians";
 import { useModals } from "@/components/ui/ModalProvider";
 import { VoiceToInspection } from "@/components/ai/VoiceToInspection";
+import { useShopState, completeInspection } from "@/lib/shop-store";
 
 export const Route = createFileRoute("/inspections/$id")({
   component: InspectionDetail,
@@ -59,6 +66,12 @@ const statusMeta: Record<
     text: "text-muted-foreground",
     icon: Minus,
   },
+  unset: {
+    label: "Not graded",
+    bg: "bg-surface text-muted-foreground border border-dashed border-border",
+    text: "text-muted-foreground",
+    icon: Circle,
+  },
 };
 
 type Tab = "findings" | "summary" | "photos" | "history";
@@ -68,6 +81,22 @@ function InspectionDetail() {
   const [tab, setTab] = useState<Tab>("findings");
   const [filter, setFilter] = useState<InspectionItemStatus | "all">("all");
   const { open: openModal } = useModals();
+  const navigate = useNavigate();
+  const [sentAt, setSentAt] = useState<Date | null>(null);
+  const [itemStatuses, setItemStatuses] = useState<Record<string, InspectionItemStatus>>({});
+  const { inspections, repairOrders } = useShopState();
+
+  const handleBuildEstimate = () => {
+    if (!ro) return;
+    openModal("ai-estimate-builder", { roId: ro.id });
+    toast.info("Building estimate from findings…");
+    setTimeout(() => {
+      navigate({ to: "/estimates/$id", params: { id: "EST-4847" } });
+      toast.success("Estimate created", {
+        description: "Review and send to customer",
+      });
+    }, 2500);
+  };
 
   const inspection = inspections.find((i) => i.id === id);
 
@@ -88,14 +117,23 @@ function InspectionDetail() {
   const vehicle = ro ? vehicles.find((v) => v.id === ro.vehicleId) : undefined;
   const tech = technicians.find((t) => t.id === inspection.technicianId);
 
+  const effectiveStatus = (item: InspectionItem): InspectionItemStatus =>
+    itemStatuses[item.id] ?? item.status;
+
   const counts = useMemo(() => {
+    const eff = inspection.items.map(effectiveStatus);
     return {
-      red: inspection.items.filter((i) => i.status === "red").length,
-      yellow: inspection.items.filter((i) => i.status === "yellow").length,
-      green: inspection.items.filter((i) => i.status === "green").length,
-      na: inspection.items.filter((i) => i.status === "na").length,
+      red: eff.filter((s) => s === "red").length,
+      yellow: eff.filter((s) => s === "yellow").length,
+      green: eff.filter((s) => s === "green").length,
+      na: eff.filter((s) => s === "na").length,
+      unset: eff.filter((s) => s === "unset").length,
     };
-  }, [inspection]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inspection, itemStatuses]);
+
+  const gradedCount = inspection.items.length - counts.unset;
+  const isFullyGraded = counts.unset === 0;
 
   // Group by category
   const itemsByCategory = useMemo(() => {
@@ -124,7 +162,7 @@ function InspectionDetail() {
       eyebrow={
         inspection.completedAt
           ? `INSPECTION · COMPLETED ${format(parseISO(inspection.completedAt), "MMM d, yyyy 'AT' h:mm a").toUpperCase()}`
-          : "INSPECTION · IN PROGRESS"
+          : `INSPECTION · IN PROGRESS — ${gradedCount} OF ${inspection.items.length} GRADED`
       }
       title={`${inspection.id} — ${vehicle?.unit ?? "Unknown vehicle"}`}
       titleMeta={
@@ -155,7 +193,10 @@ function InspectionDetail() {
         </div>
       }
       headerRight={
-        <div className="grid grid-cols-4 gap-2">
+        <div className={clsx("grid gap-2", counts.unset > 0 ? "grid-cols-5" : "grid-cols-4")}>
+          {counts.unset > 0 && (
+            <FindingTile count={counts.unset} label="Not graded" tone="dashed" />
+          )}
           <FindingTile count={counts.red} label="Red" tone="red" />
           <FindingTile count={counts.yellow} label="Yellow" tone="yellow" />
           <FindingTile count={counts.green} label="Green" tone="green" />
@@ -165,21 +206,76 @@ function InspectionDetail() {
       actions={
         <>
           <VoiceToInspection />
-          <button className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-[11px] font-medium hover:bg-surface">
+          <button
+            type="button"
+            onClick={() =>
+              toast.success("Inspection saved", {
+                description: `Draft autosaved at ${new Date().toLocaleTimeString()}`,
+              })
+            }
+            className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-[11px] font-medium hover:bg-surface"
+          >
             <Save className="h-3 w-3" />
             Save
           </button>
-          <button className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-[11px] font-medium hover:bg-surface">
+          <button
+            type="button"
+            onClick={() => {
+              setSentAt(new Date());
+              toast.success("Inspection sent", {
+                description: "Customer notified via SMS + Email",
+              });
+            }}
+            disabled={gradedCount === 0}
+            title={gradedCount === 0 ? "Grade at least one item before sending" : undefined}
+            className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-[11px] font-medium hover:bg-surface disabled:opacity-40"
+          >
             <Send className="h-3 w-3" />
             Send to Customer
           </button>
-          <button className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-[11px] font-medium hover:bg-surface">
+          {!inspection.completedAt && (
+            <button
+              type="button"
+              onClick={() => {
+                if (!isFullyGraded) {
+                  toast.error("Grade all items to complete", {
+                    description: `${counts.unset} item${counts.unset === 1 ? "" : "s"} still not graded`,
+                  });
+                  return;
+                }
+                completeInspection(inspection.id);
+                toast.success("Inspection completed", {
+                  description: `All ${inspection.items.length} items graded`,
+                });
+              }}
+              disabled={!isFullyGraded}
+              title={!isFullyGraded ? `${counts.unset} items not graded` : undefined}
+              className="inline-flex items-center gap-1.5 rounded-md border border-success/40 bg-success/10 px-2.5 py-1.5 text-[11px] font-semibold text-success hover:bg-success/15 disabled:opacity-40"
+            >
+              <Check className="h-3 w-3" />
+              Complete
+            </button>
+          )}
+          {sentAt && (
+            <span className="inline-flex items-center gap-1 rounded-full bg-success/15 px-2 py-0.5 text-[10px] font-semibold text-success">
+              Sent at {sentAt.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+            </span>
+          )}
+          <button
+            type="button"
+            onClick={() => {
+              window.print();
+              toast.info("Print preview opened");
+            }}
+            className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-[11px] font-medium hover:bg-surface"
+          >
             <Printer className="h-3 w-3" />
             Print
           </button>
           <div className="ml-auto flex items-center gap-2">
             <button
-              onClick={() => ro && openModal("ai-estimate-builder", { roId: ro.id })}
+              type="button"
+              onClick={handleBuildEstimate}
               disabled={!ro}
               className="inline-flex items-center gap-1.5 rounded-md bg-foreground px-3 py-1.5 text-[11px] font-semibold text-background hover:opacity-90 disabled:opacity-40"
             >
@@ -217,10 +313,16 @@ function InspectionDetail() {
               itemsByCategory={itemsByCategory}
               filter={filter}
               setFilter={setFilter}
+              itemStatuses={itemStatuses}
+              setItemStatuses={setItemStatuses}
             />
           )}
           {tab === "summary" && (
-            <SummaryTab counts={counts} totalItems={inspection.items.length} />
+            <SummaryTab
+              counts={counts}
+              totalItems={inspection.items.length}
+              gradedCount={gradedCount}
+            />
           )}
           {tab === "photos" && <PhotosTab inspection={inspection} />}
           {tab === "history" && <HistoryTab />}
@@ -243,33 +345,39 @@ function InspectionDetail() {
                 .map((item) => {
                   const Icon = statusMeta[item.status].icon;
                   return (
-                    <li
-                      key={item.id}
-                      className={clsx(
-                        "rounded-md border p-2 text-[11px]",
-                        item.status === "red"
-                          ? "border-destructive/30 bg-destructive/5"
-                          : "border-accent/40 bg-accent/10",
-                      )}
-                    >
-                      <div className="flex items-start gap-1.5">
-                        <Icon
-                          className={clsx(
-                            "mt-0.5 h-3 w-3 shrink-0",
-                            item.status === "red"
-                              ? "text-destructive"
-                              : "text-[#991B1B]",
-                          )}
-                        />
-                        <div className="min-w-0">
-                          <div className="text-[11px] font-semibold">{item.name}</div>
-                          {item.notes && (
-                            <p className="mt-0.5 text-[10px] text-muted-foreground">
-                              {item.notes}
-                            </p>
-                          )}
+                    <li key={item.id}>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          toast.info(`Add ${item.name} to estimate`);
+                          if (ro) openModal("ai-estimate-builder", { roId: ro.id });
+                        }}
+                        className={clsx(
+                          "w-full rounded-md border p-2 text-left text-[11px] transition-opacity hover:opacity-80",
+                          item.status === "red"
+                            ? "border-destructive/30 bg-destructive/5"
+                            : "border-accent/40 bg-accent/10",
+                        )}
+                      >
+                        <div className="flex items-start gap-1.5">
+                          <Icon
+                            className={clsx(
+                              "mt-0.5 h-3 w-3 shrink-0",
+                              item.status === "red"
+                                ? "text-destructive"
+                                : "text-[#991B1B]",
+                            )}
+                          />
+                          <div className="min-w-0">
+                            <div className="text-[11px] font-semibold">{item.name}</div>
+                            {item.notes && (
+                              <p className="mt-0.5 text-[10px] text-muted-foreground">
+                                {item.notes}
+                              </p>
+                            )}
+                          </div>
                         </div>
-                      </div>
+                      </button>
                     </li>
                   );
                 })}
@@ -290,7 +398,8 @@ function InspectionDetail() {
               </div>
             </div>
             <button
-              onClick={() => ro && openModal("ai-estimate-builder", { roId: ro.id })}
+              type="button"
+              onClick={handleBuildEstimate}
               disabled={!ro}
               className="mt-3 inline-flex w-full items-center justify-center gap-1.5 rounded-md bg-brand-green px-3 py-2 text-xs font-semibold text-brand-green-foreground hover:opacity-90 disabled:opacity-40"
             >
@@ -313,15 +422,30 @@ function FindingsTab({
   itemsByCategory,
   filter,
   setFilter,
+  itemStatuses,
+  setItemStatuses,
 }: {
-  inspection: ReturnType<typeof inspections.find>;
-  itemsByCategory: Map<string, NonNullable<ReturnType<typeof inspections.find>>["items"]>;
+  inspection: Inspection | undefined;
+  itemsByCategory: Map<string, InspectionItem[]>;
   filter: InspectionItemStatus | "all";
   setFilter: (f: InspectionItemStatus | "all") => void;
+  itemStatuses: Record<string, InspectionItemStatus>;
+  setItemStatuses: React.Dispatch<React.SetStateAction<Record<string, InspectionItemStatus>>>;
 }) {
+  const cycle = (s: InspectionItemStatus): InspectionItemStatus =>
+    s === "unset"
+      ? "green"
+      : s === "green"
+        ? "yellow"
+        : s === "yellow"
+          ? "red"
+          : s === "red"
+            ? "na"
+            : "unset";
   if (!inspection) return null;
   const filters: Array<{ id: InspectionItemStatus | "all"; label: string }> = [
     { id: "all", label: "All" },
+    { id: "unset", label: "Not graded" },
     { id: "red", label: "Red" },
     { id: "yellow", label: "Yellow" },
     { id: "green", label: "Green" },
@@ -351,10 +475,12 @@ function FindingsTab({
       {/* Category accordions */}
       <div className="space-y-3">
         {Array.from(itemsByCategory.entries()).map(([category, items]) => {
-          const visible = items.filter((i) => filter === "all" || i.status === filter);
+          const effective = (i: InspectionItem) => itemStatuses[i.id] ?? i.status;
+          const visible = items.filter((i) => filter === "all" || effective(i) === filter);
           if (visible.length === 0) return null;
-          const catRed = items.filter((i) => i.status === "red").length;
-          const catYellow = items.filter((i) => i.status === "yellow").length;
+          const catRed = items.filter((i) => effective(i) === "red").length;
+          const catYellow = items.filter((i) => effective(i) === "yellow").length;
+          const catGraded = items.filter((i) => effective(i) !== "unset").length;
           return (
             <div
               key={category}
@@ -365,8 +491,8 @@ function FindingsTab({
                   <h3 className="text-xs font-semibold uppercase tracking-wider">
                     {category}
                   </h3>
-                  <span className="text-[10px] text-muted-foreground">
-                    ({items.length})
+                  <span className="text-[10px] text-muted-foreground tabular-nums">
+                    {catGraded}/{items.length} graded
                   </span>
                 </div>
                 <div className="flex items-center gap-1">
@@ -384,21 +510,30 @@ function FindingsTab({
               </div>
               <ul className="divide-y divide-border">
                 {visible.map((item) => {
-                  const meta = statusMeta[item.status];
+                  const current: InspectionItemStatus =
+                    itemStatuses[item.id] ?? item.status;
+                  const meta = statusMeta[current];
                   const Icon = meta.icon;
                   return (
                     <li
                       key={item.id}
                       className="flex items-start gap-3 px-4 py-2.5 transition-colors hover:bg-surface/40"
                     >
-                      <div
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const next = cycle(current);
+                          setItemStatuses((prev) => ({ ...prev, [item.id]: next }));
+                          toast.info(`Marked ${item.name}: ${statusMeta[next].label}`);
+                        }}
                         className={clsx(
-                          "mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full",
+                          "mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full transition-transform hover:scale-110",
                           meta.bg,
                         )}
+                        aria-label={`Cycle status — current ${meta.label}`}
                       >
                         <Icon className="h-3 w-3" />
-                      </div>
+                      </button>
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2">
                           <span className="text-xs font-semibold">{item.name}</span>
@@ -435,18 +570,36 @@ function FindingsTab({
 function SummaryTab({
   counts,
   totalItems,
+  gradedCount,
 }: {
-  counts: { red: number; yellow: number; green: number; na: number };
+  counts: { red: number; yellow: number; green: number; na: number; unset: number };
   totalItems: number;
+  gradedCount: number;
 }) {
-  const passRate = Math.round((counts.green / (totalItems - counts.na)) * 100);
+  if (gradedCount === 0) {
+    return (
+      <div className="rounded-lg border border-dashed border-border bg-background p-8 text-center">
+        <Circle className="mx-auto h-6 w-6 text-muted-foreground/50" />
+        <h3 className="mt-3 text-xs font-semibold uppercase tracking-wider">
+          Inspection in progress
+        </h3>
+        <p className="mt-1 text-[11px] text-muted-foreground">
+          0 of {totalItems} items graded. Tap status circles on the Findings tab to grade.
+        </p>
+      </div>
+    );
+  }
+  const denom = Math.max(1, gradedCount - counts.na);
+  const passRate = Math.round((counts.green / denom) * 100);
   return (
     <div className="space-y-4">
       <div className="rounded-lg border border-border bg-background p-5">
         <h3 className="text-xs font-semibold uppercase tracking-wider">Overall</h3>
         <div className="mt-3 flex items-baseline gap-2">
           <span className="text-3xl font-semibold tabular-nums">{passRate}%</span>
-          <span className="text-xs text-muted-foreground">pass rate</span>
+          <span className="text-xs text-muted-foreground">
+            pass rate {counts.unset > 0 && `· ${counts.unset} not yet graded`}
+          </span>
         </div>
         <div className="mt-4 h-3 w-full overflow-hidden rounded-full bg-surface">
           <div className="flex h-full">
@@ -476,37 +629,61 @@ function SummaryTab({
 function PhotosTab({
   inspection,
 }: {
-  inspection: ReturnType<typeof inspections.find>;
+  inspection: Inspection | undefined;
 }) {
   if (!inspection) return null;
   const photoItems = inspection.items.filter((i) => i.hasPhoto);
+  const uploadButton = (
+    <div className="flex items-center justify-end">
+      <button
+        type="button"
+        onClick={() =>
+          toast.success("Photo uploaded", {
+            description: `photo_${Date.now()}.jpg`,
+          })
+        }
+        className="inline-flex items-center gap-1.5 rounded-md bg-foreground px-2.5 py-1.5 text-[11px] font-semibold text-background hover:opacity-90"
+      >
+        <Upload className="h-3 w-3" />
+        Upload Photo
+      </button>
+    </div>
+  );
   if (photoItems.length === 0) {
     return (
-      <EmptyState
-        icon={ImageIcon}
-        title="No photos attached"
-        description="Tech hasn't uploaded photos with this inspection."
-      />
+      <div className="space-y-3">
+        {uploadButton}
+        <EmptyState
+          icon={ImageIcon}
+          title="No photos attached"
+          description="Tech hasn't uploaded photos with this inspection."
+        />
+      </div>
     );
   }
   return (
-    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
-      {photoItems.map((item) => (
-        <div
-          key={item.id}
-          className="overflow-hidden rounded-lg border border-border bg-background"
-        >
-          <div className="flex h-32 items-center justify-center bg-surface">
-            <ImageIcon className="h-8 w-8 text-muted-foreground/40" />
-          </div>
-          <div className="p-2.5">
-            <div className="text-[11px] font-semibold">{item.name}</div>
-            <div className="mt-0.5 text-[10px] text-muted-foreground">
-              {item.category}
+    <div className="space-y-3">
+      {uploadButton}
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+        {photoItems.map((item) => (
+          <button
+            key={item.id}
+            type="button"
+            onClick={() => toast.info("Photo preview")}
+            className="overflow-hidden rounded-lg border border-border bg-background text-left transition-opacity hover:opacity-90"
+          >
+            <div className="flex h-32 items-center justify-center bg-surface">
+              <ImageIcon className="h-8 w-8 text-muted-foreground/40" />
             </div>
-          </div>
-        </div>
-      ))}
+            <div className="p-2.5">
+              <div className="text-[11px] font-semibold">{item.name}</div>
+              <div className="mt-0.5 text-[10px] text-muted-foreground">
+                {item.category}
+              </div>
+            </div>
+          </button>
+        ))}
+      </div>
     </div>
   );
 }
@@ -548,13 +725,14 @@ function FindingTile({
 }: {
   count: number;
   label: string;
-  tone: "red" | "yellow" | "green" | "gray";
+  tone: "red" | "yellow" | "green" | "gray" | "dashed";
 }) {
   const styles: Record<typeof tone, string> = {
     red: "border-destructive/30 bg-destructive/5 text-destructive",
     yellow: "border-accent/40 bg-accent/10 text-[#991B1B]",
     green: "border-success/30 bg-success/5 text-success",
     gray: "border-border bg-surface text-muted-foreground",
+    dashed: "border-dashed border-border bg-background text-muted-foreground",
   };
   return (
     <div

@@ -1,7 +1,9 @@
 import { createContext, useCallback, useContext, useMemo, useState } from "react";
 import { NewRepairOrderModal } from "@/components/flows/NewRepairOrderModal";
+import { NewInspectionModal } from "@/components/flows/NewInspectionModal";
 import { TakePaymentModal } from "@/components/flows/TakePaymentModal";
 import { AIEstimateBuilderModal } from "@/components/flows/AIEstimateBuilderModal";
+import { CreateAndSendEstimateModal } from "@/components/flows/CreateAndSendEstimateModal";
 import { FrankensteinLaborModal } from "@/components/flows/FrankensteinLaborModal";
 import { CustomerEstimateExplainerModal } from "@/components/flows/CustomerEstimateExplainerModal";
 import { AutoROArrivalModal } from "@/components/flows/AutoROArrivalModal";
@@ -20,10 +22,16 @@ type ModalRegistry = {
     customerId?: string;
     vehicleId?: string;
   };
+  "new-inspection": {
+    repairOrderId?: string;
+  };
   "take-payment": {
     roId: string;
   };
   "ai-estimate-builder": {
+    roId: string;
+  };
+  "create-send-estimate": {
     roId: string;
   };
   "frankenstein-labor": {
@@ -105,6 +113,13 @@ export function ModalProvider({ children }: { children: React.ReactNode }) {
           vehicleId={active.payload.vehicleId}
         />
       )}
+      {active?.name === "new-inspection" && (
+        <NewInspectionModal
+          open
+          onOpenChange={(o) => !o && close()}
+          repairOrderId={active.payload.repairOrderId}
+        />
+      )}
       {active?.name === "take-payment" && (
         <TakePaymentModal
           open
@@ -114,6 +129,13 @@ export function ModalProvider({ children }: { children: React.ReactNode }) {
       )}
       {active?.name === "ai-estimate-builder" && (
         <AIEstimateBuilderModal
+          open
+          onOpenChange={(o) => !o && close()}
+          roId={active.payload.roId}
+        />
+      )}
+      {active?.name === "create-send-estimate" && (
+        <CreateAndSendEstimateModal
           open
           onOpenChange={(o) => !o && close()}
           roId={active.payload.roId}

@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import clsx from "clsx";
 import { useState } from "react";
+import { toast } from "sonner";
 import type { MessagePart, ApprovalPreview, ResultCard, ResultRow } from "./types";
 
 // ============================================================================
@@ -333,6 +334,7 @@ function ApprovalPart({
             </button>
             <button
               type="button"
+              onClick={() => toast.info("Modify approval — coming soon")}
               className="rounded-md border border-border bg-background px-3 py-1.5 text-[11px] font-semibold hover:bg-surface"
             >
               Modify

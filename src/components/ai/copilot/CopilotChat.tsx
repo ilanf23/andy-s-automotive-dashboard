@@ -1,14 +1,12 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Sparkles, Send, RefreshCcw, User } from "lucide-react";
-import clsx from "clsx";
+import { useNavigate } from "@tanstack/react-router";
+import { toast } from "sonner";
 import { PartRenderer } from "./parts";
-import { matchScenario, FALLBACK_STEPS } from "./scenarios";
-import type {
-  Message,
-  MessagePart,
-  ScenarioStep,
-  ContextEntity,
-} from "./types";
+import type { Message, MessagePart, ApprovalPreview, ContextEntity } from "./types";
+import { copilotChatServerFn } from "@/lib/copilot-server";
+import { TOOLS, buildSnapshot } from "@/lib/copilot-tools-client";
+import { TOOL_META, type ChatMessage } from "@/lib/copilot-tools";
 
 // ============================================================================
 // Helpers
@@ -17,7 +15,36 @@ import type {
 let _id = 0;
 const newId = () => `id-${++_id}-${Date.now()}`;
 
-const wait = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
+// Maximum number of tool-call iterations per user turn. Prevents runaway loops
+// if the model keeps calling tools forever.
+const MAX_TOOL_ITERATIONS = 10;
+
+// Render the args dict as a list of approval-card detail rows.
+function argsToDetails(args: Record<string, unknown>): ApprovalPreview["details"] {
+  return Object.entries(args).map(([label, value]) => ({
+    label,
+    value:
+      typeof value === "string"
+        ? value
+        : typeof value === "number"
+          ? String(value)
+          : JSON.stringify(value),
+    mono: typeof value !== "string" && typeof value !== "number",
+  }));
+}
+
+function buildApprovalPreview(
+  toolName: string,
+  args: Record<string, unknown>,
+): ApprovalPreview {
+  const meta = TOOL_META[toolName];
+  return {
+    title: meta?.title ?? toolName,
+    description: `The AI wants to run \`${toolName}\`. Review the arguments below and approve to execute.`,
+    details: argsToDetails(args),
+    tone: meta?.tone ?? "default",
+  };
+}
 
 // ============================================================================
 // CopilotChat
@@ -28,20 +55,32 @@ type Props = {
 };
 
 export function CopilotChat({ onContextChange }: Props) {
+  const navigate = useNavigate();
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
-  // When a scenario is paused at an approval step, the resolver resumes execution
+
+  // Promise resolver for an approval card that's currently waiting on the user.
   const pendingApprovalRef = useRef<{
     partId: string;
     resolve: (approved: boolean) => void;
   } | null>(null);
+
+  // Raw OpenAI-format conversation history, separate from the UI Message[]
+  // because each user/assistant turn may map to several UI parts.
+  const apiMessagesRef = useRef<ChatMessage[]>([]);
 
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
   }, [messages]);
+
+  // Tell the parent route that context changed (used by the right-rail panel).
+  // The real copilot doesn't push entity context — just leave it null for now.
+  useEffect(() => {
+    onContextChange?.(null);
+  }, [onContextChange]);
 
   // ----- low-level state mutators ---------------------------------------
 
@@ -65,118 +104,39 @@ export function CopilotChat({ onContextChange }: Props) {
     [],
   );
 
-  const appendPart = useCallback(
-    (messageId: string, part: MessagePart) => {
-      setMessages((prev) =>
-        prev.map((m) =>
-          m.id !== messageId ? m : { ...m, parts: [...m.parts, part] },
-        ),
-      );
+  const appendPart = useCallback((messageId: string, part: MessagePart) => {
+    setMessages((prev) =>
+      prev.map((m) =>
+        m.id !== messageId ? m : { ...m, parts: [...m.parts, part] },
+      ),
+    );
+  }, []);
+
+  // ----- approval bridge -------------------------------------------------
+
+  const requestApproval = useCallback(
+    (assistantId: string, toolName: string, args: Record<string, unknown>) => {
+      const partId = newId();
+      appendPart(assistantId, {
+        kind: "approval",
+        id: partId,
+        preview: buildApprovalPreview(toolName, args),
+        status: "pending",
+      });
+      return new Promise<{ partId: string; approved: boolean }>((resolve) => {
+        pendingApprovalRef.current = {
+          partId,
+          resolve: (approved) => resolve({ partId, approved }),
+        };
+      });
     },
-    [],
+    [appendPart],
   );
-
-  // ----- step executors --------------------------------------------------
-
-  const runSteps = useCallback(
-    async (assistantId: string, steps: ScenarioStep[]) => {
-      for (const step of steps) {
-        if (step.type === "pause") {
-          await wait(step.ms);
-          continue;
-        }
-
-        if (step.type === "text") {
-          const part: MessagePart = { kind: "text", id: newId(), text: step.text };
-          appendPart(assistantId, part);
-          await wait(step.streamMs ?? 350);
-        }
-
-        if (step.type === "reasoning") {
-          const partId = newId();
-          appendPart(assistantId, {
-            kind: "reasoning",
-            id: partId,
-            intro: step.intro,
-            steps: step.steps,
-            currentStep: 0,
-          });
-          for (let i = 1; i <= step.steps.length; i++) {
-            await wait(step.stepMs ?? 280);
-            updatePart(assistantId, partId, (p) =>
-              p.kind === "reasoning" ? { ...p, currentStep: i } : p,
-            );
-          }
-          await wait(200);
-        }
-
-        if (step.type === "tool") {
-          const partId = newId();
-          appendPart(assistantId, {
-            kind: "tool",
-            id: partId,
-            tool: step.tool,
-            args: step.args,
-            status: "running",
-          });
-          await wait(step.durationMs ?? 700);
-          updatePart(assistantId, partId, (p) =>
-            p.kind === "tool"
-              ? { ...p, status: "done", result: step.result }
-              : p,
-          );
-          await wait(200);
-        }
-
-        if (step.type === "result") {
-          appendPart(assistantId, {
-            kind: "result",
-            id: newId(),
-            card: step.card,
-          });
-          await wait(300);
-        }
-
-        if (step.type === "suggestions") {
-          appendPart(assistantId, {
-            kind: "suggestions",
-            id: newId(),
-            prompts: step.prompts,
-          });
-          await wait(200);
-        }
-
-        if (step.type === "approval") {
-          const partId = newId();
-          appendPart(assistantId, {
-            kind: "approval",
-            id: partId,
-            preview: step.preview,
-            status: "pending",
-          });
-          const approved = await new Promise<boolean>((resolve) => {
-            pendingApprovalRef.current = { partId, resolve };
-          });
-          pendingApprovalRef.current = null;
-          updatePart(assistantId, partId, (p) =>
-            p.kind === "approval"
-              ? { ...p, status: approved ? "approved" : "rejected" }
-              : p,
-          );
-          await wait(300);
-          const nextSteps = approved ? step.onApproved : (step.onRejected ?? []);
-          await runSteps(assistantId, nextSteps);
-        }
-      }
-    },
-    [appendPart, updatePart],
-  );
-
-  // ----- public actions --------------------------------------------------
 
   const handleApprove = useCallback((partId: string) => {
     const pending = pendingApprovalRef.current;
     if (pending && pending.partId === partId) {
+      pendingApprovalRef.current = null;
       pending.resolve(true);
     }
   }, []);
@@ -184,14 +144,19 @@ export function CopilotChat({ onContextChange }: Props) {
   const handleReject = useCallback((partId: string) => {
     const pending = pendingApprovalRef.current;
     if (pending && pending.partId === partId) {
+      pendingApprovalRef.current = null;
       pending.resolve(false);
     }
   }, []);
+
+  // ----- public actions --------------------------------------------------
 
   const handleSend = useCallback(
     async (text: string) => {
       if (!text.trim() || busy) return;
       const trimmed = text.trim();
+
+      // 1. Push the user turn into both the UI and the API history
       const userMsg: Message = {
         id: newId(),
         role: "user",
@@ -199,14 +164,11 @@ export function CopilotChat({ onContextChange }: Props) {
         timestamp: Date.now(),
       };
       appendMessage(userMsg);
+      apiMessagesRef.current.push({ role: "user", content: trimmed });
       setInput("");
       setBusy(true);
 
-      // Brief "thinking" delay before assistant message appears
-      await wait(450);
-
-      const scenario = matchScenario(trimmed);
-      const steps = scenario ? scenario.steps : FALLBACK_STEPS;
+      // 2. Create the assistant container that we'll stream parts into
       const assistantId = newId();
       appendMessage({
         id: assistantId,
@@ -215,18 +177,159 @@ export function CopilotChat({ onContextChange }: Props) {
         timestamp: Date.now(),
       });
 
-      if (scenario?.context) {
-        onContextChange?.(scenario.context);
-      }
+      try {
+        let iter = 0;
+        // Tool-calling loop — keep round-tripping until the model stops
+        // requesting tools or we hit the safety limit.
+        while (iter++ < MAX_TOOL_ITERATIONS) {
+          const snapshot = buildSnapshot();
+          const response = await copilotChatServerFn({
+            data: { messages: apiMessagesRef.current, snapshot },
+          });
+          const choice = response.choices[0];
+          if (!choice) {
+            appendPart(assistantId, {
+              kind: "text",
+              id: newId(),
+              text: "(no response)",
+            });
+            break;
+          }
+          const msg = choice.message;
 
-      await runSteps(assistantId, steps);
-      setBusy(false);
+          // Render any text content the model produced
+          if (msg.content) {
+            appendPart(assistantId, {
+              kind: "text",
+              id: newId(),
+              text: msg.content,
+            });
+          }
+
+          // Push the assistant message into API history exactly as received
+          apiMessagesRef.current.push({
+            role: "assistant",
+            content: msg.content,
+            tool_calls: msg.tool_calls,
+          });
+
+          // If no tool calls, we're done with this user turn
+          if (!msg.tool_calls?.length) break;
+
+          // Execute each tool call (with approval gate for write tools)
+          for (const call of msg.tool_calls) {
+            const toolName = call.function.name;
+            const tool = TOOLS[toolName];
+            let args: Record<string, unknown> = {};
+            try {
+              args = JSON.parse(call.function.arguments || "{}");
+            } catch {
+              args = {};
+            }
+
+            if (!tool) {
+              apiMessagesRef.current.push({
+                role: "tool",
+                tool_call_id: call.id,
+                content: JSON.stringify({ error: `Unknown tool: ${toolName}` }),
+              });
+              continue;
+            }
+
+            // Show the tool-call card immediately so users see what's running
+            const toolPartId = newId();
+            appendPart(assistantId, {
+              kind: "tool",
+              id: toolPartId,
+              tool: toolName,
+              args,
+              status: "running",
+            });
+
+            // Approval gate for write tools
+            if (tool.requiresApproval) {
+              const { partId, approved } = await requestApproval(
+                assistantId,
+                toolName,
+                args,
+              );
+              updatePart(assistantId, partId, (p) =>
+                p.kind === "approval"
+                  ? { ...p, status: approved ? "approved" : "rejected" }
+                  : p,
+              );
+              if (!approved) {
+                updatePart(assistantId, toolPartId, (p) =>
+                  p.kind === "tool"
+                    ? { ...p, status: "done", result: "Rejected by user" }
+                    : p,
+                );
+                apiMessagesRef.current.push({
+                  role: "tool",
+                  tool_call_id: call.id,
+                  content: JSON.stringify({
+                    error: "User rejected this action.",
+                  }),
+                });
+                continue;
+              }
+            }
+
+            // Execute
+            try {
+              const result = await tool.execute(args, {
+                navigate: (path: string) => navigate({ to: path }),
+              });
+              const resultStr = JSON.stringify(result);
+              updatePart(assistantId, toolPartId, (p) =>
+                p.kind === "tool"
+                  ? {
+                      ...p,
+                      status: "done",
+                      result: resultStr.length > 200
+                        ? resultStr.slice(0, 200) + "…"
+                        : resultStr,
+                    }
+                  : p,
+              );
+              apiMessagesRef.current.push({
+                role: "tool",
+                tool_call_id: call.id,
+                content: resultStr,
+              });
+            } catch (err) {
+              const msg = err instanceof Error ? err.message : String(err);
+              updatePart(assistantId, toolPartId, (p) =>
+                p.kind === "tool"
+                  ? { ...p, status: "done", result: `Error: ${msg}` }
+                  : p,
+              );
+              apiMessagesRef.current.push({
+                role: "tool",
+                tool_call_id: call.id,
+                content: JSON.stringify({ error: msg }),
+              });
+            }
+          }
+        }
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : String(err);
+        appendPart(assistantId, {
+          kind: "text",
+          id: newId(),
+          text: `Sorry — I hit an error: ${msg}`,
+        });
+        toast.error("Copilot error", { description: msg });
+      } finally {
+        setBusy(false);
+      }
     },
-    [busy, appendMessage, runSteps, onContextChange],
+    [busy, appendMessage, appendPart, updatePart, requestApproval, navigate],
   );
 
   const handleReset = useCallback(() => {
     setMessages([]);
+    apiMessagesRef.current = [];
     pendingApprovalRef.current?.resolve(false);
     pendingApprovalRef.current = null;
     setBusy(false);
@@ -334,7 +437,7 @@ export function CopilotChat({ onContextChange }: Props) {
             <span>Press Enter to send · Shift+Enter for newline</span>
             <span className="inline-flex items-center gap-1">
               <Sparkles className="h-2.5 w-2.5" />
-              Demo mode — outputs hand-crafted, behavior matches production
+              Powered by GPT-4o · full read/write tools · approvals on writes
             </span>
           </div>
         </div>
@@ -352,24 +455,24 @@ function EmptyState({ onPick }: { onPick: (text: string) => void }) {
     {
       group: "Take action",
       items: [
-        "Give me an estimate for the brake job on MT-47 and send it to Med Trust",
-        "Schedule Reliable Ducks for next Tuesday at 10am",
-        "Send Northpoint a demand letter for the $17k past due",
+        "Create a new RO for Med Trust on MT-47 — brake job complaint",
+        "Mark RO 4847 as ready for pickup",
+        "Take a $1,500 ACH payment from City Form on RO 4842",
       ],
     },
     {
       group: "Answer questions",
       items: [
+        "What's on my plate today?",
         "Show me my top 5 customers by lifetime value",
-        "What's my real labor GP this week using hourly pay?",
-        "Why is RO 4847 stuck?",
-        "What's at risk of churning this month?",
+        "Why is RO 4847 still in the shop?",
+        "Which ROs are awaiting approval right now?",
       ],
     },
     {
       group: "Help me work",
       items: [
-        "Find me parts for the front brake job on MT-47",
+        "Open RO 4847",
         "What can you do?",
       ],
     },

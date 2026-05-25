@@ -247,6 +247,7 @@ export function NewRepairOrderModal({
           </ul>
           <button
             type="button"
+            onClick={() => toast.info("Add customer — coming soon")}
             className="inline-flex w-full items-center justify-center gap-1.5 rounded-md border border-dashed border-border bg-background px-3 py-2 text-xs font-medium text-muted-foreground hover:bg-surface"
           >
             <User className="h-3 w-3" />
@@ -301,6 +302,7 @@ export function NewRepairOrderModal({
           )}
           <button
             type="button"
+            onClick={() => toast.info("Add vehicle — coming soon")}
             className="inline-flex w-full items-center justify-center gap-1.5 rounded-md border border-dashed border-border bg-background px-3 py-2 text-xs font-medium text-muted-foreground hover:bg-surface"
           >
             <Truck className="h-3 w-3" />

@@ -1,4 +1,4 @@
-export type InspectionItemStatus = "green" | "yellow" | "red" | "na";
+export type InspectionItemStatus = "green" | "yellow" | "red" | "na" | "unset";
 
 export type InspectionItem = {
   id: string;

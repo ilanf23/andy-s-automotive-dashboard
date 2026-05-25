@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { useState } from "react";
 import {
   Phone,
   Mail,
@@ -9,10 +10,23 @@ import {
   Video,
   Star,
   ArrowRight,
+  Send,
 } from "lucide-react";
+import { toast } from "sonner";
 import { Reveal } from "@/lib/motion";
 
 export function PublicFooter() {
+  const [newsletterEmail, setNewsletterEmail] = useState("");
+
+  const handleSubscribe = () => {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newsletterEmail)) {
+      toast.error("Please enter a valid email");
+      return;
+    }
+    toast.success("Subscribed", { description: "Welcome to shop updates" });
+    setNewsletterEmail("");
+  };
+
   return (
     <footer className="bg-[var(--mkt-ink)] text-[var(--mkt-text-on-dark)]">
       {/* Decorative top edge with gold accent line */}
@@ -110,12 +124,24 @@ export function PublicFooter() {
               Services
             </h4>
             <ul className="mt-4 space-y-2 text-sm">
-              <FooterLink to="/services">Mobile Fleet Service</FooterLink>
-              <FooterLink to="/services">Pickup &amp; Drop-off</FooterLink>
-              <FooterLink to="/services">Preventative Maintenance</FooterLink>
-              <FooterLink to="/services">Diesel &amp; Heavy Duty</FooterLink>
-              <FooterLink to="/services">Engine &amp; Transmission</FooterLink>
-              <FooterLink to="/services">After-Hours Service</FooterLink>
+              <FooterLink to="/services" hash="mobile-fleet-service">
+                Mobile Fleet Service
+              </FooterLink>
+              <FooterLink to="/services" hash="pickup-and-drop-off">
+                Pickup &amp; Drop-off
+              </FooterLink>
+              <FooterLink to="/services" hash="preventative-maintenance">
+                Preventative Maintenance
+              </FooterLink>
+              <FooterLink to="/services" hash="diesel-and-heavy-duty">
+                Diesel &amp; Heavy Duty
+              </FooterLink>
+              <FooterLink to="/services" hash="engine-and-transmission">
+                Engine &amp; Transmission
+              </FooterLink>
+              <FooterLink to="/services" hash="after-hours">
+                After-Hours Service
+              </FooterLink>
             </ul>
           </div>
 
@@ -125,9 +151,15 @@ export function PublicFooter() {
               Company
             </h4>
             <ul className="mt-4 space-y-2 text-sm">
-              <FooterLink to="/about">About Andy's</FooterLink>
-              <FooterLink to="/about">Our Values</FooterLink>
-              <FooterLink to="/about">The Team</FooterLink>
+              <FooterLink to="/about" hash="about-andys">
+                About Andy's
+              </FooterLink>
+              <FooterLink to="/about" hash="our-values">
+                Our Values
+              </FooterLink>
+              <FooterLink to="/about" hash="the-team">
+                The Team
+              </FooterLink>
               <FooterLink to="/contact">Contact</FooterLink>
               <FooterLink to="/login">Staff Login</FooterLink>
             </ul>
@@ -190,8 +222,43 @@ export function PublicFooter() {
           </div>
         </div>
 
+        {/* Newsletter */}
+        <div className="mt-12 flex flex-col items-start justify-between gap-4 rounded-2xl border border-[var(--mkt-border-dark)] bg-white/[0.02] p-6 md:flex-row md:items-center md:p-7">
+          <div>
+            <h4 className="text-[10px] font-black uppercase tracking-[0.18em] text-[var(--mkt-gold)]">
+              Shop updates
+            </h4>
+            <p className="mt-1.5 text-sm text-[var(--mkt-text-on-dark-muted)]">
+              Fleet tips, seasonal reminders, and shop news — once a month.
+            </p>
+          </div>
+          <div className="flex w-full max-w-md items-center gap-2">
+            <input
+              type="email"
+              value={newsletterEmail}
+              onChange={(e) => setNewsletterEmail(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  handleSubscribe();
+                }
+              }}
+              placeholder="your@email.com"
+              className="flex-1 rounded-md border border-[var(--mkt-border-dark)] bg-[var(--mkt-ink)] px-3.5 py-2.5 text-sm text-white outline-none transition-colors placeholder:text-white/35 focus:border-[var(--mkt-gold)]"
+            />
+            <button
+              type="button"
+              onClick={handleSubscribe}
+              className="inline-flex shrink-0 items-center gap-1.5 rounded-md bg-[var(--mkt-gold)] px-4 py-2.5 text-xs font-black uppercase tracking-wider text-[var(--mkt-ink)] shadow-lg shadow-[var(--mkt-gold)]/15 transition-shadow hover:shadow-xl hover:shadow-[var(--mkt-gold)]/25"
+            >
+              <Send className="h-3.5 w-3.5" />
+              Subscribe
+            </button>
+          </div>
+        </div>
+
         {/* Bottom strip */}
-        <div className="mt-12 flex flex-col items-start justify-between gap-3 border-t border-[var(--mkt-border-dark)] pt-6 text-[11px] text-[var(--mkt-text-on-dark-faint)] sm:flex-row sm:items-center">
+        <div className="mt-8 flex flex-col items-start justify-between gap-3 border-t border-[var(--mkt-border-dark)] pt-6 text-[11px] text-[var(--mkt-text-on-dark-faint)] sm:flex-row sm:items-center">
           <p>
             © {new Date().getFullYear()} Andy's Automotive &amp; Truck Services,
             LLC. All rights reserved.
@@ -205,11 +272,20 @@ export function PublicFooter() {
   );
 }
 
-function FooterLink({ to, children }: { to: string; children: React.ReactNode }) {
+function FooterLink({
+  to,
+  hash,
+  children,
+}: {
+  to: string;
+  hash?: string;
+  children: React.ReactNode;
+}) {
   return (
     <li>
       <Link
         to={to as string}
+        hash={hash}
         className="inline-block text-[var(--mkt-text-on-dark-muted)] transition-colors hover:text-[var(--mkt-gold)]"
       >
         {children}

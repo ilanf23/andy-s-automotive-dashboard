@@ -36,6 +36,15 @@ function ContactPage() {
       toast.error("Please fill in name, phone, and issue");
       return;
     }
+    const phoneDigits = form.phone.replace(/\D/g, "");
+    if (phoneDigits.length < 10) {
+      toast.error("Please enter a valid phone number");
+      return;
+    }
+    if (form.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+      toast.error("Please enter a valid email");
+      return;
+    }
     setSubmitting(true);
     await new Promise((r) => setTimeout(r, 800));
     setSubmitting(false);
@@ -331,7 +340,12 @@ function ContactPage() {
       <section className="bg-[var(--mkt-paper)] py-10">
         <div className="mx-auto max-w-7xl px-4 md:px-6">
           <Reveal>
-            <div className="relative flex h-72 items-center justify-center overflow-hidden rounded-3xl border border-[var(--mkt-border-light)] bg-[var(--mkt-ink)]">
+            <a
+              href="https://www.google.com/maps?q=Jacksonville+FL"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group relative flex h-72 items-center justify-center overflow-hidden rounded-3xl border border-[var(--mkt-border-light)] bg-[var(--mkt-ink)] transition-shadow hover:shadow-xl"
+            >
               <div className="relative text-center text-white">
                 <MapPin className="mx-auto h-10 w-10 text-[var(--mkt-gold)]" />
                 <p className="mt-3 text-sm font-bold">
@@ -341,7 +355,11 @@ function ContactPage() {
                   Mobile and pickup service across Duval, Clay, Nassau, and St. Johns counties.
                 </p>
               </div>
-            </div>
+              <span className="absolute bottom-4 right-4 inline-flex items-center gap-1.5 rounded-full bg-[var(--mkt-gold)] px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-[var(--mkt-ink)] shadow-lg transition-transform group-hover:translate-x-1">
+                View on Google Maps
+                <ArrowRight className="h-3 w-3" />
+              </span>
+            </a>
           </Reveal>
         </div>
       </section>

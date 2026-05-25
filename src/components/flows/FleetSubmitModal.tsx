@@ -142,13 +142,17 @@ export function FleetSubmitModal({
                   Authorized for Med Trust account · last sync 2 min ago
                 </div>
               </div>
-              <a
-                href="#"
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  toast.info(`Opening ${platform}…`);
+                }}
                 className="inline-flex items-center gap-1 text-[10px] font-medium text-muted-foreground hover:text-foreground"
               >
                 Open in {platform}
                 <ExternalLink className="h-3 w-3" />
-              </a>
+              </button>
             </div>
           </div>
 

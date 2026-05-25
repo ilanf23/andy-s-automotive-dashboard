@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import {
   Search,
   Send,
@@ -10,9 +10,12 @@ import {
   CheckCheck,
   MessageSquare,
   Filter,
+  Smile,
+  X,
 } from "lucide-react";
 import { PageShell } from "@/components/shop/PageShell";
 import clsx from "clsx";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/messages")({
   component: MessagesPage,
@@ -22,7 +25,7 @@ type Thread = {
   id: string;
   customer: string;
   vehicle?: string;
-  channel: "SMS" | "Email";
+  channel: "SMS" | "Email" | "In-app";
   preview: string;
   time: string;
   unread: number;
@@ -38,7 +41,7 @@ type Message = {
   status?: "sent" | "delivered" | "read";
 };
 
-const threads: Thread[] = [
+const initialThreads: Thread[] = [
   {
     id: "t1",
     customer: "Dana Whitfield · Med Trust",
@@ -114,7 +117,7 @@ const threads: Thread[] = [
   },
 ];
 
-const conversations: Record<string, Message[]> = {
+const initialConversations: Record<string, Message[]> = {
   t1: [
     {
       id: "t1-m1",
@@ -319,22 +322,99 @@ const conversations: Record<string, Message[]> = {
 
 const filters = ["All", "Unread", "Open", "Awaiting Customer", "Resolved"] as const;
 
+const channelFilters = ["all", "SMS", "Email", "In-app"] as const;
+const templates = [
+  "Ready for pickup — vehicle is done.",
+  "Estimate approved — beginning work today.",
+  "Past due reminder — please call us.",
+];
+const emojis = ["😀", "👍", "🔧", "✅", "⚠️"];
+
 function MessagesPage() {
+  const [threads, setThreads] = useState<Thread[]>(initialThreads);
+  const [conversations, setConversations] =
+    useState<Record<string, Message[]>>(initialConversations);
   const [selectedId, setSelectedId] = useState<string>("t1");
   const [filter, setFilter] = useState<(typeof filters)[number]>("All");
+  const [channelFilter, setChannelFilter] =
+    useState<"all" | "SMS" | "Email" | "In-app">("all");
   const [draft, setDraft] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [showNew, setShowNew] = useState(false);
+  const [newRecipient, setNewRecipient] = useState("");
+  const [newChannel, setNewChannel] = useState<"SMS" | "Email">("SMS");
+  const [newBody, setNewBody] = useState("");
+  const templateCursor = useRef(0);
 
   const selected = threads.find((t) => t.id === selectedId);
   const unreadTotal = threads.reduce((acc, t) => acc + t.unread, 0);
 
-  const filtered = threads.filter((t) => {
-    if (filter === "All") return true;
-    if (filter === "Unread") return t.unread > 0;
-    if (filter === "Open") return t.status === "open";
-    if (filter === "Awaiting Customer") return t.status === "awaiting-customer";
-    if (filter === "Resolved") return t.status === "resolved";
-    return true;
-  });
+  const filtered = threads
+    .filter((t) => {
+      if (filter === "All") return true;
+      if (filter === "Unread") return t.unread > 0;
+      if (filter === "Open") return t.status === "open";
+      if (filter === "Awaiting Customer") return t.status === "awaiting-customer";
+      if (filter === "Resolved") return t.status === "resolved";
+      return true;
+    })
+    .filter((t) => (channelFilter === "all" ? true : t.channel === channelFilter))
+    .filter((t) => {
+      const q = searchQuery.trim().toLowerCase();
+      if (!q) return true;
+      return (
+        t.customer.toLowerCase().includes(q) || t.preview.toLowerCase().includes(q)
+      );
+    });
+
+  const selectThread = (id: string) => {
+    setSelectedId(id);
+    setThreads((prev) => prev.map((t) => (t.id === id ? { ...t, unread: 0 } : t)));
+  };
+
+  const handleSend = () => {
+    if (!draft.trim() || !selected) return;
+    const channel = selected.channel;
+    setConversations((prev) => ({
+      ...prev,
+      [selected.id]: [
+        ...(prev[selected.id] || []),
+        {
+          id: `${selected.id}-m${Date.now()}`,
+          from: "shop",
+          text: draft,
+          time: "Just now",
+          status: "sent",
+        },
+      ],
+    }));
+    setThreads((prev) =>
+      prev.map((t) =>
+        t.id === selected.id ? { ...t, preview: draft, time: "Just now" } : t,
+      ),
+    );
+    setDraft("");
+    toast.success(`Message sent via ${channel}`);
+  };
+
+  const handleInsertTemplate = () => {
+    const tmpl = templates[templateCursor.current % templates.length];
+    templateCursor.current += 1;
+    setDraft((d) => (d ? `${d} ${tmpl}` : tmpl));
+  };
+
+  const handleEmoji = () => {
+    const e = emojis[Math.floor(Math.random() * emojis.length)];
+    setDraft((d) => `${d}${e}`);
+  };
+
+  const handleNewMessageSend = () => {
+    toast.success("Message sent");
+    setShowNew(false);
+    setNewRecipient("");
+    setNewChannel("SMS");
+    setNewBody("");
+  };
 
   return (
     <PageShell
@@ -343,6 +423,7 @@ function MessagesPage() {
       actions={
         <button
           type="button"
+          onClick={() => setShowNew(true)}
           className="inline-flex items-center gap-1.5 rounded-md bg-foreground px-3 py-2 text-sm font-semibold text-background hover:opacity-90"
         >
           <MessageSquare className="h-4 w-4" />
@@ -359,6 +440,8 @@ function MessagesPage() {
               <Search className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
               <input
                 type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search threads…"
                 className="w-full rounded-md border border-border bg-surface py-1.5 pl-8 pr-3 text-xs outline-none focus:border-accent focus:ring-2 focus:ring-accent/30"
               />
@@ -380,6 +463,23 @@ function MessagesPage() {
                 </button>
               ))}
             </div>
+            <div className="mt-1.5 flex items-center gap-1 overflow-x-auto pb-0.5">
+              {channelFilters.map((c) => (
+                <button
+                  key={c}
+                  type="button"
+                  onClick={() => setChannelFilter(c)}
+                  className={clsx(
+                    "shrink-0 rounded-full border px-2.5 py-0.5 text-[10px] font-medium transition-colors",
+                    channelFilter === c
+                      ? "border-accent bg-accent/20 text-foreground"
+                      : "border-border bg-background text-muted-foreground hover:text-foreground",
+                  )}
+                >
+                  {c === "all" ? "All channels" : c}
+                </button>
+              ))}
+            </div>
           </div>
 
           {/* Thread list */}
@@ -388,7 +488,7 @@ function MessagesPage() {
               <li key={t.id}>
                 <button
                   type="button"
-                  onClick={() => setSelectedId(t.id)}
+                  onClick={() => selectThread(t.id)}
                   className={clsx(
                     "block w-full px-3 py-3 text-left transition-colors",
                     selectedId === t.id
@@ -504,18 +604,29 @@ function MessagesPage() {
                 </div>
                 <div className="flex items-center gap-1">
                   <button
+                    onClick={() => toast.success(`Calling ${selected.customer}…`)}
                     className="rounded-md p-1.5 text-muted-foreground hover:bg-surface hover:text-foreground"
                     title="Call"
                   >
                     <Phone className="h-3.5 w-3.5" />
                   </button>
                   <button
+                    onClick={() =>
+                      toast.info("Email composer", {
+                        description: "Switching channel — coming soon",
+                      })
+                    }
                     className="rounded-md p-1.5 text-muted-foreground hover:bg-surface hover:text-foreground"
                     title="Email"
                   >
                     <Mail className="h-3.5 w-3.5" />
                   </button>
                   <button
+                    onClick={() =>
+                      toast.info(
+                        "More actions: Resolve, Assign, Mute, Archive — coming soon",
+                      )
+                    }
                     className="rounded-md p-1.5 text-muted-foreground hover:bg-surface hover:text-foreground"
                     title="More"
                   >
@@ -576,21 +687,35 @@ function MessagesPage() {
                   <div className="flex items-center justify-between border-t border-border px-2 py-1.5">
                     <div className="flex items-center gap-1">
                       <button
+                        onClick={() =>
+                          toast.success(`Attached invoice_${Date.now()}.pdf`)
+                        }
                         className="rounded-md p-1.5 text-muted-foreground hover:bg-surface hover:text-foreground"
                         title="Attach file"
                       >
                         <Paperclip className="h-3.5 w-3.5" />
+                      </button>
+                      <button
+                        onClick={handleEmoji}
+                        className="rounded-md p-1.5 text-muted-foreground hover:bg-surface hover:text-foreground"
+                        title="Emoji"
+                      >
+                        <Smile className="h-3.5 w-3.5" />
                       </button>
                       <span className="text-[10px] text-muted-foreground">
                         Sending via {selected.channel}
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <button className="rounded-md border border-border px-2.5 py-1 text-[11px] font-medium hover:bg-surface">
+                      <button
+                        onClick={handleInsertTemplate}
+                        className="rounded-md border border-border px-2.5 py-1 text-[11px] font-medium hover:bg-surface"
+                      >
                         Templates
                       </button>
                       <button
                         type="button"
+                        onClick={handleSend}
                         disabled={!draft.trim()}
                         className="inline-flex items-center gap-1.5 rounded-md bg-foreground px-3 py-1 text-[11px] font-semibold text-background disabled:opacity-40"
                       >
@@ -612,6 +737,79 @@ function MessagesPage() {
           )}
         </div>
       </div>
+
+      {showNew && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+          <div className="w-full max-w-md rounded-lg border border-border bg-background shadow-xl">
+            <div className="flex items-center justify-between border-b border-border px-4 py-3">
+              <h2 className="text-sm font-semibold">New Message</h2>
+              <button
+                type="button"
+                onClick={() => setShowNew(false)}
+                className="rounded-md p-1 text-muted-foreground hover:bg-surface hover:text-foreground"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+            <div className="space-y-3 p-4">
+              <div>
+                <label className="mb-1 block text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                  Recipient
+                </label>
+                <input
+                  type="text"
+                  value={newRecipient}
+                  onChange={(e) => setNewRecipient(e.target.value)}
+                  placeholder="Customer name or phone/email"
+                  className="w-full rounded-md border border-border bg-background px-3 py-1.5 text-sm outline-none focus:border-foreground/40"
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                  Channel
+                </label>
+                <select
+                  value={newChannel}
+                  onChange={(e) => setNewChannel(e.target.value as "SMS" | "Email")}
+                  className="w-full rounded-md border border-border bg-background px-3 py-1.5 text-sm outline-none focus:border-foreground/40"
+                >
+                  <option value="SMS">SMS</option>
+                  <option value="Email">Email</option>
+                </select>
+              </div>
+              <div>
+                <label className="mb-1 block text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                  Message
+                </label>
+                <textarea
+                  value={newBody}
+                  onChange={(e) => setNewBody(e.target.value)}
+                  rows={4}
+                  placeholder="Write your message…"
+                  className="w-full resize-none rounded-md border border-border bg-background px-3 py-1.5 text-sm outline-none focus:border-foreground/40"
+                />
+              </div>
+            </div>
+            <div className="flex items-center justify-end gap-2 border-t border-border px-4 py-3">
+              <button
+                type="button"
+                onClick={() => setShowNew(false)}
+                className="rounded-md border border-border bg-background px-3 py-1.5 text-xs font-medium hover:bg-surface"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleNewMessageSend}
+                className="inline-flex items-center gap-1.5 rounded-md bg-foreground px-3 py-1.5 text-xs font-semibold text-background hover:opacity-90"
+              >
+                <Send className="h-3 w-3" />
+                Send
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </PageShell>
   );
 }

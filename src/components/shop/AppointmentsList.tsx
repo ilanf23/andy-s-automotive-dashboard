@@ -19,6 +19,7 @@ export type AppointmentRow = {
 
 type Props = {
   rows: AppointmentRow[];
+  onRowClick?: (row: AppointmentRow) => void;
 };
 
 const typeStyles: Record<AppointmentRow["type"], string> = {
@@ -30,7 +31,7 @@ const typeStyles: Record<AppointmentRow["type"], string> = {
   "Estimate Review": "bg-accent/30 text-[#991B1B]",
 };
 
-export function AppointmentsList({ rows }: Props) {
+export function AppointmentsList({ rows, onRowClick }: Props) {
   if (rows.length === 0) {
     return (
       <div className="rounded-md border border-dashed border-border px-3 py-8 text-center text-xs text-muted-foreground">
@@ -44,7 +45,11 @@ export function AppointmentsList({ rows }: Props) {
       {rows.map((a) => (
         <li
           key={a.id}
-          className="flex items-center gap-3 py-2.5 transition-colors hover:bg-surface/40"
+          onClick={onRowClick ? () => onRowClick(a) : undefined}
+          className={clsx(
+            "flex items-center gap-3 py-2.5 transition-colors hover:bg-surface/40",
+            onRowClick && "cursor-pointer",
+          )}
         >
           <div className="w-14 shrink-0 text-right">
             <div className="text-xs font-semibold tabular-nums">{a.time}</div>

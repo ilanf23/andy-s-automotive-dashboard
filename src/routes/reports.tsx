@@ -19,10 +19,14 @@ import {
   ChevronRight,
   FileText,
   Star,
+  Search,
 } from "lucide-react";
 import clsx from "clsx";
+import { toast } from "sonner";
 import { PageShell } from "@/components/shop/PageShell";
 import { ConversationalReports } from "@/components/ai/ConversationalReports";
+
+const DATE_RANGES = ["Last 7 days", "Last 30 days", "Last 90 days", "YTD"] as const;
 
 export const Route = createFileRoute("/reports")({
   component: ReportsPage,
@@ -92,9 +96,23 @@ const categoryOrder: ReportCategory[] = ["Sales", "Labor", "Parts", "AR", "Custo
 function ReportsPage() {
   const [category, setCategory] = useState<ReportCategory | "All" | "Starred">("All");
   const [search, setSearch] = useState("");
+  const [dateRangeIdx, setDateRangeIdx] = useState(0);
+  const [starredIds, setStarredIds] = useState<Set<string>>(
+    () => new Set(reports.filter((r) => r.starred).map((r) => r.id)),
+  );
+
+  const isStarred = (id: string) => starredIds.has(id);
+  const toggleStar = (id: string) => {
+    setStarredIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
 
   const filtered = reports.filter((r) => {
-    if (category === "Starred") return r.starred;
+    if (category === "Starred") return isStarred(r.id);
     if (category !== "All" && r.category !== category) return false;
     if (!search) return true;
     const q = search.toLowerCase();
@@ -114,16 +132,39 @@ function ReportsPage() {
       description="Pull insights on sales, labor, parts, AR, customers, and fleet activity"
       actions={
         <>
-          <button className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-xs font-medium hover:bg-surface">
+          <button
+            type="button"
+            onClick={() => setDateRangeIdx((i) => (i + 1) % DATE_RANGES.length)}
+            className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-xs font-medium hover:bg-surface"
+          >
             <Calendar className="h-3 w-3" />
-            May 1 – May 20
+            {DATE_RANGES[dateRangeIdx]}
           </button>
-          <button className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-xs font-medium hover:bg-surface">
+          <button
+            type="button"
+            onClick={() => toast.info("Report filters — coming soon")}
+            className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-xs font-medium hover:bg-surface"
+          >
             <Filter className="h-3 w-3" />
             Filters
           </button>
           <button
             type="button"
+            onClick={() => toast.info("Schedule report — coming soon")}
+            className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-xs font-medium hover:bg-surface"
+          >
+            <Clock className="h-3 w-3" />
+            Schedule
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              toast.success("Exporting report bundle…");
+              setTimeout(() => {
+                const date = new Date().toISOString().split("T")[0];
+                toast.success(`Bundle ready — reports_${date}.zip`);
+              }, 1000);
+            }}
             className="inline-flex items-center gap-1.5 rounded-md bg-foreground px-3 py-2 text-sm font-semibold text-background shadow-sm hover:opacity-90"
           >
             <Download className="h-4 w-4" />
@@ -135,12 +176,48 @@ function ReportsPage() {
       {/* Conversational Reports — AI Q&A surface */}
       <ConversationalReports />
 
+      {/* Search */}
+      <div className="relative">
+        <Search className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
+        <input
+          type="text"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search reports…"
+          className="w-full rounded-md border border-border bg-background py-2 pl-8 pr-3 text-xs outline-none focus:border-accent focus:ring-2 focus:ring-accent/20"
+        />
+      </div>
+
       {/* Quick KPIs */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <KpiTile label="MTD Sales" value="$284,500" delta="+12% YoY" icon={DollarSign} />
-        <KpiTile label="MTD ARO" value="$1,847" delta="+$104" icon={TrendingUp} />
-        <KpiTile label="MTD ELR" value="$148/hr" delta="target $155" icon={Wrench} />
-        <KpiTile label="MTD GP %" value="56.4%" delta="+1.2pts" icon={BarChart3} />
+        <KpiTile
+          label="MTD Sales"
+          value="$284,500"
+          delta="+12% YoY"
+          icon={DollarSign}
+          onClick={() => toast.info("Drilling into MTD Sales")}
+        />
+        <KpiTile
+          label="MTD ARO"
+          value="$1,847"
+          delta="+$104"
+          icon={TrendingUp}
+          onClick={() => toast.info("Drilling into MTD ARO")}
+        />
+        <KpiTile
+          label="MTD ELR"
+          value="$148/hr"
+          delta="target $155"
+          icon={Wrench}
+          onClick={() => toast.info("Drilling into MTD ELR")}
+        />
+        <KpiTile
+          label="MTD GP %"
+          value="56.4%"
+          delta="+1.2pts"
+          icon={BarChart3}
+          onClick={() => toast.info("Drilling into MTD GP %")}
+        />
       </div>
 
       {/* Category filter */}
@@ -153,7 +230,7 @@ function ReportsPage() {
         />
         <CategoryPill
           label="Starred"
-          count={reports.filter((r) => r.starred).length}
+          count={starredIds.size}
           active={category === "Starred"}
           icon={Star}
           onClick={() => setCategory("Starred")}
@@ -179,11 +256,15 @@ function ReportsPage() {
             <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
               {items.map((r) => {
                 const Icon = r.icon;
+                const starred = isStarred(r.id);
                 return (
-                  <button
+                  <div
                     key={r.id}
-                    type="button"
-                    className="group flex items-start gap-3 rounded-lg border border-border bg-background p-4 text-left transition-all hover:border-foreground/30 hover:shadow-sm"
+                    onClick={() => {
+                      toast.info(`Opening ${r.name}…`);
+                      setTimeout(() => toast.success("Report rendered"), 600);
+                    }}
+                    className="group flex cursor-pointer items-start gap-3 rounded-lg border border-border bg-background p-4 text-left transition-all hover:border-foreground/30 hover:shadow-sm"
                   >
                     <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-surface">
                       <Icon className="h-4 w-4" />
@@ -191,9 +272,22 @@ function ReportsPage() {
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-1.5">
                         <span className="text-sm font-semibold">{r.name}</span>
-                        {r.starred && (
-                          <Star className="h-3 w-3 fill-accent text-accent" />
-                        )}
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            toggleStar(r.id);
+                          }}
+                          className="rounded p-0.5 hover:bg-surface"
+                          aria-label={starred ? "Unstar report" : "Star report"}
+                        >
+                          <Star
+                            className={clsx(
+                              "h-3 w-3",
+                              starred ? "fill-accent text-accent" : "text-muted-foreground",
+                            )}
+                          />
+                        </button>
                         {r.isNew && (
                           <span className="rounded-full bg-accent px-1.5 py-0.5 text-[9px] font-bold uppercase text-accent-foreground">
                             New
@@ -205,7 +299,7 @@ function ReportsPage() {
                       </p>
                     </div>
                     <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
-                  </button>
+                  </div>
                 );
               })}
             </div>
@@ -221,14 +315,20 @@ function KpiTile({
   value,
   delta,
   icon: Icon,
+  onClick,
 }: {
   label: string;
   value: string;
   delta: string;
   icon: typeof DollarSign;
+  onClick?: () => void;
 }) {
   return (
-    <div className="rounded-lg border border-border bg-background p-4">
+    <button
+      type="button"
+      onClick={onClick}
+      className="rounded-lg border border-border bg-background p-4 text-left transition-colors hover:border-foreground/30"
+    >
       <div className="flex items-center justify-between">
         <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
           {label}
@@ -237,7 +337,7 @@ function KpiTile({
       </div>
       <div className="mt-2 text-2xl font-semibold tabular-nums">{value}</div>
       <div className="text-[11px] text-muted-foreground">{delta}</div>
-    </div>
+    </button>
   );
 }
 

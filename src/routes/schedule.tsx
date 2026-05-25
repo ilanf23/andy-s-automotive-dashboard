@@ -134,8 +134,46 @@ const HOURS = [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]; // 7am..6pm
 
 function SchedulePage() {
   const [view, setView] = useState<"Day" | "Week" | "List">("Day");
-  const [weekStart] = useState(() => startOfWeek(parseISO(TODAY_ISO), { weekStartsOn: 1 }));
+  const [weekStart, setWeekStart] = useState(() =>
+    startOfWeek(parseISO(TODAY_ISO), { weekStartsOn: 1 }),
+  );
   const today = parseISO(TODAY_ISO);
+
+  // New Appointment modal — shared between header CTA, empty cells, unscheduled "+ Add"
+  const [showNewAppt, setShowNewAppt] = useState(false);
+  const [apptCustomer, setApptCustomer] = useState("");
+  const [apptVin, setApptVin] = useState("");
+  const [apptService, setApptService] = useState("Oil change");
+  const [apptBay, setApptBay] = useState("Bay 1");
+  const [apptTech, setApptTech] = useState("Marcus");
+  const [apptDate, setApptDate] = useState(TODAY_ISO);
+  const [apptTime, setApptTime] = useState("09:00");
+  const [apptRecurring, setApptRecurring] = useState("None");
+  const [scanning, setScanning] = useState(false);
+
+  const openNewAppt = (prefill?: { bay?: string; time?: string }) => {
+    if (prefill?.bay) setApptBay(prefill.bay);
+    if (prefill?.time) setApptTime(prefill.time);
+    setShowNewAppt(true);
+  };
+
+  const handleScanVin = () => {
+    setScanning(true);
+    toast.info("Scanning…");
+    setTimeout(() => {
+      setApptVin("1FDXE4FS7KDC42718");
+      setScanning(false);
+    }, 800);
+  };
+
+  const handleCreateAppt = () => {
+    toast.success("Appointment created", {
+      description: `${apptCustomer || "(no customer)"} — ${apptVin || "(no VIN)"} on ${apptDate} at ${apptTime}`,
+    });
+    setShowNewAppt(false);
+    setApptCustomer("");
+    setApptVin("");
+  };
 
   // Local state — appointments and unscheduled queue (drag-and-drop mutates these)
   const [appts, setAppts] = useState<Appointment[]>(APPOINTMENTS);
@@ -207,15 +245,37 @@ function SchedulePage() {
           <div className="inline-flex items-center rounded-md border border-border bg-background">
             <button
               type="button"
+              onClick={() => {
+                setWeekStart((d) => {
+                  const next = new Date(d.getTime() - 86400000);
+                  toast.info(`Showing ${next.toLocaleDateString()}`);
+                  return next;
+                });
+              }}
               className="flex h-8 w-8 items-center justify-center text-muted-foreground hover:text-foreground"
             >
               <ChevronLeft className="h-4 w-4" />
             </button>
-            <button className="px-2.5 text-xs font-medium hover:text-foreground">
+            <button
+              type="button"
+              onClick={() => {
+                const next = new Date();
+                setWeekStart(next);
+                toast.info(`Showing ${next.toLocaleDateString()}`);
+              }}
+              className="px-2.5 text-xs font-medium hover:text-foreground"
+            >
               Today
             </button>
             <button
               type="button"
+              onClick={() => {
+                setWeekStart((d) => {
+                  const next = new Date(d.getTime() + 86400000);
+                  toast.info(`Showing ${next.toLocaleDateString()}`);
+                  return next;
+                });
+              }}
               className="flex h-8 w-8 items-center justify-center text-muted-foreground hover:text-foreground"
             >
               <ChevronRight className="h-4 w-4" />
@@ -241,13 +301,22 @@ function SchedulePage() {
             ))}
           </div>
 
-          <button className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-xs font-medium hover:bg-surface">
+          <button
+            type="button"
+            onClick={() =>
+              toast.info("Schedule filters", {
+                description: "Tech / bay / status filters — coming soon",
+              })
+            }
+            className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-xs font-medium hover:bg-surface"
+          >
             <Filter className="h-3 w-3" />
             Filters
           </button>
 
           <button
             type="button"
+            onClick={() => openNewAppt()}
             className="inline-flex items-center gap-1.5 rounded-md bg-foreground px-3 py-2 text-sm font-semibold text-background hover:opacity-90"
           >
             <Plus className="h-4 w-4" />
@@ -274,18 +343,34 @@ function SchedulePage() {
               todayApptsByBay={todayApptsByBay}
               isDragging={!!draggingItem}
               onDrop={handleScheduleDrop}
+              onCellClick={(bay, hour) => {
+                const timeStr = `${String(hour).padStart(2, "0")}:00`;
+                openNewAppt({ bay: `Bay ${bay}`, time: timeStr });
+              }}
+              onApptClick={(a) =>
+                toast.info(a.customer, {
+                  description: "Click handler: reschedule / reassign / check in",
+                })
+              }
             />
           )}
           {view === "Week" && (
             <WeekView
               techs={techs.map((t) => ({ id: t.id, name: t.name, utilization: t.utilization, initials: t.initials }))}
               apptsByCell={apptsByCell}
+              onCellClick={() => openNewAppt()}
+              onBlockClick={(a) =>
+                toast.info(a.customer, {
+                  description: "Click handler: reschedule / reassign / check in",
+                })
+              }
             />
           )}
           {view === "List" && (
             <ListView
               appts={appts.filter((a) => a.dayIdx === TODAY_DAY_IDX)}
               techMap={techMap as Map<string, { name: string; initials: string }>}
+              onRowClick={(a) => toast.info(a.customer)}
             />
           )}
         </div>
@@ -293,13 +378,23 @@ function SchedulePage() {
         {/* Unscheduled rail */}
         <aside className="space-y-4">
           <div className="rounded-lg border border-border bg-background">
-            <div className="border-b border-border px-4 py-2.5">
-              <h3 className="text-xs font-semibold uppercase tracking-wider">
-                Unscheduled
-              </h3>
-              <p className="mt-0.5 text-[10px] text-muted-foreground">
-                {unscheduled.length} waiting to be scheduled · drag to a bay
-              </p>
+            <div className="flex items-start justify-between gap-2 border-b border-border px-4 py-2.5">
+              <div>
+                <h3 className="text-xs font-semibold uppercase tracking-wider">
+                  Unscheduled
+                </h3>
+                <p className="mt-0.5 text-[10px] text-muted-foreground">
+                  {unscheduled.length} waiting to be scheduled · drag to a bay
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => openNewAppt()}
+                className="inline-flex items-center gap-1 rounded-md border border-border bg-background px-2 py-1 text-[10px] font-semibold hover:bg-surface"
+              >
+                <Plus className="h-3 w-3" />
+                Add
+              </button>
             </div>
             <ul className="divide-y divide-border">
               {unscheduled.length === 0 ? (
@@ -313,6 +408,11 @@ function SchedulePage() {
                     <li
                       key={u.id}
                       draggable
+                      onClick={() =>
+                        toast.info(u.customer, {
+                          description: "Edit unscheduled request — coming soon",
+                        })
+                      }
                       onDragStart={(e) => {
                         e.dataTransfer.effectAllowed = "move";
                         e.dataTransfer.setData("text/plain", u.id);
@@ -362,6 +462,179 @@ function SchedulePage() {
           </div>
         </aside>
       </div>
+
+      {/* ===================================================== */}
+      {/* New Appointment modal — inline overlay                */}
+      {/* ===================================================== */}
+      {showNewAppt && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/40 p-4"
+          onClick={() => setShowNewAppt(false)}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="max-h-[90vh] w-full max-w-xl overflow-y-auto rounded-lg border border-border bg-background shadow-xl"
+          >
+            <div className="flex items-center justify-between border-b border-border px-5 py-3">
+              <h2 className="text-sm font-semibold">New Appointment</h2>
+              <button
+                type="button"
+                onClick={() => setShowNewAppt(false)}
+                className="text-muted-foreground hover:text-foreground"
+              >
+                ×
+              </button>
+            </div>
+            <div className="space-y-3 px-5 py-4">
+              <div>
+                <label className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                  Customer
+                </label>
+                <input
+                  type="text"
+                  value={apptCustomer}
+                  onChange={(e) => setApptCustomer(e.target.value)}
+                  placeholder="Customer name"
+                  className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm"
+                />
+              </div>
+
+              <div>
+                <label className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                  Vehicle VIN
+                </label>
+                <div className="mt-1 flex gap-2">
+                  <input
+                    type="text"
+                    value={apptVin}
+                    onChange={(e) => setApptVin(e.target.value)}
+                    placeholder="Type or paste VIN (17 chars)"
+                    className="flex-1 rounded-md border border-border bg-background px-3 py-2 text-sm font-mono"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleScanVin}
+                    disabled={scanning}
+                    className="inline-flex items-center gap-1 rounded-md border border-border bg-background px-3 py-2 text-xs font-semibold hover:bg-surface disabled:opacity-50"
+                  >
+                    {scanning ? "Scanning…" : "Scan VIN"}
+                  </button>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                    Service Type
+                  </label>
+                  <select
+                    value={apptService}
+                    onChange={(e) => setApptService(e.target.value)}
+                    className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm"
+                  >
+                    <option>Oil change</option>
+                    <option>Inspection</option>
+                    <option>Brake</option>
+                    <option>Diagnostic</option>
+                    <option>Other</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                    Bay
+                  </label>
+                  <select
+                    value={apptBay}
+                    onChange={(e) => setApptBay(e.target.value)}
+                    className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm"
+                  >
+                    <option>Bay 1</option>
+                    <option>Bay 2</option>
+                    <option>Bay 3</option>
+                    <option>Bay 4</option>
+                    <option>Bay 5</option>
+                    <option>Bay 6</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                    Tech
+                  </label>
+                  <select
+                    value={apptTech}
+                    onChange={(e) => setApptTech(e.target.value)}
+                    className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm"
+                  >
+                    <option>Marcus</option>
+                    <option>Andre</option>
+                    <option>Tony</option>
+                    <option>Unassigned</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                    Recurring
+                  </label>
+                  <select
+                    value={apptRecurring}
+                    onChange={(e) => setApptRecurring(e.target.value)}
+                    className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm"
+                  >
+                    <option>None</option>
+                    <option>Weekly</option>
+                    <option>Bi-weekly</option>
+                    <option>Monthly</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                    Date
+                  </label>
+                  <input
+                    type="date"
+                    value={apptDate}
+                    onChange={(e) => setApptDate(e.target.value)}
+                    className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                    Time
+                  </label>
+                  <input
+                    type="time"
+                    value={apptTime}
+                    onChange={(e) => setApptTime(e.target.value)}
+                    className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-end gap-2 border-t border-border px-5 py-3">
+              <button
+                type="button"
+                onClick={() => setShowNewAppt(false)}
+                className="rounded-md border border-border bg-background px-3 py-2 text-xs font-semibold hover:bg-surface"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleCreateAppt}
+                className="rounded-md bg-foreground px-3 py-2 text-xs font-semibold text-background hover:opacity-90"
+              >
+                Create Appointment
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </PageShell>
   );
 }
@@ -373,10 +646,14 @@ function DayView({
   todayApptsByBay,
   isDragging = false,
   onDrop,
+  onCellClick,
+  onApptClick,
 }: {
   todayApptsByBay: Map<number, Appointment[]>;
   isDragging?: boolean;
   onDrop?: (bay: number, hour: number) => void;
+  onCellClick?: (bay: number, hour: number) => void;
+  onApptClick?: (a: Appointment) => void;
 }) {
   const rowHeight = 28; // px per 30 min
   const startHour = 7;
@@ -433,6 +710,7 @@ function DayView({
               return (
                 <div
                   key={`c-${h}-${b}`}
+                  onClick={() => onCellClick?.(b, h)}
                   onDragOver={(e) => {
                     if (!isDragging || !onDrop) return;
                     e.preventDefault();
@@ -451,14 +729,14 @@ function DayView({
                     setHoverCell(null);
                   }}
                   className={clsx(
-                    "border-b border-r border-border transition-colors last:border-r-0",
+                    "cursor-pointer border-b border-r border-border transition-colors last:border-r-0",
                     isHovered
                       ? "bg-brand-green-tint ring-1 ring-inset ring-brand-green"
                       : isDragging
                         ? "bg-brand-green/[0.04] hover:bg-brand-green/10"
                         : hi % 2 === 0
-                          ? "bg-background"
-                          : "bg-surface/20",
+                          ? "bg-background hover:bg-brand-green/[0.05]"
+                          : "bg-surface/20 hover:bg-brand-green/[0.05]",
                   )}
                   style={{
                     gridColumn: bi + 2,
@@ -489,8 +767,12 @@ function DayView({
               return (
                 <div
                   key={a.id}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onApptClick?.(a);
+                  }}
                   className={clsx(
-                    "z-20 m-0.5 overflow-hidden rounded border-l-4 bg-background p-1.5 shadow-sm transition-all hover:shadow-md hover:ring-1 hover:ring-foreground/20",
+                    "z-20 m-0.5 cursor-pointer overflow-hidden rounded border-l-4 bg-background p-1.5 shadow-sm transition-all hover:shadow-md hover:ring-1 hover:ring-foreground/20",
                     categoryStripe[a.category],
                   )}
                   style={{
@@ -538,9 +820,13 @@ function DayView({
 function WeekView({
   techs,
   apptsByCell,
+  onCellClick,
+  onBlockClick,
 }: {
   techs: Array<{ id: string; name: string; utilization: number; initials: string }>;
   apptsByCell: Map<string, Appointment[]>;
+  onCellClick?: (techId: string, dayIdx: number) => void;
+  onBlockClick?: (a: Appointment) => void;
 }) {
   return (
     <div className="overflow-x-auto">
@@ -589,8 +875,11 @@ function WeekView({
               return (
                 <div
                   key={dayIdx}
+                  onClick={() => {
+                    if (appts.length === 0) onCellClick?.(t.id, dayIdx);
+                  }}
                   className={clsx(
-                    "min-h-[90px] border-r border-border p-1 last:border-r-0",
+                    "min-h-[90px] cursor-pointer border-r border-border p-1 last:border-r-0 hover:bg-brand-green/[0.04]",
                     dayIdx === TODAY_DAY_IDX && "bg-accent/5",
                   )}
                 >
@@ -598,8 +887,12 @@ function WeekView({
                     {appts.map((a) => (
                       <div
                         key={a.id}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onBlockClick?.(a);
+                        }}
                         className={clsx(
-                          "rounded border-l-2 bg-background px-1.5 py-1 text-[10px] shadow-sm",
+                          "cursor-pointer rounded border-l-2 bg-background px-1.5 py-1 text-[10px] shadow-sm hover:ring-1 hover:ring-foreground/20",
                           categoryStripe[a.category],
                         )}
                       >
@@ -635,9 +928,11 @@ function WeekView({
 function ListView({
   appts,
   techMap,
+  onRowClick,
 }: {
   appts: Appointment[];
   techMap: Map<string, { name: string; initials: string }>;
+  onRowClick?: (a: Appointment) => void;
 }) {
   const sorted = [...appts].sort((a, b) => a.startHour - b.startHour);
   return (
@@ -656,7 +951,11 @@ function ListView({
         {sorted.map((a) => {
           const t = techMap.get(a.techId);
           return (
-            <tr key={a.id} className="border-b border-border last:border-0">
+            <tr
+              key={a.id}
+              onClick={() => onRowClick?.(a)}
+              className="cursor-pointer border-b border-border transition-colors last:border-0 hover:bg-surface/40"
+            >
               <td className="px-3 py-2.5 text-xs tabular-nums">
                 {a.startHour > 12 ? `${a.startHour - 12}:00 PM` : `${a.startHour}:00 AM`}
               </td>

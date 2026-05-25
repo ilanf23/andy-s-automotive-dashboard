@@ -16,6 +16,7 @@ import {
   Zap,
 } from "lucide-react";
 import clsx from "clsx";
+import { toast } from "sonner";
 import { CopilotChat } from "@/components/ai/copilot/CopilotChat";
 import type { ContextEntity } from "@/components/ai/copilot/types";
 
@@ -45,6 +46,7 @@ const TOOL_CAPABILITIES = [
 
 function CopilotPage() {
   const [context, setContext] = useState<ContextEntity | null>(null);
+  const [chatKey, setChatKey] = useState(0);
 
   return (
     <div className="grid h-[calc(100vh-7rem)] grid-cols-[260px_1fr_320px] gap-0 overflow-hidden rounded-lg border border-border bg-background -mx-4 -my-6 md:-mx-6">
@@ -55,7 +57,7 @@ function CopilotPage() {
         <div className="border-b border-border p-3">
           <button
             type="button"
-            onClick={() => window.location.reload()}
+            onClick={() => setChatKey((k) => k + 1)}
             className="inline-flex w-full items-center justify-center gap-1.5 rounded-md bg-brand-green px-3 py-2 text-xs font-semibold text-brand-green-foreground hover:opacity-90"
           >
             <Plus className="h-3 w-3" />
@@ -72,6 +74,10 @@ function CopilotPage() {
               <li key={c.id}>
                 <button
                   type="button"
+                  onClick={() => {
+                    toast.info(`Loading conversation: ${c.title}`);
+                    setChatKey((k) => k + 1);
+                  }}
                   className={clsx(
                     "flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left text-[11px] transition-colors",
                     c.active
@@ -120,7 +126,7 @@ function CopilotPage() {
       {/* CENTER — Chat thread                                                    */}
       {/* ====================================================================== */}
       <div className="min-h-0">
-        <CopilotChat onContextChange={setContext} />
+        <CopilotChat key={chatKey} onContextChange={setContext} />
       </div>
 
       {/* ====================================================================== */}

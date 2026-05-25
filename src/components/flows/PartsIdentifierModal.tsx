@@ -88,11 +88,15 @@ type Props = {
 export function PartsIdentifierModal({ open, onOpenChange }: Props) {
   const [phase, setPhase] = useState<Phase>("input");
   const [step, setStep] = useState(0);
+  const [vinFilter, setVinFilter] = useState("");
+  const [partClass, setPartClass] = useState("All parts");
 
   useEffect(() => {
     if (open) {
       setPhase("input");
       setStep(0);
+      setVinFilter("");
+      setPartClass("All parts");
     }
   }, [open]);
 
@@ -178,10 +182,16 @@ export function PartsIdentifierModal({ open, onOpenChange }: Props) {
             <div className="mt-2 flex gap-2">
               <input
                 type="text"
+                value={vinFilter}
+                onChange={(e) => setVinFilter(e.target.value)}
                 placeholder="VIN — e.g., 1FDXE4FS7KDC42718"
                 className="flex-1 rounded-md border border-border bg-background px-3 py-1.5 text-xs outline-none focus:border-brand-green focus:ring-2 focus:ring-brand-green/20"
               />
-              <select className="rounded-md border border-border bg-background px-2 py-1.5 text-xs">
+              <select
+                value={partClass}
+                onChange={(e) => setPartClass(e.target.value)}
+                className="rounded-md border border-border bg-background px-2 py-1.5 text-xs"
+              >
                 <option>All parts</option>
                 <option>Filters</option>
                 <option>Lighting</option>
@@ -217,7 +227,11 @@ export function PartsIdentifierModal({ open, onOpenChange }: Props) {
                 Identified: round bezel · amber lens · 4-pin connector · 12V LED marker
               </div>
             </div>
-            <button className="text-[10px] font-semibold text-muted-foreground hover:text-foreground">
+            <button
+              type="button"
+              onClick={() => setPhase("input")}
+              className="text-[10px] font-semibold text-muted-foreground hover:text-foreground"
+            >
               Re-scan
             </button>
           </div>

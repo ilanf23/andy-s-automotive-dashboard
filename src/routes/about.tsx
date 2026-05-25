@@ -12,6 +12,7 @@ import {
   Heart,
   Wrench,
 } from "lucide-react";
+import { toast } from "sonner";
 import { Reveal, AnimatedCounter, Marquee, Parallax } from "@/lib/motion";
 
 export const Route = createFileRoute("/about")({
@@ -23,61 +24,69 @@ const TEAM = [
     name: "Andy Andrews",
     role: "Co-Founder · Owner",
     initials: "AA",
-    photo: "https://randomuser.me/api/portraits/men/32.jpg",
+    photo:
+      "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=600&h=600&fit=crop&crop=faces&q=80",
   },
   {
     name: "Stuart",
     role: "Co-Founder · Lead Technician",
     initials: "ST",
-    photo: "https://randomuser.me/api/portraits/men/45.jpg",
+    photo:
+      "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=600&h=600&fit=crop&crop=faces&q=80",
   },
   {
     name: "Cody",
     role: "Service & Customer Care",
     initials: "CD",
-    photo: "https://randomuser.me/api/portraits/men/52.jpg",
+    photo:
+      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600&h=600&fit=crop&crop=faces&q=80",
   },
   {
     name: "Cameron",
     role: "Service Advisor",
     initials: "CM",
-    photo: "https://randomuser.me/api/portraits/men/64.jpg",
+    photo:
+      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=600&h=600&fit=crop&crop=faces&q=80",
   },
   {
     name: "Marcus",
     role: "Diesel Specialist",
     initials: "MR",
-    photo: "https://randomuser.me/api/portraits/men/76.jpg",
+    photo:
+      "https://images.unsplash.com/photo-1463453091185-61582044d556?w=600&h=600&fit=crop&crop=faces&q=80",
   },
   {
     name: "Jose",
     role: "Hydraulics Specialist",
     initials: "JA",
-    photo: "https://randomuser.me/api/portraits/men/83.jpg",
+    photo:
+      "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&h=600&fit=crop&crop=faces&q=80",
   },
   {
     name: "Andre",
     role: "Electrical Specialist",
     initials: "AB",
-    photo: "https://randomuser.me/api/portraits/men/91.jpg",
+    photo:
+      "https://images.unsplash.com/photo-1545167622-3a6ac756afa4?w=600&h=600&fit=crop&crop=faces&q=80",
   },
   {
     name: "Trevor",
     role: "General Technician",
     initials: "TH",
-    photo: "https://randomuser.me/api/portraits/men/15.jpg",
+    photo:
+      "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=600&h=600&fit=crop&crop=faces&q=80",
   },
 ];
 
 const SHOP_GALLERY = [
-  "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=800&fit=crop&q=80",
-  "https://images.unsplash.com/photo-1486006920555-c77dcf18193c?w=600&h=800&fit=crop&q=80",
-  "https://images.unsplash.com/photo-1542362567-b07e54358753?w=600&h=800&fit=crop&q=80",
-  "https://images.unsplash.com/photo-1487754180451-c456f719a1fc?w=600&h=800&fit=crop&q=80",
-  "https://images.unsplash.com/photo-1565043666747-69f6646db940?w=600&h=800&fit=crop&q=80",
-  "https://images.unsplash.com/photo-1625047509248-ec889cbff17f?w=600&h=800&fit=crop&q=80",
-  "https://images.unsplash.com/photo-1530046339160-ce3e530c7d2f?w=600&h=800&fit=crop&q=80",
-  "https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?w=600&h=800&fit=crop&q=80",
+  "https://images.unsplash.com/photo-1551830820-330a71b99659?w=600&h=800&fit=crop&q=80",
+  "https://images.unsplash.com/photo-1610647929723-a8922852cd44?w=600&h=800&fit=crop&q=80",
+  "https://images.unsplash.com/photo-1554734867-bf3c00a49371?w=600&h=800&fit=crop&q=80",
+  "https://images.unsplash.com/photo-1601252300554-4ad551483bd2?w=600&h=800&fit=crop&q=80",
+  "https://images.unsplash.com/photo-1605504835488-e8c6d37beb43?w=600&h=800&fit=crop&q=80",
+  "https://images.unsplash.com/photo-1619025873875-59dfdd2bbbd6?w=600&h=800&fit=crop&q=80",
+  "https://images.unsplash.com/photo-1624339024061-b435d9261c1d?w=600&h=800&fit=crop&q=80",
+  "https://images.unsplash.com/photo-1612057473117-3e16246121e6?w=600&h=800&fit=crop&q=80",
 ];
 
 const VALUES = [
@@ -142,12 +151,12 @@ function AboutPage() {
               <Parallax speed={0.15}>
                 <div className="relative aspect-[4/5] overflow-hidden rounded-2xl border border-white/10 shadow-2xl">
                   <img
-                    src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=900&h=1100&fit=crop&q=80"
+                    src="https://images.unsplash.com/photo-1649793395985-967862a3b73f?w=900&h=1100&fit=crop&q=80"
                     onError={(e) => {
                       (e.currentTarget as HTMLImageElement).src =
-                        "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=900&h=1100&fit=crop&q=80";
+                        "https://images.unsplash.com/photo-1686715018049-f73970aa97d3?w=900&h=1100&fit=crop&q=80";
                     }}
-                    alt="Fleet truck serviced by Andy's ATS"
+                    alt="Silver RAM pickup truck serviced by Andy's ATS"
                     className="h-full w-full object-cover transition-transform duration-[1500ms] hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[var(--mkt-ink)]/60 via-transparent to-transparent" />
@@ -162,17 +171,24 @@ function AboutPage() {
       <section className="relative overflow-hidden bg-[var(--mkt-ink)] py-12">
         <Marquee speedSec={45}>
           {SHOP_GALLERY.map((src, i) => (
-            <div
+            <button
               key={i}
-              className="mx-3 h-64 w-80 shrink-0 overflow-hidden rounded-xl border border-white/10"
+              type="button"
+              onClick={() =>
+                toast.info("Gallery", {
+                  description: "Full gallery — coming soon",
+                })
+              }
+              className="mx-3 block h-64 w-80 shrink-0 cursor-pointer overflow-hidden rounded-xl border border-white/10 transition-shadow hover:shadow-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--mkt-gold)]"
+              aria-label="Open shop gallery"
             >
               <img
                 src={src}
                 alt=""
                 loading="lazy"
-                className="h-full w-full object-cover transition-transform duration-700 hover:scale-110"
+                className="h-full w-full object-cover"
               />
-            </div>
+            </button>
           ))}
         </Marquee>
       </section>
@@ -198,7 +214,7 @@ function AboutPage() {
             <div className="mt-10 flex items-center justify-center gap-4">
               <div className="relative h-16 w-16 overflow-hidden rounded-full ring-2 ring-[var(--mkt-gold)] ring-offset-2 ring-offset-[var(--mkt-paper)]">
                 <img
-                  src="https://randomuser.me/api/portraits/men/32.jpg"
+                  src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=600&h=600&fit=crop&crop=faces&q=80"
                   alt="Andy Andrews"
                   className="h-full w-full object-cover"
                 />
@@ -216,57 +232,204 @@ function AboutPage() {
         </div>
       </section>
 
-      {/* Values */}
-      <section className="bg-[var(--mkt-ink)] py-24 text-white md:py-32">
-        <div className="mx-auto max-w-7xl px-4 md:px-6">
-          <div className="text-center">
+      {/* Values — Manifesto Stack */}
+      <section className="relative overflow-hidden bg-[var(--mkt-ink)] text-white">
+        {/* Drifting diagonal stripes */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -inset-[20%] opacity-[0.06]"
+          style={{
+            background:
+              "repeating-linear-gradient(115deg, transparent 0 90px, var(--mkt-gold) 90px 91px, transparent 91px 180px)",
+            animation: "valuesDrift 32s linear infinite",
+          }}
+        />
+        {/* Spotlight wash */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute left-1/2 top-[55%] h-[70vh] w-[70vw] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-[0.18] blur-[140px]"
+          style={{
+            background:
+              "radial-gradient(closest-side, var(--mkt-gold), transparent)",
+          }}
+        />
+
+        {/* Marquee ticker — top */}
+        <div className="relative border-y border-white/10 bg-black/40 backdrop-blur-sm">
+          <Marquee speedSec={45} pauseOnHover={false}>
+            <div className="flex items-center gap-10 py-4 pr-10 text-[10px] font-black uppercase tracking-[0.4em] text-white/45">
+              <span>No compromise</span>
+              <span aria-hidden className="text-[var(--mkt-gold)]">◣</span>
+              <span>Safety first</span>
+              <span aria-hidden className="text-[var(--mkt-gold)]">◣</span>
+              <span>Transparent estimates</span>
+              <span aria-hidden className="text-[var(--mkt-gold)]">◣</span>
+              <span>True partnership</span>
+              <span aria-hidden className="text-[var(--mkt-gold)]">◣</span>
+              <span>Family standards</span>
+              <span aria-hidden className="text-[var(--mkt-gold)]">◣</span>
+            </div>
+          </Marquee>
+        </div>
+
+        {/* Heading */}
+        <div className="relative mx-auto max-w-7xl px-4 pt-24 md:px-6 md:pt-32">
+          <div className="grid grid-cols-1 gap-10 md:grid-cols-[1fr_1.4fr] md:items-end">
             <Reveal>
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--mkt-gold)]">
-                Our values
-              </span>
-            </Reveal>
-            <Reveal delay={100}>
-              <h2 className="mkt-display mt-3 text-4xl md:text-5xl">
+              <div className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.3em] text-[var(--mkt-gold)]">
+                <span className="h-px w-8 bg-[var(--mkt-gold)]" />
+                Our values · 03
+              </div>
+              <h2 className="mkt-display mt-5 text-5xl leading-[0.92] tracking-tight md:text-7xl">
                 Three things
                 <br />
-                we won't compromise on.
+                <span className="font-light italic text-white/45">
+                  we won't{" "}
+                </span>
+                <span className="relative inline-block">
+                  compromise
+                  <span
+                    aria-hidden
+                    className="absolute -bottom-1 left-0 right-0 h-[7px] origin-left bg-[var(--mkt-gold)]"
+                    style={{
+                      animation:
+                        "valuesUnderline 1.1s cubic-bezier(0.22, 1, 0.36, 1) 0.5s both",
+                    }}
+                  />
+                </span>
+                .
               </h2>
             </Reveal>
-            <Reveal delay={200}>
-              <p className="mx-auto mt-5 max-w-2xl text-base text-white/70">
+            <Reveal delay={150}>
+              <p className="text-base leading-relaxed text-white/65 md:pb-3 md:text-lg">
                 Walt Disney said "when your values are clear, your decisions
-                are easy." Everything we do comes back to these three.
+                are easy." Everything we do comes back to these three.{" "}
+                <span className="text-white">
+                  No exceptions, no negotiations, no asterisks.
+                </span>
               </p>
             </Reveal>
           </div>
+        </div>
 
-          <div className="mt-16 grid grid-cols-1 gap-5 md:grid-cols-3">
-            {VALUES.map((v, i) => {
-              const Icon = v.icon;
-              return (
-                <Reveal key={v.title} delay={i * 120}>
-                  <div className="group relative h-full overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] p-8 transition-all duration-500 hover:-translate-y-1 hover:border-[var(--mkt-gold)]/40 hover:bg-white/[0.06]">
-                    <div className="text-[9px] font-black uppercase tracking-[0.18em] text-[var(--mkt-gold)]">
-                      {String(i + 1).padStart(2, "0")}
+        {/* Pillars — manifesto rows */}
+        <ul className="relative mx-auto mt-20 max-w-[1500px] px-4 md:mt-24 md:px-10">
+          <li
+            aria-hidden
+            className="h-px w-full bg-gradient-to-r from-transparent via-white/15 to-transparent"
+          />
+          {VALUES.map((v, i) => {
+            const Icon = v.icon;
+            return (
+              <Reveal
+                key={v.title}
+                as="li"
+                delay={i * 120}
+                className="group relative block"
+              >
+                <div className="relative grid grid-cols-[1fr] items-start gap-6 py-12 transition-colors duration-500 md:grid-cols-[200px_1fr_minmax(0,_2.4fr)_auto] md:gap-14 md:py-16">
+                  {/* Hover-revealed scrolling title */}
+                  <div
+                    aria-hidden
+                    className="pointer-events-none absolute inset-0 overflow-hidden opacity-0 transition-opacity duration-700 group-hover:opacity-100"
+                  >
+                    <div
+                      className="mkt-display absolute left-0 top-1/2 -translate-y-1/2 whitespace-nowrap text-[160px] font-extrabold leading-none tracking-tight text-[var(--mkt-gold)]/[0.07]"
+                      style={{
+                        animation: "valuesScroll 22s linear infinite",
+                      }}
+                    >
+                      {`${v.title.toUpperCase()} · ${v.title.toUpperCase()} · ${v.title.toUpperCase()} · ${v.title.toUpperCase()} · ${v.title.toUpperCase()} · `}
                     </div>
-                    <div className="mt-6 flex h-14 w-14 items-center justify-center rounded-xl bg-[var(--mkt-gold)]/10 transition-all duration-500 group-hover:bg-[var(--mkt-gold)]">
-                      <Icon
-                        className="h-7 w-7 text-[var(--mkt-gold)] transition-colors duration-500 group-hover:text-[var(--mkt-ink)]"
-                        strokeWidth={1.5}
+                  </div>
+
+                  {/* Oversized numeral */}
+                  <div className="relative">
+                    <div
+                      className="mkt-display relative inline-block text-[88px] font-black leading-none text-white/15 transition-colors duration-700 group-hover:text-[var(--mkt-gold)] md:text-[156px]"
+                      style={{ letterSpacing: "-0.04em" }}
+                    >
+                      0{i + 1}
+                      <span
+                        aria-hidden
+                        className="absolute -bottom-3 left-0 h-[3px] w-0 bg-[var(--mkt-gold)] transition-all duration-700 ease-out group-hover:w-full"
                       />
                     </div>
-                    <h3 className="mkt-display mt-6 text-3xl text-white">
-                      {v.title}
+                  </div>
+
+                  {/* Icon + title */}
+                  <div className="relative">
+                    <div className="relative flex h-16 w-16 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.04] transition-all duration-500 group-hover:rotate-[-8deg] group-hover:border-[var(--mkt-gold)]/50 group-hover:bg-[var(--mkt-gold)]/15">
+                      <Icon
+                        className="h-7 w-7 text-white/85 transition-colors duration-500 group-hover:text-[var(--mkt-gold)]"
+                        strokeWidth={1.5}
+                      />
+                      <span
+                        aria-hidden
+                        className="absolute -inset-2 -z-10 rounded-2xl bg-[var(--mkt-gold)]/0 blur-xl transition-all duration-700 group-hover:bg-[var(--mkt-gold)]/30"
+                      />
+                    </div>
+                    <h3 className="mkt-display mt-7 text-4xl leading-[0.95] tracking-tight md:text-5xl">
+                      {v.title}.
                     </h3>
-                    <p className="mt-3 text-sm leading-relaxed text-white/70">
+                  </div>
+
+                  {/* Body */}
+                  <div className="relative md:pt-3">
+                    <p className="max-w-xl text-base leading-relaxed text-white/75 md:text-lg">
                       {v.body}
                     </p>
+                    <div className="mt-6 flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.3em] text-white/40 transition-colors duration-500 group-hover:text-[var(--mkt-gold)]">
+                      <span className="h-px w-6 bg-current transition-all duration-500 group-hover:w-12" />
+                      Non-negotiable
+                    </div>
                   </div>
-                </Reveal>
-              );
-            })}
-          </div>
+
+                  {/* Arrow */}
+                  <div className="hidden items-start pt-4 md:flex">
+                    <span className="flex h-12 w-12 items-center justify-center rounded-full border border-white/15 text-white/40 transition-all duration-500 group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:border-[var(--mkt-gold)] group-hover:bg-[var(--mkt-gold)] group-hover:text-[var(--mkt-ink)]">
+                      <ArrowRight className="h-5 w-5" strokeWidth={2} />
+                    </span>
+                  </div>
+                </div>
+
+                {/* Row divider — lights up on hover */}
+                <div
+                  aria-hidden
+                  className="relative h-px w-full bg-gradient-to-r from-transparent via-white/15 to-transparent"
+                >
+                  <span className="absolute inset-y-0 left-0 w-0 bg-gradient-to-r from-[var(--mkt-gold)] via-[var(--mkt-gold)] to-transparent transition-all duration-1000 ease-out group-hover:w-1/2" />
+                </div>
+              </Reveal>
+            );
+          })}
+        </ul>
+
+        {/* Closing line */}
+        <div className="relative mx-auto max-w-7xl px-4 pb-24 pt-20 md:px-6 md:pb-32">
+          <Reveal>
+            <p className="mkt-display text-2xl leading-tight text-white/80 md:text-3xl">
+              <span className="text-[var(--mkt-gold)]">↳</span> If we wouldn't
+              put our own family in it,{" "}
+              <span className="text-white">it doesn't leave the shop.</span>
+            </p>
+          </Reveal>
         </div>
+
+        <style>{`
+          @keyframes valuesDrift {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-180px, 90px); }
+          }
+          @keyframes valuesUnderline {
+            0% { transform: scaleX(0); }
+            100% { transform: scaleX(1); }
+          }
+          @keyframes valuesScroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+          }
+        `}</style>
       </section>
 
       {/* Story */}
@@ -344,7 +507,16 @@ function AboutPage() {
                   direction={dir as "up" | "left" | "right"}
                   distance={40}
                 >
-                  <div className="group overflow-hidden rounded-2xl border border-[var(--mkt-border-light)] bg-white transition-all duration-500 hover:-translate-y-2 hover:border-[var(--mkt-ink)]/30 hover:shadow-2xl">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      toast.info(`${m.name}`, {
+                        description: "Tech bio coming soon",
+                      })
+                    }
+                    className="group block w-full cursor-pointer overflow-hidden rounded-2xl border border-[var(--mkt-border-light)] bg-white text-left transition-all duration-500 hover:-translate-y-2 hover:border-[var(--mkt-ink)]/30 hover:shadow-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--mkt-gold)]"
+                    aria-label={`View bio for ${m.name}`}
+                  >
                     <div className="relative aspect-[4/5] overflow-hidden bg-[var(--mkt-ink)]">
                       <img
                         src={m.photo}
@@ -365,7 +537,7 @@ function AboutPage() {
                         {m.initials}
                       </div>
                     </div>
-                  </div>
+                  </button>
                 </Reveal>
               );
             })}

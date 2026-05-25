@@ -1,7 +1,8 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState, useMemo } from "react";
-import { Plus, AlertTriangle, Phone, Mail } from "lucide-react";
+import { Plus, AlertTriangle, Phone, Mail, X } from "lucide-react";
 import clsx from "clsx";
+import { toast } from "sonner";
 import { ListPageShell } from "@/components/shop/ListPageShell";
 import { FilterBar } from "@/components/shop/FilterBar";
 import { MoneyCell, DateCell, TableHeader, TableRow } from "@/components/shop/cells";
@@ -25,6 +26,14 @@ function CustomersIndex() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<TabKey>("all");
   const [search, setSearch] = useState("");
+  const [showAddCustomer, setShowAddCustomer] = useState(false);
+  const [newCustomer, setNewCustomer] = useState({
+    name: "",
+    contactName: "",
+    phone: "",
+    email: "",
+    type: "Retail" as "Retail" | "Fleet",
+  });
 
   const enriched = useMemo(() => {
     return customers.map((c) => {
@@ -91,6 +100,7 @@ function CustomersIndex() {
       actions={
         <button
           type="button"
+          onClick={() => setShowAddCustomer(true)}
           className="inline-flex items-center gap-1.5 rounded-md bg-foreground px-3.5 py-2 text-sm font-semibold text-background shadow-sm hover:opacity-90"
         >
           <Plus className="h-4 w-4" />
@@ -239,6 +249,115 @@ function CustomersIndex() {
           )}
         </table>
       </div>
+
+      {showAddCustomer && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+          <div className="w-full max-w-md rounded-lg border border-border bg-background shadow-xl">
+            <div className="flex items-center justify-between border-b border-border px-4 py-3">
+              <h2 className="text-sm font-semibold">Add Customer</h2>
+              <button
+                type="button"
+                onClick={() => setShowAddCustomer(false)}
+                className="rounded-md p-1 text-muted-foreground hover:bg-surface hover:text-foreground"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+            <div className="space-y-3 p-4">
+              <div>
+                <label className="mb-1 block text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                  Business Name
+                </label>
+                <input
+                  type="text"
+                  value={newCustomer.name}
+                  onChange={(e) => setNewCustomer({ ...newCustomer, name: e.target.value })}
+                  placeholder="Acme Trucking LLC"
+                  className="w-full rounded-md border border-border bg-background px-3 py-1.5 text-sm outline-none focus:border-foreground/40"
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                  Contact Name
+                </label>
+                <input
+                  type="text"
+                  value={newCustomer.contactName}
+                  onChange={(e) => setNewCustomer({ ...newCustomer, contactName: e.target.value })}
+                  placeholder="Jane Doe"
+                  className="w-full rounded-md border border-border bg-background px-3 py-1.5 text-sm outline-none focus:border-foreground/40"
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                  Phone
+                </label>
+                <input
+                  type="tel"
+                  value={newCustomer.phone}
+                  onChange={(e) => setNewCustomer({ ...newCustomer, phone: e.target.value })}
+                  placeholder="(555) 123-4567"
+                  className="w-full rounded-md border border-border bg-background px-3 py-1.5 text-sm outline-none focus:border-foreground/40"
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  value={newCustomer.email}
+                  onChange={(e) => setNewCustomer({ ...newCustomer, email: e.target.value })}
+                  placeholder="jane@acmetrucking.com"
+                  className="w-full rounded-md border border-border bg-background px-3 py-1.5 text-sm outline-none focus:border-foreground/40"
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                  Customer Type
+                </label>
+                <select
+                  value={newCustomer.type}
+                  onChange={(e) =>
+                    setNewCustomer({ ...newCustomer, type: e.target.value as "Retail" | "Fleet" })
+                  }
+                  className="w-full rounded-md border border-border bg-background px-3 py-1.5 text-sm outline-none focus:border-foreground/40"
+                >
+                  <option value="Retail">Retail</option>
+                  <option value="Fleet">Fleet</option>
+                </select>
+              </div>
+            </div>
+            <div className="flex items-center justify-end gap-2 border-t border-border px-4 py-3">
+              <button
+                type="button"
+                onClick={() => setShowAddCustomer(false)}
+                className="rounded-md border border-border bg-background px-3 py-1.5 text-xs font-medium hover:bg-surface"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  const name = newCustomer.name.trim() || "New Customer";
+                  toast.success(`Added ${name}`);
+                  setShowAddCustomer(false);
+                  setNewCustomer({
+                    name: "",
+                    contactName: "",
+                    phone: "",
+                    email: "",
+                    type: "Retail",
+                  });
+                }}
+                className="inline-flex items-center gap-1.5 rounded-md bg-foreground px-3 py-1.5 text-xs font-semibold text-background hover:opacity-90"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </ListPageShell>
   );
 }

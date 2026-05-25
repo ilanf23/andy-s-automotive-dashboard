@@ -8,6 +8,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import clsx from "clsx";
+import { toast } from "sonner";
 import { ListPageShell } from "@/components/shop/ListPageShell";
 import { FilterBar } from "@/components/shop/FilterBar";
 import { MoneyCell, DateCell, TableHeader, TableRow } from "@/components/shop/cells";
@@ -132,6 +133,11 @@ function EstimatesListPage() {
       actions={
         <button
           type="button"
+          onClick={() => {
+            const newId = "EST-" + Date.now().toString().slice(-4);
+            navigate({ to: "/estimates/$id", params: { id: newId } });
+            toast.success("New estimate started");
+          }}
           className="inline-flex items-center gap-1.5 rounded-md bg-brand-green px-3.5 py-2 text-sm font-semibold text-brand-green-foreground shadow-sm hover:opacity-90"
         >
           <Plus className="h-4 w-4" />

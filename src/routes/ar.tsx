@@ -190,6 +190,68 @@ function ARPage() {
         <BucketTile label="91+ days" value={buckets.b91} tone="danger" />
       </div>
 
+      {activeTab === "payments" ? (
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[800px] text-sm">
+            <TableHeader
+              cols={[
+                { id: "pay", label: "Payment", w: "120px" },
+                { id: "date", label: "Date", align: "right", w: "110px" },
+                { id: "customer", label: "Customer" },
+                { id: "method", label: "Method", w: "120px" },
+                { id: "amount", label: "Amount", align: "right", w: "110px" },
+              ]}
+            />
+            <tbody>
+              {[
+                { id: "PMT-9012", date: "May 19", customer: "Med Trust", method: "ACH", amount: 4250.0 },
+                { id: "PMT-9013", date: "May 18", customer: "City Form", method: "Credit Card", amount: 1820.5 },
+                { id: "PMT-9014", date: "May 17", customer: "Reliable Ducks", method: "Check", amount: 3475.0 },
+              ].map((p) => (
+                <TableRow key={p.id}>
+                  <td className="px-3 py-2.5 text-xs font-semibold tabular-nums">{p.id}</td>
+                  <td className="px-3 py-2.5 text-right text-[11px]">{p.date}</td>
+                  <td className="px-3 py-2.5 text-xs font-semibold">{p.customer}</td>
+                  <td className="px-3 py-2.5 text-[11px]">{p.method}</td>
+                  <td className="px-3 py-2.5 text-right">
+                    <MoneyCell value={p.amount} className="text-xs font-semibold" />
+                  </td>
+                </TableRow>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : activeTab === "statements" ? (
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[800px] text-sm">
+            <TableHeader
+              cols={[
+                { id: "stmt", label: "Statement", w: "120px" },
+                { id: "customer", label: "Customer" },
+                { id: "period", label: "Period", w: "140px" },
+                { id: "sent", label: "Sent", w: "100px" },
+                { id: "balance", label: "Balance", align: "right", w: "110px" },
+              ]}
+            />
+            <tbody>
+              {[
+                { id: "STMT-2401", customer: "Med Trust", period: "May 2026", sent: "May 20", balance: 8420 },
+                { id: "STMT-2402", customer: "Northpoint Logistics", period: "May 2026", sent: "May 20", balance: 12750 },
+              ].map((s) => (
+                <TableRow key={s.id}>
+                  <td className="px-3 py-2.5 text-xs font-semibold tabular-nums">{s.id}</td>
+                  <td className="px-3 py-2.5 text-xs font-semibold">{s.customer}</td>
+                  <td className="px-3 py-2.5 text-[11px]">{s.period}</td>
+                  <td className="px-3 py-2.5 text-[11px] text-muted-foreground">{s.sent}</td>
+                  <td className="px-3 py-2.5 text-right">
+                    <MoneyCell value={s.balance} className="text-xs font-semibold" />
+                  </td>
+                </TableRow>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : (
       <div className="overflow-x-auto">
         <table className="w-full min-w-[1000px] text-sm">
           <TableHeader
@@ -242,12 +304,20 @@ function ARPage() {
                 <td className="px-3 py-2.5">
                   <div className="flex items-center justify-end gap-1">
                     <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toast.success(`Statement sent to ${i.customer}`);
+                      }}
                       className="rounded-md p-1.5 text-muted-foreground hover:bg-surface hover:text-foreground"
                       title="Send statement"
                     >
                       <Send className="h-3 w-3" />
                     </button>
                     <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toast.success(`Calling ${i.customer}…`);
+                      }}
                       className="rounded-md p-1.5 text-muted-foreground hover:bg-surface hover:text-foreground"
                       title="Call"
                     >
@@ -287,6 +357,7 @@ function ARPage() {
           </tfoot>
         </table>
       </div>
+      )}
     </ListPageShell>
   );
 }

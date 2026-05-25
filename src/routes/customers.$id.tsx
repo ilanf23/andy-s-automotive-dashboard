@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { format, parseISO } from "date-fns";
 import {
@@ -16,6 +16,8 @@ import {
   Edit,
   CreditCard,
   Calendar,
+  Star,
+  MessageCircle,
 } from "lucide-react";
 import clsx from "clsx";
 import { DetailPageShell, MetaPair } from "@/components/shop/DetailPageShell";
@@ -51,6 +53,7 @@ type Tab = "overview" | "vehicles" | "repair-orders" | "estimates" | "messages" 
 
 function CustomerDetail() {
   const { id } = Route.useParams();
+  const navigate = useNavigate();
   const [tab, setTab] = useState<Tab>("overview");
   const { repairOrders } = useShopState();
   const { open: openModal } = useModals();
@@ -145,20 +148,64 @@ function CustomerDetail() {
       }
       actions={
         <>
-          <button className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-[11px] font-medium hover:bg-surface">
+          <button
+            onClick={() => toast.info("Edit customer", { description: "Coming soon" })}
+            className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-[11px] font-medium hover:bg-surface"
+          >
             <Edit className="h-3 w-3" />
             Edit
           </button>
-          <button className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-[11px] font-medium hover:bg-surface">
+          <button
+            onClick={() =>
+              toast.success(`Calling ${customer.contactName} at ${customer.phone}…`)
+            }
+            className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-[11px] font-medium hover:bg-surface"
+          >
             <Phone className="h-3 w-3" />
             Call
           </button>
-          <button className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-[11px] font-medium hover:bg-surface">
+          <button
+            onClick={() => {
+              navigate({ to: "/messages" });
+              toast.info("Opening messages");
+            }}
+            className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-[11px] font-medium hover:bg-surface"
+          >
             <MessageSquare className="h-3 w-3" />
             Message
           </button>
+          <button
+            onClick={() => toast.success(`Drafting email to ${customer.email}`)}
+            className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-[11px] font-medium hover:bg-surface"
+            title="Email"
+          >
+            <Mail className="h-3 w-3" />
+            Email
+          </button>
+          <button
+            onClick={() => toast.success(`Drafting text to ${customer.phone}`)}
+            className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-[11px] font-medium hover:bg-surface"
+            title="Text"
+          >
+            <MessageCircle className="h-3 w-3" />
+            Text
+          </button>
+          <button
+            onClick={() => toast.success("Review request sent")}
+            className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-[11px] font-medium hover:bg-surface"
+            title="Send Review Request"
+          >
+            <Star className="h-3 w-3" />
+            Review
+          </button>
           <div className="ml-auto flex items-center gap-2">
-            <button className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-[11px] font-medium hover:bg-surface">
+            <button
+              onClick={() => {
+                navigate({ to: "/schedule" });
+                toast.info("Opening schedule");
+              }}
+              className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-[11px] font-medium hover:bg-surface"
+            >
               <Calendar className="h-3 w-3" />
               Schedule
             </button>
@@ -254,7 +301,10 @@ function CustomerDetail() {
                   <div className="text-[10px] text-muted-foreground">Connected · Auto-sync ON</div>
                 </div>
               </div>
-              <button className="mt-3 inline-flex w-full items-center justify-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-[11px] font-medium hover:bg-surface">
+              <button
+                onClick={() => toast.info(`Opening in ${customer.fleetPlatform}…`)}
+                className="mt-3 inline-flex w-full items-center justify-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-[11px] font-medium hover:bg-surface"
+              >
                 <ExternalLink className="h-3 w-3" />
                 Open in {customer.fleetPlatform}
               </button>
@@ -318,7 +368,10 @@ function CustomerDetail() {
               </div>
             </div>
             {customer.openBalance > 0 && (
-              <button className="mt-3 inline-flex w-full items-center justify-center gap-1.5 rounded-md bg-foreground px-3 py-1.5 text-xs font-semibold text-background hover:opacity-90">
+              <button
+                onClick={() => toast.success(`Statement emailed to ${customer.contactName}`)}
+                className="mt-3 inline-flex w-full items-center justify-center gap-1.5 rounded-md bg-foreground px-3 py-1.5 text-xs font-semibold text-background hover:opacity-90"
+              >
                 <Send className="h-3 w-3" />
                 Send Statement
               </button>
@@ -447,6 +500,7 @@ function OverviewTab({
 }
 
 function VehiclesTab({ vehicles }: { vehicles: ReturnType<typeof Array.prototype.filter> }) {
+  const navigate = useNavigate();
   if (vehicles.length === 0) {
     return (
       <EmptyState
@@ -472,15 +526,14 @@ function VehiclesTab({ vehicles }: { vehicles: ReturnType<typeof Array.prototype
           {vehicles.map((v: any) => (
             <tr
               key={v.id}
+              onClick={() => navigate({ to: "/vehicles/$id", params: { id: v.id } })}
               className="cursor-pointer border-b border-border last:border-0 hover:bg-surface/40"
             >
               <td className="px-3 py-2.5">
-                <Link to="/vehicles/$id" params={{ id: v.id }}>
-                  <div className="text-xs font-semibold">{v.unit}</div>
-                  <div className="text-[10px] text-muted-foreground">
-                    {v.year} {v.make} {v.model}
-                  </div>
-                </Link>
+                <div className="text-xs font-semibold">{v.unit}</div>
+                <div className="text-[10px] text-muted-foreground">
+                  {v.year} {v.make} {v.model}
+                </div>
               </td>
               <td className="px-3 py-2.5 font-mono text-[10px] text-muted-foreground">
                 {v.vin}
@@ -503,6 +556,7 @@ function VehiclesTab({ vehicles }: { vehicles: ReturnType<typeof Array.prototype
 }
 
 function RepairOrdersTab({ ros }: { ros: ReturnType<typeof Array.prototype.filter> }) {
+  const navigate = useNavigate();
   if (ros.length === 0) {
     return <EmptyState icon={FileText} title="No repair orders yet" />;
   }
@@ -520,15 +574,15 @@ function RepairOrdersTab({ ros }: { ros: ReturnType<typeof Array.prototype.filte
         </thead>
         <tbody>
           {ros.map((r: any) => (
-            <tr key={r.id} className="cursor-pointer border-b border-border last:border-0 hover:bg-surface/40">
+            <tr
+              key={r.id}
+              onClick={() => navigate({ to: "/repair-orders/$id", params: { id: r.id } })}
+              className="cursor-pointer border-b border-border last:border-0 hover:bg-surface/40"
+            >
               <td className="px-3 py-2.5">
-                <Link
-                  to="/repair-orders/$id"
-                  params={{ id: r.id }}
-                  className="text-xs font-semibold tabular-nums hover:underline"
-                >
+                <span className="text-xs font-semibold tabular-nums hover:underline">
                   #{r.id}
-                </Link>
+                </span>
               </td>
               <td className="px-3 py-2.5 text-xs">{r.description}</td>
               <td className="px-3 py-2.5">
@@ -549,6 +603,7 @@ function RepairOrdersTab({ ros }: { ros: ReturnType<typeof Array.prototype.filte
 }
 
 function EstimatesTab({ estimates }: { estimates: ReturnType<typeof Array.prototype.filter> }) {
+  const navigate = useNavigate();
   if (estimates.length === 0) {
     return <EmptyState icon={FileText} title="No estimates" />;
   }
@@ -566,15 +621,15 @@ function EstimatesTab({ estimates }: { estimates: ReturnType<typeof Array.protot
         </thead>
         <tbody>
           {estimates.map((e: any) => (
-            <tr key={e.id} className="cursor-pointer border-b border-border last:border-0 hover:bg-surface/40">
+            <tr
+              key={e.id}
+              onClick={() => navigate({ to: "/estimates/$id", params: { id: e.id } })}
+              className="cursor-pointer border-b border-border last:border-0 hover:bg-surface/40"
+            >
               <td className="px-3 py-2.5">
-                <Link
-                  to="/estimates/$id"
-                  params={{ id: e.id }}
-                  className="text-xs font-semibold tabular-nums hover:underline"
-                >
+                <span className="text-xs font-semibold tabular-nums hover:underline">
                   {e.id}
-                </Link>
+                </span>
               </td>
               <td className="px-3 py-2.5">
                 <span className="rounded-full bg-surface px-1.5 py-0.5 text-[10px] font-semibold capitalize">
@@ -627,14 +682,19 @@ function MessagesTab({ customerName }: { customerName: string }) {
 }
 
 function NotesTab({ note }: { note?: string }) {
+  const [notes, setNotes] = useState(note || "");
   return (
     <div className="space-y-3">
       <textarea
-        defaultValue={note ?? ""}
+        value={notes}
+        onChange={(e) => setNotes(e.target.value)}
         placeholder="Internal notes about this customer…"
         className="h-32 w-full resize-none rounded-md border border-border bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus:border-foreground/40 focus:outline-none"
       />
-      <button className="inline-flex items-center gap-1.5 rounded-md bg-foreground px-3 py-1.5 text-[11px] font-semibold text-background hover:opacity-90">
+      <button
+        onClick={() => toast.success("Note saved")}
+        className="inline-flex items-center gap-1.5 rounded-md bg-foreground px-3 py-1.5 text-[11px] font-semibold text-background hover:opacity-90"
+      >
         Save Note
       </button>
     </div>

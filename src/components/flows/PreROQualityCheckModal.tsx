@@ -265,6 +265,10 @@ export function PreROQualityCheckModal({ open, onOpenChange, roId }: Props) {
                       )}
                       <button
                         type="button"
+                        onClick={() => {
+                          toast.success(`Routed: ${issue.title}`);
+                          setIgnored((p) => ({ ...p, [issue.id]: true }));
+                        }}
                         className="inline-flex items-center gap-1 rounded-md bg-foreground px-2 py-1 text-[10px] font-semibold text-background hover:opacity-90"
                       >
                         Fix

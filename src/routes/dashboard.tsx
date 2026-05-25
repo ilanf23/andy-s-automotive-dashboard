@@ -1,4 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useState } from "react";
 import { format } from "date-fns";
 import {
   Plus,
@@ -289,6 +290,8 @@ function Dashboard() {
   const today = format(new Date(), "EEEE, MMMM d, yyyy");
   const { repairOrders } = useShopState();
   const { open: openModal } = useModals();
+  const navigate = useNavigate();
+  const [dateRange, setDateRange] = useState<"Today" | "Week" | "Month">("Today");
 
   const custMap = new Map(customers.map((c) => [c.id, c]));
   const vehMap = new Map(vehicles.map((v) => [v.id, v]));
@@ -398,9 +401,10 @@ function Dashboard() {
         <>
           <button
             type="button"
-            onClick={() =>
-              toast.info("Schedule appointment", { description: "Opens the Schedule page" })
-            }
+            onClick={() => {
+              toast.info("Schedule appointment", { description: "Opens the Schedule page" });
+              navigate({ to: "/schedule" });
+            }}
             className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-surface"
           >
             <CalendarPlus className="h-4 w-4" />
@@ -492,59 +496,83 @@ function Dashboard() {
       {/* TOP: KPI Strip — 6 shop metrics                            */}
       {/* ======================================================== */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-        <MetricTile
-          label="Sales Today"
-          value="$14,820"
-          delta="+18% vs yest."
-          deltaDirection="up"
-          icon={DollarSign}
-          accent="success"
-        />
-        <MetricTile
-          label="ARO"
-          value="$1,847"
-          subValue="avg"
-          delta="+$104 MTD"
-          deltaDirection="up"
-          icon={Gauge}
-          accent="ink"
-        />
-        <MetricTile
-          label="ELR"
-          value="$148"
-          subValue="/hr"
-          delta="target $155"
-          deltaDirection="down"
-          icon={TrendingUp}
-          accent="warning"
-        />
-        <MetricTile
-          label="GP %"
-          value="56.4%"
-          subValue="GP $8,290"
-          delta="+1.2pts"
-          deltaDirection="up"
-          icon={Percent}
-          accent="success"
-        />
-        <MetricTile
-          label="Hours Sold"
-          value="47.2"
-          subValue="/ 40.0 billed"
-          delta="118% eff."
-          deltaDirection="up"
-          icon={Clock}
-          accent="ink"
-        />
-        <MetricTile
-          label="Cars In Shop"
-          value={String(carsInShop)}
-          subValue={`of 12 bays`}
-          delta={`${openROs} open ROs`}
-          deltaDirection="flat"
-          icon={Truck}
-          accent="default"
-        />
+        {(
+          [
+            {
+              label: "Sales Today",
+              value: "$14,820",
+              delta: "+18% vs yest.",
+              deltaDirection: "up" as const,
+              icon: DollarSign,
+              accent: "success" as const,
+            },
+            {
+              label: "ARO",
+              value: "$1,847",
+              subValue: "avg",
+              delta: "+$104 MTD",
+              deltaDirection: "up" as const,
+              icon: Gauge,
+              accent: "ink" as const,
+            },
+            {
+              label: "ELR",
+              value: "$148",
+              subValue: "/hr",
+              delta: "target $155",
+              deltaDirection: "down" as const,
+              icon: TrendingUp,
+              accent: "warning" as const,
+            },
+            {
+              label: "GP %",
+              value: "56.4%",
+              subValue: "GP $8,290",
+              delta: "+1.2pts",
+              deltaDirection: "up" as const,
+              icon: Percent,
+              accent: "success" as const,
+            },
+            {
+              label: "Hours Sold",
+              value: "47.2",
+              subValue: "/ 40.0 billed",
+              delta: "118% eff.",
+              deltaDirection: "up" as const,
+              icon: Clock,
+              accent: "ink" as const,
+            },
+            {
+              label: "Cars In Shop",
+              value: String(carsInShop),
+              subValue: `of 12 bays`,
+              delta: `${openROs} open ROs`,
+              deltaDirection: "flat" as const,
+              icon: Truck,
+              accent: "default" as const,
+            },
+          ]
+        ).map((kpi) => (
+          <button
+            key={kpi.label}
+            type="button"
+            onClick={() => {
+              toast.info(`${kpi.label} drill-down`);
+              navigate({ to: "/reports" });
+            }}
+            className="text-left transition-transform hover:-translate-y-0.5"
+          >
+            <MetricTile
+              label={kpi.label}
+              value={kpi.value}
+              subValue={kpi.subValue}
+              delta={kpi.delta}
+              deltaDirection={kpi.deltaDirection}
+              icon={kpi.icon}
+              accent={kpi.accent}
+            />
+          </button>
+        ))}
       </div>
 
       {/* ======================================================== */}
@@ -569,13 +597,34 @@ function Dashboard() {
           description={`${carsInShop} vehicles on the floor · ${openROs} open repair orders`}
           actions={
             <div className="flex items-center gap-2">
-              <button className="rounded-md border border-border bg-background px-2.5 py-1.5 text-[11px] font-medium text-foreground hover:bg-surface">
+              <button
+                type="button"
+                onClick={() =>
+                  toast.info("Tech filter", { description: "Filter dropdown — coming soon" })
+                }
+                className="rounded-md border border-border bg-background px-2.5 py-1.5 text-[11px] font-medium text-foreground hover:bg-surface"
+              >
                 All Techs
               </button>
-              <button className="rounded-md border border-border bg-background px-2.5 py-1.5 text-[11px] font-medium text-foreground hover:bg-surface">
-                Today
+              <button
+                type="button"
+                onClick={() => {
+                  const next: "Today" | "Week" | "Month" =
+                    dateRange === "Today" ? "Week" : dateRange === "Week" ? "Month" : "Today";
+                  setDateRange(next);
+                  toast.info(`Date range: ${next}`, {
+                    description: "Filter applied to the job board",
+                  });
+                }}
+                className="rounded-md border border-border bg-background px-2.5 py-1.5 text-[11px] font-medium text-foreground hover:bg-surface"
+              >
+                {dateRange}
               </button>
-              <button className="inline-flex items-center gap-1 text-[11px] font-medium text-muted-foreground hover:text-foreground">
+              <button
+                type="button"
+                onClick={() => navigate({ to: "/repair-orders" })}
+                className="inline-flex items-center gap-1 text-[11px] font-medium text-muted-foreground hover:text-foreground"
+              >
                 Full board <ChevronRight className="h-3 w-3" />
               </button>
             </div>
@@ -606,12 +655,18 @@ function Dashboard() {
                 {appointments.length} scheduled
               </p>
             </div>
-            <button className="inline-flex items-center gap-1 text-[11px] font-medium text-muted-foreground hover:text-foreground">
+            <Link
+              to="/schedule"
+              className="inline-flex items-center gap-1 text-[11px] font-medium text-muted-foreground hover:text-foreground"
+            >
               Schedule <ChevronRight className="h-3 w-3" />
-            </button>
+            </Link>
           </div>
           <div className="px-3 py-1">
-            <AppointmentsList rows={appointments} />
+            <AppointmentsList
+              rows={appointments}
+              onRowClick={() => navigate({ to: "/schedule" })}
+            />
           </div>
         </div>
 
@@ -624,9 +679,12 @@ function Dashboard() {
                 Hours billed vs. sold today
               </p>
             </div>
-            <button className="inline-flex items-center gap-1 text-[11px] font-medium text-muted-foreground hover:text-foreground">
+            <Link
+              to="/my-work"
+              className="inline-flex items-center gap-1 text-[11px] font-medium text-muted-foreground hover:text-foreground"
+            >
               Time clock <ChevronRight className="h-3 w-3" />
-            </button>
+            </Link>
           </div>
           <div className="p-5">
             <TechProductivityList rows={techRows} />
@@ -660,8 +718,9 @@ function Dashboard() {
               {messages.map((m) => (
                 <li
                   key={m.id}
+                  onClick={() => navigate({ to: "/messages" })}
                   className={clsx(
-                    "flex items-start gap-3 px-5 py-3 transition-colors hover:bg-surface/40",
+                    "flex cursor-pointer items-start gap-3 px-5 py-3 transition-colors hover:bg-surface/40",
                     m.unread && "bg-accent/[0.04]",
                   )}
                 >
@@ -698,21 +757,40 @@ function Dashboard() {
               </h3>
             </div>
             <ul className="mt-2 space-y-1.5 text-[11px] text-foreground">
-              <li className="flex items-start gap-1.5">
+              <li
+                onClick={() =>
+                  navigate({ to: "/repair-orders/$id", params: { id: "4847" } })
+                }
+                className="flex cursor-pointer items-start gap-1.5 rounded px-1 py-0.5 hover:bg-destructive/10"
+              >
                 <span className="mt-1 h-1 w-1 shrink-0 rounded-full bg-destructive" />
                 <span>
                   <span className="font-semibold">RO 4847</span> awaiting customer
                   approval — 3 days, $1,850 at risk
                 </span>
               </li>
-              <li className="flex items-start gap-1.5">
+              <li
+                onClick={() => {
+                  toast.info("Northpoint Logistics", {
+                    description: "185 days past due — $17,000",
+                  });
+                  navigate({ to: "/customers" });
+                }}
+                className="flex cursor-pointer items-start gap-1.5 rounded px-1 py-0.5 hover:bg-destructive/10"
+              >
                 <span className="mt-1 h-1 w-1 shrink-0 rounded-full bg-destructive" />
                 <span>
                   Northpoint Logistics — 185 days past due,{" "}
                   <span className="font-semibold">$17,000</span>
                 </span>
               </li>
-              <li className="flex items-start gap-1.5">
+              <li
+                onClick={() => {
+                  toast.info("Stuck job — FT-3");
+                  navigate({ to: "/repair-orders" });
+                }}
+                className="flex cursor-pointer items-start gap-1.5 rounded px-1 py-0.5 hover:bg-destructive/10"
+              >
                 <span className="mt-1 h-1 w-1 shrink-0 rounded-full bg-destructive" />
                 <span>
                   <span className="font-semibold">FT-3</span> stuck in Estimate
@@ -737,15 +815,19 @@ function Dashboard() {
                 {partsOnOrder.length} outstanding orders
               </p>
             </div>
-            <button className="inline-flex items-center gap-1 text-[11px] font-medium text-muted-foreground hover:text-foreground">
+            <Link
+              to="/inventory"
+              className="inline-flex items-center gap-1 text-[11px] font-medium text-muted-foreground hover:text-foreground"
+            >
               Inventory <ChevronRight className="h-3 w-3" />
-            </button>
+            </Link>
           </div>
           <ul className="divide-y divide-border">
             {partsOnOrder.map((p) => (
               <li
                 key={p.id}
-                className="flex items-start gap-3 px-5 py-3 transition-colors hover:bg-surface/40"
+                onClick={() => navigate({ to: "/inventory" })}
+                className="flex cursor-pointer items-start gap-3 px-5 py-3 transition-colors hover:bg-surface/40"
               >
                 <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-surface">
                   <Package className="h-3.5 w-3.5 text-foreground" />
@@ -779,15 +861,25 @@ function Dashboard() {
               <h2 className="text-sm font-semibold">Recent Activity</h2>
               <p className="text-[11px] text-muted-foreground">Last 24 hours</p>
             </div>
-            <Activity className="h-4 w-4 text-muted-foreground" />
+            <div className="flex items-center gap-2">
+              <Link
+                to="/repair-orders"
+                className="text-[11px] font-medium text-muted-foreground hover:text-foreground"
+              >
+                View all
+              </Link>
+              <Activity className="h-4 w-4 text-muted-foreground" />
+            </div>
           </div>
           <ul className="space-y-0.5 px-3 py-2">
             {activity.map((a) => {
               const Icon = a.icon;
+              const activityLabel = `${a.actor} ${a.text}`;
               return (
                 <li
                   key={a.id}
-                  className="flex items-start gap-2.5 rounded-md px-2 py-1.5 transition-colors hover:bg-surface/60"
+                  onClick={() => toast.info(activityLabel)}
+                  className="flex cursor-pointer items-start gap-2.5 rounded-md px-2 py-1.5 transition-colors hover:bg-surface/60"
                 >
                   <div
                     className={clsx(
@@ -825,8 +917,22 @@ function Dashboard() {
             {quickActions.map((qa) => {
               const Icon = qa.icon;
               const handleClick = () => {
-                if (qa.id === "qa1") openModal("new-ro", {});
-                else toast.info(qa.label, { description: "Coming soon" });
+                if (qa.id === "qa1") {
+                  openModal("new-ro", {});
+                } else if (qa.id === "qa2") {
+                  navigate({ to: "/schedule" });
+                } else if (qa.id === "qa3") {
+                  navigate({ to: "/inspections" });
+                } else if (qa.id === "qa4") {
+                  toast.info("Add customer — fill the form on the customers page");
+                  navigate({ to: "/customers" });
+                } else if (qa.id === "qa5") {
+                  navigate({ to: "/inventory" });
+                } else if (qa.id === "qa6") {
+                  navigate({ to: "/estimates" });
+                } else {
+                  toast.info(qa.label, { description: "Coming soon" });
+                }
               };
               return (
                 <button

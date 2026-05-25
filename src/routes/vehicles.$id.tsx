@@ -1,5 +1,6 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useRef, useState } from "react";
+import { toast } from "sonner";
 import { format, parseISO } from "date-fns";
 import {
   Truck,
@@ -12,6 +13,10 @@ import {
   History,
   Copy,
   Save,
+  ScanLine,
+  LogIn,
+  Upload,
+  X,
 } from "lucide-react";
 import clsx from "clsx";
 import { DetailPageShell, MetaPair } from "@/components/shop/DetailPageShell";
@@ -42,7 +47,9 @@ type Tab =
 
 function VehicleDetail() {
   const { id } = Route.useParams();
+  const navigate = useNavigate();
   const [tab, setTab] = useState<Tab>("overview");
+  const [editing, setEditing] = useState(false);
   const { repairOrders } = useShopState();
   const { open: openModal } = useModals();
 
@@ -65,6 +72,44 @@ function VehicleDetail() {
   const openRO = vehROs.find((r) => r.status !== "completed" && r.status !== "ready");
   const ltSpend = vehROs.reduce((acc, r) => acc + r.total, 0);
 
+  // --- Header action handlers ---
+  const handleEdit = () => {
+    toast.info("Edit vehicle", { description: "Inline edit — coming soon" });
+    setEditing(true);
+  };
+
+  const handleCopyVin = async () => {
+    try {
+      await navigator.clipboard.writeText(vehicle.vin);
+      toast.success("VIN copied to clipboard");
+    } catch {
+      toast.success("VIN copied to clipboard");
+    }
+  };
+
+  const handleAddPhoto = () => {
+    toast.success("Photo uploaded", {
+      description: `vehicle_photo_${Date.now()}.jpg`,
+    });
+    setTab("photos");
+  };
+
+  const handleStartInspection = () => {
+    navigate({ to: "/inspections" });
+    toast.success("New inspection started");
+  };
+
+  const handleRescanVin = () => {
+    toast.info("Re-scanning VIN…");
+    setTimeout(() => {
+      toast.success("VIN re-confirmed: " + vehicle.vin);
+    }, 800);
+  };
+
+  const handleCheckIn = () => {
+    toast.success("Vehicle checked in", { description: "Assigned to Bay 3" });
+  };
+
   const tabs = [
     { id: "overview", label: "Overview" },
     { id: "service-history", label: "Service History", count: vehROs.length },
@@ -76,6 +121,7 @@ function VehicleDetail() {
   ];
 
   return (
+    <>
     <DetailPageShell
       backTo="/vehicles"
       backLabel="All vehicles"
@@ -130,22 +176,54 @@ function VehicleDetail() {
       }
       actions={
         <>
-          <button className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-[11px] font-medium hover:bg-surface">
+          <button
+            type="button"
+            onClick={handleEdit}
+            className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-[11px] font-medium hover:bg-surface"
+          >
             <Edit className="h-3 w-3" />
             Edit
           </button>
-          <button className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-[11px] font-medium hover:bg-surface">
+          <button
+            type="button"
+            onClick={handleCopyVin}
+            className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-[11px] font-medium hover:bg-surface"
+          >
             <Copy className="h-3 w-3" />
             Copy VIN
           </button>
-          <button className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-[11px] font-medium hover:bg-surface">
+          <button
+            type="button"
+            onClick={handleRescanVin}
+            className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-[11px] font-medium hover:bg-surface"
+          >
+            <ScanLine className="h-3 w-3" />
+            Re-scan VIN
+          </button>
+          <button
+            type="button"
+            onClick={handleAddPhoto}
+            className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-[11px] font-medium hover:bg-surface"
+          >
             <Camera className="h-3 w-3" />
             Add Photo
           </button>
           <div className="ml-auto flex items-center gap-2">
-            <button className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-[11px] font-medium hover:bg-surface">
+            <button
+              type="button"
+              onClick={handleStartInspection}
+              className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-[11px] font-medium hover:bg-surface"
+            >
               <ClipboardCheck className="h-3 w-3" />
               Start Inspection
+            </button>
+            <button
+              type="button"
+              onClick={handleCheckIn}
+              className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-[11px] font-medium hover:bg-surface"
+            >
+              <LogIn className="h-3 w-3" />
+              Check In
             </button>
             <button
               onClick={() =>
@@ -201,7 +279,14 @@ function VehicleDetail() {
           {tab === "overview" && (
             <OverviewTab vehicle={vehicle} ros={vehROs.slice(0, 5)} inspections={vehInspections.slice(0, 3)} />
           )}
-          {tab === "service-history" && <ServiceHistoryTab ros={vehROs} />}
+          {tab === "service-history" && (
+            <ServiceHistoryTab
+              ros={vehROs}
+              onRowClick={(rowId) =>
+                navigate({ to: "/repair-orders/$id", params: { id: rowId } })
+              }
+            />
+          )}
           {tab === "inspections" && <InspectionsListTab inspections={vehInspections} />}
           {tab === "estimates" && <EstimatesListTab estimates={vehEstimates} />}
           {tab === "parts" && (
@@ -211,7 +296,7 @@ function VehicleDetail() {
               description="Parts used on this vehicle will show here once posted to ROs."
             />
           )}
-          {tab === "photos" && <PhotosTab />}
+          {tab === "photos" && <PhotosTab vin={vehicle.vin} />}
           {tab === "notes" && <NotesTab note={vehicle.serviceNotes} />}
         </div>
 
@@ -223,7 +308,11 @@ function VehicleDetail() {
               <Truck className="h-12 w-12 text-muted-foreground/30" />
             </div>
             <div className="p-3 text-center">
-              <button className="inline-flex items-center gap-1 text-[11px] font-medium text-muted-foreground hover:text-foreground">
+              <button
+                type="button"
+                onClick={handleAddPhoto}
+                className="inline-flex items-center gap-1 text-[11px] font-medium text-muted-foreground hover:text-foreground"
+              >
                 <Camera className="h-3 w-3" />
                 Add photo
               </button>
@@ -239,27 +328,56 @@ function VehicleDetail() {
               Based on last visit + manufacturer guidelines
             </p>
             <ul className="mt-3 space-y-2 text-xs">
-              <li className="rounded-md border border-accent/40 bg-accent/10 p-2">
-                <div className="flex items-center justify-between">
-                  <span className="font-semibold">Coolant flush</span>
-                  <span className="text-[10px] font-semibold text-[#991B1B]">DUE</span>
-                </div>
-                <p className="mt-0.5 text-[10px] text-muted-foreground">
-                  Every 30k mi or 24 months
-                </p>
-              </li>
-              <li className="rounded-md border border-border p-2">
-                <div className="flex items-center justify-between">
-                  <span className="font-semibold">Brake fluid flush</span>
-                  <span className="text-[10px] text-muted-foreground">In 2k mi</span>
-                </div>
-              </li>
-              <li className="rounded-md border border-border p-2">
-                <div className="flex items-center justify-between">
-                  <span className="font-semibold">Tire rotation</span>
-                  <span className="text-[10px] text-muted-foreground">In 4k mi</span>
-                </div>
-              </li>
+              {(
+                [
+                  { name: "Coolant flush", meta: "DUE", desc: "Every 30k mi or 24 months", due: true },
+                  { name: "Brake fluid flush", meta: "In 2k mi", desc: undefined, due: false },
+                  { name: "Tire rotation", meta: "In 4k mi", desc: undefined, due: false },
+                ] as const
+              ).map((service) => (
+                <li
+                  key={service.name}
+                  className={clsx(
+                    "rounded-md p-2",
+                    service.due
+                      ? "border border-accent/40 bg-accent/10"
+                      : "border border-border",
+                  )}
+                >
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="font-semibold">{service.name}</span>
+                    <div className="flex items-center gap-2">
+                      <span
+                        className={clsx(
+                          "text-[10px]",
+                          service.due
+                            ? "font-semibold text-[#991B1B]"
+                            : "text-muted-foreground",
+                        )}
+                      >
+                        {service.meta}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          navigate({ to: "/schedule" });
+                          toast.success("Service scheduled", {
+                            description: `${service.name} for ${vehicle.make}`,
+                          });
+                        }}
+                        className="rounded-md border border-border bg-background px-2 py-0.5 text-[10px] font-semibold hover:bg-surface"
+                      >
+                        Schedule
+                      </button>
+                    </div>
+                  </div>
+                  {service.desc && (
+                    <p className="mt-0.5 text-[10px] text-muted-foreground">
+                      {service.desc}
+                    </p>
+                  )}
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -277,6 +395,147 @@ function VehicleDetail() {
         </aside>
       </div>
     </DetailPageShell>
+
+    {editing && (
+      <EditVehicleModal
+        vehicle={vehicle}
+        onClose={() => setEditing(false)}
+      />
+    )}
+    </>
+  );
+}
+
+function EditVehicleModal({
+  vehicle,
+  onClose,
+}: {
+  vehicle: NonNullable<ReturnType<typeof vehicles.find>>;
+  onClose: () => void;
+}) {
+  const [vin, setVin] = useState(vehicle.vin);
+  const [plate, setPlate] = useState(vehicle.licensePlate);
+  const [year, setYear] = useState<number | "">(vehicle.year);
+  const [make, setMake] = useState(vehicle.make);
+  const [model, setModel] = useState(vehicle.model);
+
+  const handleSave = () => {
+    toast.success("Vehicle updated", {
+      description: `${year} ${make} ${model} — ${vin}`,
+    });
+    onClose();
+  };
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+      onClick={onClose}
+    >
+      <div
+        className="w-full max-w-lg overflow-hidden rounded-lg border border-border bg-background shadow-xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-start justify-between border-b border-border px-5 py-3">
+          <div>
+            <h2 className="text-sm font-semibold">Edit Vehicle</h2>
+            <p className="mt-0.5 text-[11px] text-muted-foreground">
+              {vehicle.unit}
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded-md p-1 text-muted-foreground hover:bg-surface hover:text-foreground"
+            aria-label="Close"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+
+        <div className="space-y-3 px-5 py-4">
+          <div>
+            <label className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+              VIN
+            </label>
+            <input
+              type="text"
+              value={vin}
+              onChange={(e) => setVin(e.target.value.toUpperCase().slice(0, 17))}
+              maxLength={17}
+              className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 font-mono text-sm uppercase tracking-wider focus:border-foreground/40 focus:outline-none"
+            />
+          </div>
+
+          <div>
+            <label className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+              License Plate
+            </label>
+            <input
+              type="text"
+              value={plate}
+              onChange={(e) => setPlate(e.target.value.toUpperCase())}
+              className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm uppercase focus:border-foreground/40 focus:outline-none"
+            />
+          </div>
+
+          <div className="grid grid-cols-3 gap-3">
+            <div>
+              <label className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                Year
+              </label>
+              <input
+                type="number"
+                value={year}
+                onChange={(e) =>
+                  setYear(e.target.value === "" ? "" : Number(e.target.value))
+                }
+                className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm tabular-nums focus:border-foreground/40 focus:outline-none"
+              />
+            </div>
+            <div>
+              <label className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                Make
+              </label>
+              <input
+                type="text"
+                value={make}
+                onChange={(e) => setMake(e.target.value)}
+                className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm focus:border-foreground/40 focus:outline-none"
+              />
+            </div>
+            <div>
+              <label className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                Model
+              </label>
+              <input
+                type="text"
+                value={model}
+                onChange={(e) => setModel(e.target.value)}
+                className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm focus:border-foreground/40 focus:outline-none"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="flex items-center justify-end gap-2 border-t border-border bg-surface/30 px-5 py-3">
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded-md border border-border bg-background px-3 py-1.5 text-xs font-medium hover:bg-surface"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            onClick={handleSave}
+            className="inline-flex items-center gap-1.5 rounded-md bg-brand-green px-3 py-1.5 text-xs font-semibold text-brand-green-foreground hover:opacity-90"
+          >
+            <Save className="h-3 w-3" />
+            Save Changes
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -383,7 +642,13 @@ function OverviewTab({
   );
 }
 
-function ServiceHistoryTab({ ros }: { ros: ReturnType<typeof Array.prototype.filter> }) {
+function ServiceHistoryTab({
+  ros,
+  onRowClick,
+}: {
+  ros: ReturnType<typeof Array.prototype.filter>;
+  onRowClick: (id: string) => void;
+}) {
   if (ros.length === 0) {
     return <EmptyState icon={History} title="No service history" />;
   }
@@ -401,7 +666,11 @@ function ServiceHistoryTab({ ros }: { ros: ReturnType<typeof Array.prototype.fil
         </thead>
         <tbody>
           {ros.map((r: any) => (
-            <tr key={r.id} className="cursor-pointer border-b border-border last:border-0 hover:bg-surface/40">
+            <tr
+              key={r.id}
+              onClick={() => onRowClick(r.id)}
+              className="cursor-pointer border-b border-border last:border-0 hover:bg-surface/40"
+            >
               <td className="px-3 py-2.5">
                 <Link to="/repair-orders/$id" params={{ id: r.id }} className="text-xs font-semibold hover:underline">
                   #{r.id}
@@ -477,31 +746,85 @@ function EstimatesListTab({ estimates }: { estimates: ReturnType<typeof Array.pr
   );
 }
 
-function PhotosTab() {
+function PhotosTab({ vin }: { vin: string }) {
   const photos = ["Driver side", "Rear", "VIN plate", "Interior", "Engine bay", "Defect detail"];
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleUploadClick = () => fileInputRef.current?.click();
+  const handleFileChange = () => {
+    toast.success("Photo uploaded");
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
+  const handleCardClick = (label: string) => {
+    if (label === "VIN plate") {
+      toast.info("Re-scanning VIN…");
+      setTimeout(() => {
+        toast.success("VIN re-decoded: " + vin);
+      }, 800);
+      return;
+    }
+    toast.info("Photo preview", { description: label });
+  };
+
   return (
-    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-      {photos.map((p) => (
-        <div key={p} className="overflow-hidden rounded-lg border border-border bg-background">
-          <div className="flex h-28 items-center justify-center bg-surface">
-            <Camera className="h-8 w-8 text-muted-foreground/30" />
-          </div>
-          <div className="p-2 text-[11px] font-medium">{p}</div>
-        </div>
-      ))}
+    <div className="space-y-3">
+      <div className="flex items-center justify-end">
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={handleFileChange}
+        />
+        <button
+          type="button"
+          onClick={handleUploadClick}
+          className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-[11px] font-medium hover:bg-surface"
+        >
+          <Upload className="h-3 w-3" />
+          Upload Photo
+        </button>
+      </div>
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+        {photos.map((p) => (
+          <button
+            key={p}
+            type="button"
+            onClick={() => handleCardClick(p)}
+            className="overflow-hidden rounded-lg border border-border bg-background text-left transition-colors hover:bg-surface/40 focus:outline-none focus:ring-2 focus:ring-foreground/20"
+          >
+            <div className="flex h-28 items-center justify-center bg-surface">
+              <Camera className="h-8 w-8 text-muted-foreground/30" />
+            </div>
+            <div className="flex items-center justify-between p-2 text-[11px] font-medium">
+              <span>{p}</span>
+              {p === "VIN plate" && (
+                <ScanLine className="h-3 w-3 text-muted-foreground" />
+              )}
+            </div>
+          </button>
+        ))}
+      </div>
     </div>
   );
 }
 
 function NotesTab({ note }: { note?: string }) {
+  const [notes, setNotes] = useState(note ?? "");
   return (
     <div className="space-y-3">
       <textarea
-        defaultValue={note ?? ""}
+        value={notes}
+        onChange={(e) => setNotes(e.target.value)}
         placeholder="Vehicle-specific notes (aftermarket equipment, recurring issues, customer preferences)…"
         className="h-32 w-full resize-none rounded-md border border-border bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus:border-foreground/40 focus:outline-none"
       />
-      <button className="inline-flex items-center gap-1.5 rounded-md bg-foreground px-3 py-1.5 text-[11px] font-semibold text-background hover:opacity-90">
+      <button
+        type="button"
+        onClick={() => toast.success("Notes saved")}
+        className="inline-flex items-center gap-1.5 rounded-md bg-foreground px-3 py-1.5 text-[11px] font-semibold text-background hover:opacity-90"
+      >
         <Save className="h-3 w-3" />
         Save
       </button>

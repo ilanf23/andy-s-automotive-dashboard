@@ -1,5 +1,6 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Fragment, useEffect, useState, type ReactNode } from "react";
+import { toast } from "sonner";
 import {
   ArrowRight,
   Phone,
@@ -78,13 +79,15 @@ const HERO_IMAGES = [
 
 function Hero() {
   const [active, setActive] = useState(0);
+  const [paused, setPaused] = useState(false);
 
   useEffect(() => {
+    if (paused) return;
     const id = window.setInterval(() => {
       setActive((i) => (i + 1) % HERO_IMAGES.length);
     }, 6000);
     return () => window.clearInterval(id);
-  }, []);
+  }, [paused]);
 
   const leftIdx = active;
   const rightIdx = (active + 1) % HERO_IMAGES.length;
@@ -197,6 +200,13 @@ function Hero() {
                     <ArrowRight className="h-[1.15rem] w-[1.15rem] transition-transform group-hover:translate-x-1" />
                   </Link>
                   <Link
+                    to="/login"
+                    className="group inline-flex items-center gap-2 rounded-md border-2 border-white/30 bg-white/5 px-[1.65rem] py-[0.85rem] text-[16px] font-black uppercase tracking-wider text-white transition-colors hover:border-[var(--mkt-gold)] hover:text-[var(--mkt-gold)]"
+                  >
+                    <Play className="h-[1.05rem] w-[1.05rem]" />
+                    Watch demo
+                  </Link>
+                  <Link
                     to="/services"
                     className="group inline-flex items-center gap-1.5 text-[16px] font-bold text-white/90 transition-colors hover:text-[var(--mkt-gold)]"
                   >
@@ -213,7 +223,10 @@ function Hero() {
                 <button
                   key={i}
                   type="button"
-                  onClick={() => setActive(i)}
+                  onClick={() => {
+                    setActive(i);
+                    setPaused(true);
+                  }}
                   aria-label={`Show background image ${i + 1}`}
                   className={clsx(
                     "h-1.5 rounded-full transition-all duration-500",
@@ -341,7 +354,7 @@ function TrustMarquee() {
         <Marquee speedSec={36}>
           {industries.map((i) => (
             <div key={i} className="px-8 py-2">
-              <span className="text-2xl font-black tracking-tight text-[var(--mkt-ink)]/35 hover:text-[var(--mkt-ink)] transition-colors md:text-3xl">
+              <span className="text-2xl font-black tracking-tight text-[var(--mkt-ink)]/35 md:text-3xl">
                 {i}
               </span>
             </div>
@@ -374,13 +387,31 @@ function AboutUsVideo() {
         </div>
 
         <Reveal delay={200} direction="up">
-          <div className="mt-10 overflow-hidden rounded-2xl border border-[var(--mkt-border-light)] shadow-[0_18px_50px_-20px_rgba(10,10,10,0.35)]">
+          <button
+            type="button"
+            onClick={() =>
+              toast.info("Video player", {
+                description: "Demo video — coming soon",
+              })
+            }
+            className="group relative mt-10 block w-full cursor-pointer overflow-hidden rounded-2xl border border-[var(--mkt-border-light)] shadow-[0_18px_50px_-20px_rgba(10,10,10,0.35)] transition-transform duration-500 hover:scale-[1.01]"
+            aria-label="Play About Us video"
+          >
             <img
               src="/images/about-us-video.png"
               alt="Andy's Auto & Truck Services — about us"
               className="block h-auto w-full"
             />
-          </div>
+            <span className="pointer-events-none absolute inset-0 flex items-center justify-center">
+              <span className="flex h-20 w-20 items-center justify-center rounded-full bg-[var(--mkt-gold)] text-[var(--mkt-ink)] shadow-2xl transition-transform duration-300 group-hover:scale-110 md:h-24 md:w-24">
+                <Play
+                  className="ml-1 h-9 w-9 md:h-11 md:w-11"
+                  strokeWidth={2}
+                  fill="currentColor"
+                />
+              </span>
+            </span>
+          </button>
         </Reveal>
       </div>
     </section>
@@ -916,6 +947,7 @@ function PreviewParts() {
 }
 
 function PreviewEstimate() {
+  const navigate = useNavigate();
   const photos = [
     { bg: "linear-gradient(135deg, #1f2937 0%, #374151 60%, #6b7280 100%)", label: "Pad wear" },
     { bg: "linear-gradient(135deg, #3f1d1d 0%, #7f1d1d 60%, #b91c1c 100%)", label: "Rotor" },
@@ -971,6 +1003,12 @@ function PreviewEstimate() {
 
       <button
         type="button"
+        onClick={() => {
+          toast.success("Estimate approved", {
+            description: "Work order created — RO #4847",
+          });
+          navigate({ to: "/estimates/EST-4847" });
+        }}
         className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-md bg-[var(--mkt-gold)] px-3 py-2 text-[11px] font-black uppercase tracking-wider text-white transition-transform hover:scale-[1.01]"
       >
         Approve in one tap
@@ -1149,7 +1187,9 @@ function ServicesPreview() {
             const Icon = s.icon;
             return (
               <Reveal key={s.title} delay={i * 80}>
-                <div className="group relative h-full overflow-hidden rounded-2xl border border-[var(--mkt-border-light)] bg-white p-7 transition-all duration-500 hover:-translate-y-1 hover:border-[var(--mkt-ink)]/30 hover:shadow-xl">
+                <Link
+                  to="/services"
+                  className="group relative block h-full overflow-hidden rounded-2xl border border-[var(--mkt-border-light)] bg-white p-7 transition-all duration-500 hover:-translate-y-1 hover:border-[var(--mkt-ink)]/30 hover:shadow-xl">
                   <div className="absolute -bottom-12 -right-12 h-32 w-32 rounded-full bg-[var(--mkt-gold)]/0 transition-all duration-500 group-hover:bg-[var(--mkt-gold)]/15" />
                   <div className="relative">
                     <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-[var(--mkt-ink)] text-[var(--mkt-gold)] transition-all duration-500 group-hover:bg-[var(--mkt-gold)] group-hover:text-[var(--mkt-ink)]">
@@ -1166,7 +1206,7 @@ function ServicesPreview() {
                       <ArrowRight className="h-3 w-3" />
                     </div>
                   </div>
-                </div>
+                </Link>
               </Reveal>
             );
           })}

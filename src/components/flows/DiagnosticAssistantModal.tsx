@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { toast } from "sonner";
 import {
   Sparkles,
   Send,
@@ -304,7 +305,14 @@ export function DiagnosticAssistantModal({
                   <Wrench className="h-3.5 w-3.5" />
                   Suggested troubleshooting sequence
                 </h3>
-                <button className="text-[10px] font-semibold text-muted-foreground hover:text-foreground">
+                <button
+                  type="button"
+                  onClick={() => {
+                    toast.success("Sent to Marcus");
+                    onOpenChange(false);
+                  }}
+                  className="text-[10px] font-semibold text-muted-foreground hover:text-foreground"
+                >
                   Send to Marcus
                 </button>
               </div>

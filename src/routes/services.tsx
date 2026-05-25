@@ -25,8 +25,8 @@ const SERVICES = [
     blurb:
       "We bring the shop to you. Routine maintenance and minor diagnostics performed at your yard, jobsite, or driveway — so your trucks never leave production.",
     image:
-      "https://images.unsplash.com/photo-1551522435-a13afa10f103?auto=format&fit=crop&w=1200&q=80",
-    imageAlt: "Busy auto shop floor with multiple vehicles being serviced",
+      "https://images.unsplash.com/photo-1559416523-140ddc3d238c?auto=format&fit=crop&w=1200&q=80",
+    imageAlt: "White crew cab pickup truck on a jobsite",
     includes: [
       "Oil and filter service",
       "Tire rotation and pressure checks",
@@ -43,8 +43,8 @@ const SERVICES = [
     blurb:
       "For repairs that need shop time, we send a driver. You don't pull two employees off a jobsite to deliver a broken truck.",
     image:
-      "https://images.unsplash.com/photo-1486006920555-c77dcf18193c?auto=format&fit=crop&w=1200&q=80",
-    imageAlt: "Vehicle parked inside a service garage",
+      "https://images.unsplash.com/photo-1605504835488-e8c6d37beb43?auto=format&fit=crop&w=1200&q=80",
+    imageAlt: "Brown crew cab pickup truck on the road",
     includes: [
       "Pickup from your yard or jobsite",
       "Photo handoff at our shop",
@@ -61,8 +61,8 @@ const SERVICES = [
     blurb:
       "Diesel and gas, light to heavy duty. From regular service to full engine or transmission replacement — done right the first time.",
     image:
-      "https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?auto=format&fit=crop&w=1200&q=80",
-    imageAlt: "Close-up of engine belts and pulleys",
+      "https://images.unsplash.com/photo-1551830820-330a71b99659?auto=format&fit=crop&w=1200&q=80",
+    imageAlt: "Blue Ford pickup truck",
     includes: [
       "Engine rebuild and replacement",
       "Automatic + manual transmission service",
@@ -79,8 +79,8 @@ const SERVICES = [
     blurb:
       "Modern scan tools paired with old-school know-how. Most shops chase codes. We chase root causes.",
     image:
-      "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1200&q=80",
-    imageAlt: "Vehicles on lifts inside a diagnostic bay",
+      "https://images.unsplash.com/photo-1607535882326-e3bd656233b3?auto=format&fit=crop&w=1200&q=80",
+    imageAlt: "Pickup truck ready for diagnostic work",
     includes: [
       "Full OBD-II + heavy-duty diagnostic scans",
       "Wiring harness repair and tracing",
@@ -97,8 +97,8 @@ const SERVICES = [
     blurb:
       "The systems that keep your driver safe and your truck legal. Full inspection, transparent recommendations, no upsell.",
     image:
-      "https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=1200&q=80",
-    imageAlt: "Vehicle on the road showcasing braking and suspension",
+      "https://images.unsplash.com/photo-1649793395985-967862a3b73f?auto=format&fit=crop&w=1200&q=80",
+    imageAlt: "Silver RAM pickup truck on the road at sunset",
     includes: [
       "Brake pad, rotor, drum, and shoe service",
       "Air brake systems for heavy duty",
@@ -115,8 +115,8 @@ const SERVICES = [
     blurb:
       "We track your fleet's service intervals so you don't have to. Mileage-based, hour-based, or calendar-based — whatever fits your operation.",
     image:
-      "https://images.unsplash.com/photo-1487754180451-c456f719a1fc?auto=format&fit=crop&w=1200&q=80",
-    imageAlt: "Mechanic pouring fluid into an engine bay during scheduled service",
+      "https://images.unsplash.com/photo-1686715018049-f73970aa97d3?auto=format&fit=crop&w=1200&q=80",
+    imageAlt: "Black Ford F-150 Raptor pickup truck",
     includes: [
       "Custom maintenance schedules per vehicle",
       "Automated service reminders",
@@ -173,8 +173,9 @@ function ServicesPage() {
               const isEven = i % 2 === 0;
               return (
                 <Reveal key={s.title}>
-                  <div
-                    className={`grid grid-cols-1 items-start gap-8 lg:grid-cols-[400px_1fr] ${
+                  <Link
+                    to="/contact"
+                    className={`group/card grid grid-cols-1 items-start gap-8 lg:grid-cols-[400px_1fr] ${
                       isEven ? "" : "lg:grid-cols-[1fr_400px]"
                     }`}
                   >
@@ -231,8 +232,13 @@ function ServicesPage() {
                           </li>
                         ))}
                       </ul>
+
+                      <div className="mt-8 inline-flex items-center gap-2 rounded-md bg-[var(--mkt-ink)] px-5 py-3 text-[11px] font-black uppercase tracking-wider text-white opacity-0 transition-opacity duration-300 group-hover/card:opacity-100">
+                        Request this service
+                        <ArrowRight className="h-3.5 w-3.5" />
+                      </div>
                     </div>
-                  </div>
+                  </Link>
                 </Reveal>
               );
             })}

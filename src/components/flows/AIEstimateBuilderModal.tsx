@@ -459,7 +459,7 @@ function ReviewPanel({
             </h3>
             <p className="mt-1 text-[11px] text-brand-green-soft/80">
               Each line is grounded in your shop's history, Mitchell1 labor guides,
-              and live vendor catalogs. Click any field to edit; toggle Include to
+              and live vendor catalogs. Review proposed lines; toggle Include to
               add or skip per line.
             </p>
           </div>
