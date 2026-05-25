@@ -34,64 +34,122 @@
   --color-brand-bg: var(--brand-bg);
   --color-brand-ink: var(--brand-ink);
   --color-brand-accent: var(--brand-accent);
+  --color-brand-red: var(--brand-red);
+  --color-brand-red-foreground: var(--brand-red-foreground);
+  --color-brand-red-soft: var(--brand-red-soft);
+  --color-brand-red-tint: var(--brand-red-tint);
+  --color-brand-yellow: var(--brand-yellow);
+  --color-brand-yellow-foreground: var(--brand-yellow-foreground);
+  --color-brand-yellow-soft: var(--brand-yellow-soft);
+  --color-brand-yellow-tint: var(--brand-yellow-tint);
+  --color-brand-green: var(--brand-green);
+  --color-brand-green-foreground: var(--brand-green-foreground);
+  --color-brand-green-soft: var(--brand-green-soft);
+  --color-brand-green-tint: var(--brand-green-tint);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
   --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
 
 :root {
   --radius: 0.5rem;
 
-  /* Brand tokens (Andy's OS) */
+  /* ----------------------------------------------------------------------
+     Brand tokens — Andy's ATS is RED + YELLOW + GREEN.
+     Traffic-light / auto-inspection palette:
+       Red    → primary brand, urgent, fail
+       Yellow → caution, attention, highlight
+       Green  → success, ready, forward action
+     ---------------------------------------------------------------------- */
   --brand-bg: #ffffff;
-  --brand-ink: #0f0f0f;
-  --brand-accent: #ffd60a;
+  --brand-ink: #0a0a0a;
+
+  /* Red (primary brand accent) */
+  --brand-accent: #E10600;          /* primary brand red (CTAs, logo, accents) */
+  --brand-accent-deep: #991B1B;     /* deep red for text on light tints */
+  --brand-accent-tint: #FEE2E2;     /* very light red wash for badges */
+  --brand-red: #E10600;
+  --brand-red-foreground: #ffffff;
+  --brand-red-soft: #B91C1C;
+  --brand-red-tint: #FEE2E2;
+
+  /* Yellow (caution / highlight) */
+  --brand-yellow: #FACC15;
+  --brand-yellow-foreground: #0a0a0a;
+  --brand-yellow-soft: #CA8A04;
+  --brand-yellow-tint: #FEF9C3;
+
+  /* Green (success / forward-momentum action) */
+  --brand-green: #16a34a;
+  --brand-green-foreground: #ffffff;
+  --brand-green-soft: #15803d;
+  --brand-green-tint: #dcfce7;
 
   --background: #ffffff;
-  --foreground: #0f0f0f;
+  --foreground: #0a0a0a;
   --card: #ffffff;
-  --card-foreground: #0f0f0f;
+  --card-foreground: #0a0a0a;
   --popover: #ffffff;
-  --popover-foreground: #0f0f0f;
-  --primary: #0f0f0f;
+  --popover-foreground: #0a0a0a;
+  --primary: #0a0a0a;
   --primary-foreground: #ffffff;
   --secondary: #f5f5f5;
-  --secondary-foreground: #0f0f0f;
+  --secondary-foreground: #0a0a0a;
   --muted: #f5f5f5;
   --muted-foreground: #6b6b6b;
-  --accent: #ffd60a;
-  --accent-foreground: #0f0f0f;
-  --destructive: #dc2626;
+  --accent: #E10600;                /* brand red */
+  --accent-foreground: #ffffff;     /* white text on red */
+  /* destructive used for actual error/fail state */
+  --destructive: #B91C1C;
   --destructive-foreground: #ffffff;
+  /* warning maps to brand yellow */
+  --warning: #FACC15;
+  --warning-foreground: #0a0a0a;
   --border: #e6e6e6;
   --input: #e6e6e6;
-  --ring: #ffd60a;
+  --ring: #E10600;
   --surface: #f5f5f5;
-  --success: #3db16b;
+  --success: #16a34a;
   --success-foreground: #ffffff;
 }
 
 .dark {
-  --background: #0f0f0f;
+  --background: #0a0a0a;
   --foreground: #ffffff;
   --card: #171717;
   --card-foreground: #ffffff;
   --popover: #171717;
   --popover-foreground: #ffffff;
   --primary: #ffffff;
-  --primary-foreground: #0f0f0f;
+  --primary-foreground: #0a0a0a;
   --secondary: #1f1f1f;
   --secondary-foreground: #ffffff;
   --muted: #1f1f1f;
   --muted-foreground: #a3a3a3;
-  --accent: #ffd60a;
-  --accent-foreground: #0f0f0f;
-  --destructive: #ef4444;
+  --accent: #EF4444;
+  --accent-foreground: #ffffff;
+  --destructive: #EF4444;
   --destructive-foreground: #ffffff;
+  --warning: #FDE047;
+  --warning-foreground: #0a0a0a;
   --border: #262626;
   --input: #262626;
-  --ring: #ffd60a;
+  --ring: #EF4444;
   --surface: #171717;
-  --success: #3db16b;
-  --success-foreground: #ffffff;
+  --success: #22c55e;
+  --success-foreground: #052e16;
+  --brand-red: #EF4444;
+  --brand-red-foreground: #ffffff;
+  --brand-red-soft: #F87171;
+  --brand-red-tint: #450a0a;
+  --brand-yellow: #FDE047;
+  --brand-yellow-foreground: #0a0a0a;
+  --brand-yellow-soft: #FACC15;
+  --brand-yellow-tint: #422006;
+  --brand-green: #22c55e;
+  --brand-green-foreground: #052e16;
+  --brand-green-soft: #4ade80;
+  --brand-green-tint: #14532d;
 }
 
 @layer base {
@@ -105,4 +163,75 @@
     background-color: var(--color-background);
     color: var(--color-foreground);
   }
+}
+
+/* ============================================================================
+   Marketing site palette — scoped to .marketing-theme on PublicLayout
+   Auto-shop signage palette: BLACK + RED + YELLOW + GREEN.
+     Red    → primary brand, hot CTAs, urgent
+     Yellow → highlights, caution, attention-grabbers
+     Green  → forward action, "ready", success states
+   The --mkt-gold token is kept as RED for backwards compatibility with
+   components written for white text on the primary brand color.
+   ============================================================================ */
+
+.marketing-theme {
+  /* Surfaces — pure black */
+  --mkt-ink: #0a0a0a;          /* pure black hero / footer */
+  --mkt-ink-soft: #1a1a1a;     /* sub-surface dark */
+  --mkt-paper: #FFFFFF;        /* light section bg */
+  --mkt-paper-soft: #F6F6F6;   /* off-white section bg */
+  --mkt-border-dark: rgba(255,255,255,0.10);
+  --mkt-border-light: rgba(10,10,10,0.10);
+
+  /* Red — primary brand color.
+     --mkt-gold name kept for backwards compatibility with existing components
+     (which assume white text contrast against this background). */
+  --mkt-gold: #E10600;
+  --mkt-gold-soft: #FF3D2E;
+  --mkt-gold-deep: #991B1B;
+  --mkt-red: #E10600;
+  --mkt-red-soft: #FF3D2E;
+  --mkt-red-deep: #991B1B;
+
+  /* Yellow — caution / highlight / "attention" accent */
+  --mkt-yellow: #FACC15;
+  --mkt-yellow-soft: #FDE047;
+  --mkt-yellow-deep: #A16207;
+
+  /* Green — forward action, "ready", success states */
+  --mkt-green: #16A34A;
+  --mkt-green-soft: #22C55E;
+  --mkt-green-deep: #15803D;
+
+  /* Text on dark */
+  --mkt-text-on-dark: #FFFFFF;
+  --mkt-text-on-dark-muted: rgba(255,255,255,0.72);
+  --mkt-text-on-dark-faint: rgba(255,255,255,0.55);
+
+  /* Text on light */
+  --mkt-text-on-light: #0a0a0a;
+  --mkt-text-on-light-muted: rgba(10,10,10,0.65);
+
+  /* Marketing-specific font: friendly, rounded sans for a less intimidating feel */
+  --mkt-font-display: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --mkt-font-body: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
+
+/* Marketing theme typography baseline — friendlier font for the whole marketing site */
+.marketing-theme {
+  font-family: var(--mkt-font-body);
+  font-feature-settings: "ss01";
+}
+
+.marketing-theme .mkt-display {
+  font-family: var(--mkt-font-display);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+}
+
+/* Smooth scroll for in-page anchor clicks */
+.marketing-theme {
+  scroll-behavior: smooth;
 }

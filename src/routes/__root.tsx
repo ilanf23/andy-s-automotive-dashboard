@@ -4,12 +4,25 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
+import { Toaster } from "sonner";
 
 import appCss from "../styles.css?url";
 import { AppShell } from "@/components/layout/AppShell";
+import { PublicLayout } from "@/components/public/PublicLayout";
+import { ModalProvider } from "@/components/ui/ModalProvider";
+import { AuthProvider } from "@/lib/auth-context";
+
+// Public routes use the marketing layout (header + footer).
+// Everything else uses the OS shell (sidebar + topbar + AI copilot bar).
+const PUBLIC_ROUTES = new Set(["/", "/services", "/about", "/contact", "/login"]);
+
+function isPublicRoute(pathname: string): boolean {
+  return PUBLIC_ROUTES.has(pathname);
+}
 
 function NotFoundComponent() {
   return (
@@ -64,7 +77,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "stylesheet", href: appCss },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap",
       },
     ],
   }),
@@ -90,9 +103,35 @@ function RootShell({ children }: { children: React.ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const useMarketing = isPublicRoute(pathname);
+
   return (
     <QueryClientProvider client={queryClient}>
-      <AppShell />
+      <AuthProvider>
+        <ModalProvider>
+          {useMarketing ? <PublicLayout /> : <AppShell />}
+          <Toaster
+            position="bottom-right"
+            richColors
+            closeButton
+            toastOptions={{
+              classNames: {
+                toast:
+                  "border border-border bg-background text-foreground shadow-lg rounded-lg",
+                title: "text-sm font-semibold",
+                description: "text-xs text-muted-foreground",
+                actionButton:
+                  "bg-foreground text-background rounded-md px-2 py-1 text-xs font-semibold",
+                cancelButton:
+                  "bg-surface text-foreground rounded-md px-2 py-1 text-xs",
+                success: "border-brand-green/40",
+                error: "border-destructive/40",
+              },
+            }}
+          />
+        </ModalProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }

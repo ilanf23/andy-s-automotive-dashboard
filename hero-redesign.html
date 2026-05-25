@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Andy's ATS — Hero Redesign Preview</title>
+
+<!-- Fonts: Bebas Neue (display) + Montserrat 300 as Gotham Light substitute.
+     If you have Gotham licensed, add it before Montserrat in the font-family stack
+     and the browser will prefer it. Bebas Neue stays as-is. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+  :root{
+    --red:#DC2626;
+    --red-deep:#B91C1C;
+    --black:#000000;
+    --ink:#0A0A0A;
+    --white:#FFFFFF;
+    --muted:rgba(255,255,255,0.7);
+    --hairline:rgba(255,255,255,0.08);
+    --font-display:'Bebas Neue', 'Impact', sans-serif;
+    --font-body:'Gotham Light', 'Montserrat', system-ui, -apple-system, sans-serif;
+  }
+
+  body{
+    font-family: var(--font-body);
+    font-weight: 300;
+    background: var(--black);
+    color: var(--white);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ============================================================
+     HERO
+  ============================================================ */
+  .hero{
+    position: relative;
+    min-height: 100vh;
+    background: var(--black);
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  /* Background slideshow — swap photo URLs below with your preferred stock
+     images. Search terms that work well on Unsplash:
+       - "mechanic truck", "fleet truck", "auto shop interior",
+         "engine repair", "pickup truck garage" */
+  .slide{
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    animation: kenburns 32s infinite;
+  }
+  .slide-1{
+    animation-delay: 0s;
+    background-image: url('https://images.unsplash.com/photo-1486754735734-325b5831c3ad?auto=format&fit=crop&w=2400&q=80');
+  }
+  .slide-2{
+    animation-delay: 8s;
+    background-image: url('https://images.unsplash.com/photo-1632823469850-1bf9c5f88e07?auto=format&fit=crop&w=2400&q=80');
+  }
+  .slide-3{
+    animation-delay: 16s;
+    background-image: url('https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=2400&q=80');
+  }
+  .slide-4{
+    animation-delay: 24s;
+    background-image: url('https://images.unsplash.com/photo-1581235720704-06d3acfcb36f?auto=format&fit=crop&w=2400&q=80');
+  }
+
+  @keyframes kenburns{
+    0%   { opacity: 0; transform: scale(1.04); }
+    6%   { opacity: 1; }
+    25%  { opacity: 1; transform: scale(1.14); }
+    31%  { opacity: 0; transform: scale(1.14); }
+    100% { opacity: 0; }
+  }
+
+  /* Dark overlay — keeps text legible on every photo */
+  .overlay{
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(90deg,
+        rgba(0,0,0,0.92) 0%,
+        rgba(0,0,0,0.7) 45%,
+        rgba(0,0,0,0.35) 100%),
+      linear-gradient(180deg,
+        rgba(0,0,0,0.5) 0%,
+        rgba(0,0,0,0) 25%,
+        rgba(0,0,0,0) 65%,
+        rgba(0,0,0,0.7) 100%);
+    z-index: 1;
+  }
+
+  /* Subtle red grid */
+  .grid-bg{
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(220,38,38,0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(220,38,38,0.07) 1px, transparent 1px);
+    background-size: 64px 64px;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  /* ============================================================
+     NAV
+  ============================================================ */
+  .nav{
+    position: relative;
+    z-index: 10;
+    padding: 24px 48px;
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .logo{ display: flex; align-items: center; gap: 12px; }
+  .logo-mark{
+    width: 44px; height: 44px;
+    border: 2px solid var(--red);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--red);
+    font-family: var(--font-display);
+    font-size: 24px;
+    letter-spacing: 1px;
+  }
+  .logo-text{
+    font-family: var(--font-display);
+    font-size: 19px;
+    letter-spacing: 2.5px;
+    line-height: 1;
+  }
+  .logo-text .red{ color: var(--red); }
+  .logo-text small{
+    display: block;
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 9px;
+    letter-spacing: 2.5px;
+    color: rgba(255,255,255,0.55);
+    margin-top: 4px;
+  }
+
+  .nav-links{
+    display: flex;
+    gap: 24px;
+    margin-left: 32px;
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  .nav-links a{
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    padding-bottom: 4px;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .nav-links a:hover{ color: var(--white); }
+  .nav-links a.active{ color: var(--red); border-color: var(--red); }
+
+  .nav-cta{ margin-left: auto; display: flex; align-items: center; gap: 20px; }
+  .nav-phone{
+    display: inline-flex; align-items: center; gap: 10px;
+    color: var(--white); text-decoration: none;
+    font-family: var(--font-display);
+    font-size: 18px; letter-spacing: 0.08em;
+    transition: color 0.2s;
+  }
+  .nav-phone:hover{ color: var(--red); }
+  .nav-phone .ico{
+    width: 32px; height: 32px;
+    background: var(--red); color: var(--white);
+    border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .btn-platform{
+    background: var(--red); color: var(--white);
+    padding: 10px 18px; border: none;
+    font-family: var(--font-display); font-size: 13px;
+    letter-spacing: 0.18em; cursor: pointer;
+    transition: background 0.2s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-platform:hover{ background: var(--red-deep); }
+  .staff-login{
+    font-family: var(--font-body); font-weight: 500;
+    font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: rgba(255,255,255,0.55); text-decoration: none;
+  }
+  .staff-login:hover{ color: var(--white); }
+
+  /* ============================================================
+     CONTENT
+  ============================================================ */
+  .content{
+    position: relative;
+    z-index: 5;
+    max-width: 1400px;
+    padding: 100px 48px 160px;
+  }
+
+  .eyebrow{
+    display: inline-flex; align-items: center; gap: 10px;
+    border: 1px solid rgba(220,38,38,0.45);
+    background: rgba(220,38,38,0.1);
+    padding: 8px 16px;
+    color: var(--red);
+    font-family: var(--font-body); font-weight: 500;
+    font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase;
+  }
+  .pulse{ position: relative; width: 8px; height: 8px; }
+  .pulse::before, .pulse::after{
+    content:''; position: absolute; inset: 0; border-radius: 50%; background: var(--red);
+  }
+  .pulse::before{ animation: pulse 2s infinite; }
+  @keyframes pulse{
+    0%   { transform: scale(1); opacity: 0.8; }
+    100% { transform: scale(3); opacity: 0; }
+  }
+
+  .headline{
+    font-family: var(--font-display);
+    font-size: clamp(72px, 11vw, 168px);
+    line-height: 0.88;
+    letter-spacing: -0.01em;
+    margin: 32px 0 8px;
+    text-transform: uppercase;
+    font-weight: 400;
+  }
+  .headline .red{ color: var(--red); }
+  .headline-sub{
+    display: block;
+    font-family: var(--font-display);
+    font-size: clamp(36px, 4.5vw, 64px);
+    color: rgba(255,255,255,0.85);
+    margin-top: 16px;
+    line-height: 0.95;
+  }
+
+  .subhead{
+    font-family: var(--font-body);
+    font-weight: 300;
+    font-size: clamp(17px, 1.4vw, 22px);
+    line-height: 1.6;
+    color: rgba(255,255,255,0.82);
+    max-width: 580px;
+    margin: 36px 0 48px;
+  }
+
+  /* CTAs */
+  .cta-row{
+    display: flex; gap: 16px; flex-wrap: wrap;
+    margin-bottom: 56px;
+  }
+  .btn-primary{
+    background: var(--red); color: var(--white);
+    padding: 20px 36px; border: none;
+    font-family: var(--font-display); font-size: 18px;
+    letter-spacing: 0.2em; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 14px;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .btn-primary:hover{ background: var(--red-deep); }
+  .btn-primary:active{ transform: scale(0.98); }
+  .btn-primary svg{ transition: transform 0.2s; }
+  .btn-primary:hover svg{ transform: translateX(4px); }
+
+  .btn-secondary{
+    background: transparent;
+    border: 2px solid rgba(255,255,255,0.22);
+    color: var(--white);
+    padding: 16px 24px;
+    font-family: var(--font-display); font-size: 18px;
+    letter-spacing: 0.1em;
+    display: inline-flex; align-items: center; gap: 14px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .btn-secondary:hover{
+    border-color: var(--red);
+    background: rgba(220,38,38,0.08);
+  }
+  .btn-icon{
+    width: 32px; height: 32px;
+    background: var(--red); color: var(--white);
+    border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+
+  /* Trust strip */
+  .trust{
+    display: flex; flex-wrap: wrap; gap: 28px;
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: rgba(255,255,255,0.55);
+    text-transform: uppercase;
+  }
+  .trust span{ display: inline-flex; align-items: center; gap: 8px; }
+  .trust .dot{
+    width: 4px; height: 4px;
+    background: var(--red);
+    border-radius: 50%;
+  }
+
+  /* Slide indicators */
+  .indicators{
+    position: absolute;
+    bottom: 40px;
+    left: 48px;
+    display: flex;
+    gap: 8px;
+    z-index: 5;
+  }
+  .indicator{
+    width: 48px; height: 3px;
+    background: rgba(255,255,255,0.2);
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  .indicator.active{ background: var(--red); }
+
+  /* Scroll cue */
+  .scroll-cue{
+    position: absolute;
+    bottom: 40px; right: 48px;
+    display: flex; flex-direction: column; align-items: center;
+    gap: 12px;
+    color: rgba(255,255,255,0.4);
+    z-index: 5;
+  }
+  .scroll-cue .txt{
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+  }
+  .scroll-cue .line{
+    width: 1px; height: 48px;
+    background: rgba(255,255,255,0.3);
+    animation: scrollBlink 2s infinite;
+  }
+  @keyframes scrollBlink{
+    0%, 100% { opacity: 0.2; }
+    50%      { opacity: 1; }
+  }
+
+  /* ============================================================
+     RESPONSIVE
+  ============================================================ */
+  @media (max-width: 768px){
+    .nav{ padding: 16px 20px; gap: 16px; }
+    .nav-links{ display: none; }
+    .logo-text{ font-size: 16px; }
+    .logo-text small{ display: none; }
+    .staff-login{ display: none; }
+    .nav-phone .tx{ display: none; }
+    .content{ padding: 60px 20px 100px; }
+    .indicators, .scroll-cue{ left: 20px; right: 20px; bottom: 24px; }
+    .scroll-cue{ display: none; }
+  }
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <!-- Slideshow layers — replace photo URLs with your preferred stock images -->
+  <div class="slide slide-1"></div>
+  <div class="slide slide-2"></div>
+  <div class="slide slide-3"></div>
+  <div class="slide slide-4"></div>
+
+  <!-- Dark overlay + red grid -->
+  <div class="overlay"></div>
+  <div class="grid-bg"></div>
+
+  <!-- Top nav -->
+  <header class="nav">
+    <a href="/" class="logo" style="text-decoration:none;color:inherit">
+      <div class="logo-mark">A</div>
+      <div class="logo-text">
+        ANDY'S <span class="red">ATS</span>
+        <small>AUTOMOTIVE &amp; TRUCK SERVICES</small>
+      </div>
+    </a>
+
+    <nav class="nav-links">
+      <a href="/" class="active">Home</a>
+      <a href="/services">Services</a>
+      <a href="/about">About</a>
+      <a href="/contact">Contact</a>
+    </nav>
+
+    <div class="nav-cta">
+      <a href="tel:+19042075191" class="nav-phone">
+        <span class="ico">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.37 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.33 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        </span>
+        <span class="tx">(904) 207-5191</span>
+      </a>
+      <button class="btn-platform">
+        OPEN PLATFORM
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
+      <a href="/login" class="staff-login">Staff Login</a>
+    </div>
+  </header>
+
+  <!-- Main hero content -->
+  <div class="content">
+    <div class="eyebrow">
+      <span class="pulse"></span>
+      MOBILE FLEET SERVICE · JACKSONVILLE
+    </div>
+
+    <h1 class="headline">
+      WE COME<br>
+      TO <span class="red">YOU.</span>
+      <span class="headline-sub">YOUR FLEET STAYS EARNING.</span>
+    </h1>
+
+    <p class="subhead">
+      Mobile maintenance for 3&ndash;20 vehicle fleets. We pick up, drop off, and work after-hours &mdash; so your trucks never miss a shift.
+    </p>
+
+    <div class="cta-row">
+      <button class="btn-primary">
+        GET FREE ESTIMATE
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
+      <a href="tel:+19042075191" class="btn-secondary">
+        <span class="btn-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.37 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.33 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        </span>
+        (904) 207-5191
+      </a>
+    </div>
+
+    <div class="trust">
+      <span><span class="dot"></span>5.0 ★ ON GOOGLE</span>
+      <span><span class="dot"></span>NAPA AFFILIATED</span>
+      <span><span class="dot"></span>INSURED &amp; LICENSED</span>
+      <span><span class="dot"></span>FAMILY-RUN SINCE 2018</span>
+    </div>
+  </div>
+
+  <!-- Slide indicators -->
+  <div class="indicators" id="indicators">
+    <div class="indicator active" data-i="0"></div>
+    <div class="indicator" data-i="1"></div>
+    <div class="indicator" data-i="2"></div>
+    <div class="indicator" data-i="3"></div>
+  </div>
+
+  <!-- Scroll cue -->
+  <div class="scroll-cue">
+    <span class="txt">SCROLL</span>
+    <div class="line"></div>
+  </div>
+</section>
+
+<script>
+  // Sync indicators with the slideshow timing (32s cycle = 8s per slide)
+  (function(){
+    const inds = document.querySelectorAll('.indicator');
+    if (!inds.length) return;
+    let active = 0;
+    setInterval(() => {
+      inds.forEach(n => n.classList.remove('active'));
+      active = (active + 1) % inds.length;
+      inds[active].classList.add('active');
+    }, 8000);
+  })();
+</script>
+
+</body>
+</html>
