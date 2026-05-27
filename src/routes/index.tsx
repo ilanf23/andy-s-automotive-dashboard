@@ -800,9 +800,9 @@ function PreviewPickup() {
             <div
               className={clsx(
                 "flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[10px] font-black",
-                s.done && "bg-[var(--mkt-gold)] text-white",
+                s.done && "bg-[var(--mkt-green)] text-white",
                 s.active &&
-                  "bg-[var(--mkt-ink)] text-white ring-4 ring-[var(--mkt-gold)]/30",
+                  "bg-[var(--mkt-ink)] text-white ring-4 ring-[var(--mkt-yellow)]/50",
                 !s.done && !s.active && "bg-[var(--mkt-paper-soft)] text-[var(--mkt-text-on-light-muted)]",
               )}
             >
