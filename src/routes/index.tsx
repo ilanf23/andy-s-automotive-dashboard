@@ -299,7 +299,7 @@ function StatsBar() {
                 delay={i * 120}
               >
                 <div className="h-full bg-white px-5 py-6 md:px-6 md:py-7">
-                  <div className="text-3xl font-black leading-none tabular-nums text-[var(--mkt-gold)] md:text-4xl">
+                  <div className={clsx("text-3xl font-black leading-none tabular-nums md:text-4xl", i % 3 === 1 ? "text-[var(--mkt-green-deep)]" : i % 3 === 2 ? "text-[var(--mkt-yellow-deep)]" : "text-[var(--mkt-gold)]")}>
                     <AnimatedCounter
                       to={s.value}
                       suffix={s.suffix}
@@ -800,9 +800,9 @@ function PreviewPickup() {
             <div
               className={clsx(
                 "flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[10px] font-black",
-                s.done && "bg-[var(--mkt-gold)] text-white",
+                s.done && "bg-[var(--mkt-green)] text-white",
                 s.active &&
-                  "bg-[var(--mkt-ink)] text-white ring-4 ring-[var(--mkt-gold)]/30",
+                  "bg-[var(--mkt-ink)] text-white ring-4 ring-[var(--mkt-yellow)]/50",
                 !s.done && !s.active && "bg-[var(--mkt-paper-soft)] text-[var(--mkt-text-on-light-muted)]",
               )}
             >
@@ -867,8 +867,8 @@ function PreviewSchedule() {
               const isWknd = d === "Sat" || d === "Sun";
               const isAfter = row.type === "after";
               let cls = "bg-[var(--mkt-ink)]/[0.06]";
-              if (!isWknd && !isAfter) cls = "bg-[var(--mkt-gold)]/80";
-              else if (!isWknd && isAfter) cls = "bg-[var(--mkt-gold)]/35";
+              if (!isWknd && !isAfter) cls = "bg-[var(--mkt-green)]/80";
+              else if (!isWknd && isAfter) cls = "bg-[var(--mkt-yellow)]/70";
               else if (d === "Sat" && !isAfter) cls = "bg-[var(--mkt-gold)]/60";
               return (
                 <div
@@ -883,11 +883,11 @@ function PreviewSchedule() {
 
       <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[10px] text-[var(--mkt-text-on-light-muted)]">
         <span className="inline-flex items-center gap-1.5">
-          <span className="h-2 w-2 rounded-sm bg-[var(--mkt-gold)]/80" />
+          <span className="h-2 w-2 rounded-sm bg-[var(--mkt-green)]/80" />
           Shop hours
         </span>
         <span className="inline-flex items-center gap-1.5">
-          <span className="h-2 w-2 rounded-sm bg-[var(--mkt-gold)]/35" />
+          <span className="h-2 w-2 rounded-sm bg-[var(--mkt-yellow)]/70" />
           After-hours fleet
         </span>
         <span className="inline-flex items-center gap-1.5">
@@ -909,7 +909,7 @@ function PreviewParts() {
     <div className="text-[var(--mkt-ink)]">
       <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-wider text-[var(--mkt-text-on-light-muted)]">
         <span>Parts manifest · RO-0312</span>
-        <span className="inline-flex items-center gap-1 rounded bg-[var(--mkt-gold)] px-1.5 py-0.5 text-[9px] font-black text-white">
+        <span className="inline-flex items-center gap-1 rounded bg-[var(--mkt-green)] px-1.5 py-0.5 text-[9px] font-black text-white">
           <ShieldCheck className="h-3 w-3" />
           NAPA AutoCare
         </span>
