@@ -1259,8 +1259,9 @@ function Testimonials() {
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-white via-white/85 to-transparent"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-white/70 to-transparent"
       />
+
     </section>
   );
 }
