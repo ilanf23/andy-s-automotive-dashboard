@@ -867,8 +867,8 @@ function PreviewSchedule() {
               const isWknd = d === "Sat" || d === "Sun";
               const isAfter = row.type === "after";
               let cls = "bg-[var(--mkt-ink)]/[0.06]";
-              if (!isWknd && !isAfter) cls = "bg-[var(--mkt-gold)]/80";
-              else if (!isWknd && isAfter) cls = "bg-[var(--mkt-gold)]/35";
+              if (!isWknd && !isAfter) cls = "bg-[var(--mkt-green)]/80";
+              else if (!isWknd && isAfter) cls = "bg-[var(--mkt-yellow)]/70";
               else if (d === "Sat" && !isAfter) cls = "bg-[var(--mkt-gold)]/60";
               return (
                 <div
