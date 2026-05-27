@@ -1248,72 +1248,116 @@ const TESTIMONIALS = [
 ];
 
 function Testimonials() {
+  const [idx, setIdx] = useState(0);
+  const [paused, setPaused] = useState(false);
+
+  useEffect(() => {
+    if (paused) return;
+    const id = setInterval(() => {
+      setIdx((i) => (i + 1) % TESTIMONIALS.length);
+    }, 6000);
+    return () => clearInterval(id);
+  }, [paused]);
+
+  const t = TESTIMONIALS[idx];
+
   return (
-    <section className="relative overflow-hidden bg-white py-24 text-[var(--mkt-ink)] md:py-32">
+    <section
+      className="relative overflow-hidden bg-white text-[var(--mkt-ink)]"
+      style={{ minHeight: "min(900px, 95vh)" }}
+    >
+      {/* Background photo of the people — fills the section, anchored to top so faces are visible */}
       <div
         className="pointer-events-none absolute inset-0 bg-cover bg-top bg-no-repeat"
         style={{ backgroundImage: "url('/images/testimonials-bg.jpg')" }}
       />
-      <div className="relative mx-auto max-w-7xl px-4 md:px-6">
-        <div className="text-center">
-          <Reveal>
-            <div className="inline-flex items-center gap-2 rounded-full border border-[var(--mkt-gold)]/30 bg-[var(--mkt-gold)]/10 px-3 py-1.5">
-              <Star className="h-3 w-3 fill-[var(--mkt-gold)] text-[var(--mkt-gold)]" />
-              <span className="text-[10px] font-black uppercase tracking-[0.18em] text-[var(--mkt-gold)]">
-                5.0 · 25+ Google reviews
-              </span>
-            </div>
-          </Reveal>
-          <Reveal delay={100}>
-            <h2 className="mkt-display mt-5 text-4xl md:text-5xl">
-              Real fleet owners.
-              <br />
-              <span className="text-[var(--mkt-gold)]">Real reviews.</span>
-            </h2>
-          </Reveal>
-        </div>
+      {/* Soft fade so the rotating quote band reads cleanly at the bottom */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-white via-white/85 to-transparent"
+      />
 
-        <div className="mt-14 grid grid-cols-1 gap-5 md:grid-cols-2">
-          {TESTIMONIALS.map((t, i) => (
-            <Reveal key={t.author} delay={i * 100}>
-              <figure className="group flex h-full flex-col rounded-2xl border border-[var(--mkt-border-light)] bg-white p-7 transition-all duration-500 hover:-translate-y-1 hover:border-[var(--mkt-gold)]/40 hover:shadow-lg">
-                <div className="flex items-center justify-between">
-                  <Quote
-                    className="h-8 w-8 text-[var(--mkt-gold)]"
-                    strokeWidth={1.5}
+      {/* Header pinned to the top */}
+      <div className="relative mx-auto max-w-7xl px-4 pt-24 text-center md:px-6 md:pt-32">
+        <Reveal>
+          <div className="inline-flex items-center gap-2 rounded-full border border-[var(--mkt-gold)]/30 bg-[var(--mkt-gold)]/10 px-3 py-1.5 backdrop-blur">
+            <Star className="h-3 w-3 fill-[var(--mkt-gold)] text-[var(--mkt-gold)]" />
+            <span className="text-[10px] font-black uppercase tracking-[0.18em] text-[var(--mkt-gold)]">
+              5.0 · 25+ Google reviews
+            </span>
+          </div>
+        </Reveal>
+        <Reveal delay={100}>
+          <h2 className="mkt-display mt-5 text-4xl md:text-5xl">
+            Real fleet owners.
+            <br />
+            <span className="text-[var(--mkt-gold)]">Real reviews.</span>
+          </h2>
+        </Reveal>
+      </div>
+
+      {/* Rotating quote band — positioned at the "stomach" of the background people, near the bottom */}
+      <div
+        className="absolute inset-x-0 bottom-16 z-10 md:bottom-20"
+        onMouseEnter={() => setPaused(true)}
+        onMouseLeave={() => setPaused(false)}
+      >
+        <div className="mx-auto max-w-5xl px-4 md:px-6">
+          <figure
+            key={t.author}
+            className="relative mx-auto animate-[fadeIn_0.6s_ease-out] rounded-2xl border border-[var(--mkt-border-light)] bg-white/95 p-7 shadow-[0_20px_60px_-20px_rgba(0,0,0,0.25)] backdrop-blur md:p-10"
+          >
+            <div className="flex items-center justify-between">
+              <Quote className="h-9 w-9 text-[var(--mkt-gold)]" strokeWidth={1.5} />
+              <div className="flex gap-0.5">
+                {[1, 2, 3, 4, 5].map((s) => (
+                  <Star
+                    key={s}
+                    className="h-4 w-4 fill-[var(--mkt-gold)] text-[var(--mkt-gold)]"
                   />
-                  <div className="flex gap-0.5">
-                    {[1, 2, 3, 4, 5].map((s) => (
-                      <Star
-                        key={s}
-                        className="h-3.5 w-3.5 fill-[var(--mkt-gold)] text-[var(--mkt-gold)]"
-                      />
-                    ))}
+                ))}
+              </div>
+            </div>
+            <blockquote className="mt-6 text-lg leading-relaxed text-[var(--mkt-ink)]/90 md:text-xl">
+              "{t.quote}"
+            </blockquote>
+            <figcaption className="mt-7 flex items-center justify-between gap-3 border-t border-[var(--mkt-border-light)] pt-5">
+              <div className="flex items-center gap-3">
+                <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[var(--mkt-gold)] text-sm font-black text-white">
+                  {t.author
+                    .split(" ")
+                    .map((w) => w[0])
+                    .slice(0, 2)
+                    .join("")}
+                </div>
+                <div>
+                  <div className="text-sm font-black text-[var(--mkt-ink)]">{t.author}</div>
+                  <div className="text-[11px] text-[var(--mkt-text-on-light-muted)]">
+                    {t.role}
                   </div>
                 </div>
-                <blockquote className="mt-6 flex-1 text-base leading-relaxed text-[var(--mkt-ink)]/85">
-                  "{t.quote}"
-                </blockquote>
-                <figcaption className="mt-6 flex items-center gap-3 border-t border-[var(--mkt-border-light)] pt-5">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[var(--mkt-gold)] text-sm font-black text-white">
-                    {t.author
-                      .split(" ")
-                      .map((w) => w[0])
-                      .slice(0, 2)
-                      .join("")}
-                  </div>
-                  <div>
-                    <div className="text-sm font-black text-[var(--mkt-ink)]">{t.author}</div>
-                    <div className="text-[11px] text-[var(--mkt-text-on-light-muted)]">{t.role}</div>
-                  </div>
-                </figcaption>
-              </figure>
-            </Reveal>
-          ))}
-        </div>
+              </div>
+              {/* Dots */}
+              <div className="flex items-center gap-2">
+                {TESTIMONIALS.map((q, i) => (
+                  <button
+                    key={q.author}
+                    type="button"
+                    onClick={() => setIdx(i)}
+                    aria-label={`Show review ${i + 1}`}
+                    className={clsx(
+                      "h-2 rounded-full transition-all",
+                      i === idx
+                        ? "w-6 bg-[var(--mkt-gold)]"
+                        : "w-2 bg-[var(--mkt-ink)]/20 hover:bg-[var(--mkt-ink)]/40",
+                    )}
+                  />
+                ))}
+              </div>
+            </figcaption>
+          </figure>
 
-        <Reveal delay={400}>
-          <div className="mt-12 text-center">
+          <div className="mt-6 text-center">
             <a
               href="https://goo.gl/maps/s1Bk7rNLzCFT978s9"
               target="_blank"
@@ -1324,7 +1368,7 @@ function Testimonials() {
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </a>
           </div>
-        </Reveal>
+        </div>
       </div>
     </section>
   );
