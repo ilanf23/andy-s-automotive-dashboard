@@ -299,7 +299,7 @@ function StatsBar() {
                 delay={i * 120}
               >
                 <div className="h-full bg-white px-5 py-6 md:px-6 md:py-7">
-                  <div className="text-3xl font-black leading-none tabular-nums text-[var(--mkt-gold)] md:text-4xl">
+                  <div className={clsx("text-3xl font-black leading-none tabular-nums md:text-4xl", i % 3 === 1 ? "text-[var(--mkt-green-deep)]" : i % 3 === 2 ? "text-[var(--mkt-yellow-deep)]" : "text-[var(--mkt-gold)]")}>
                     <AnimatedCounter
                       to={s.value}
                       suffix={s.suffix}
