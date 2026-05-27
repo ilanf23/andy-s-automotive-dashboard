@@ -883,11 +883,11 @@ function PreviewSchedule() {
 
       <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[10px] text-[var(--mkt-text-on-light-muted)]">
         <span className="inline-flex items-center gap-1.5">
-          <span className="h-2 w-2 rounded-sm bg-[var(--mkt-gold)]/80" />
+          <span className="h-2 w-2 rounded-sm bg-[var(--mkt-green)]/80" />
           Shop hours
         </span>
         <span className="inline-flex items-center gap-1.5">
-          <span className="h-2 w-2 rounded-sm bg-[var(--mkt-gold)]/35" />
+          <span className="h-2 w-2 rounded-sm bg-[var(--mkt-yellow)]/70" />
           After-hours fleet
         </span>
         <span className="inline-flex items-center gap-1.5">
