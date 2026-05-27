@@ -909,7 +909,7 @@ function PreviewParts() {
     <div className="text-[var(--mkt-ink)]">
       <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-wider text-[var(--mkt-text-on-light-muted)]">
         <span>Parts manifest · RO-0312</span>
-        <span className="inline-flex items-center gap-1 rounded bg-[var(--mkt-gold)] px-1.5 py-0.5 text-[9px] font-black text-white">
+        <span className="inline-flex items-center gap-1 rounded bg-[var(--mkt-green)] px-1.5 py-0.5 text-[9px] font-black text-white">
           <ShieldCheck className="h-3 w-3" />
           NAPA AutoCare
         </span>
