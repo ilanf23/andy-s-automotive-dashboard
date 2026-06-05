@@ -44,6 +44,7 @@ import { vehicles } from "@/data/vehicles";
 import { technicians } from "@/data/technicians";
 import type { ShopStatus } from "@/components/shop/StatusBadge";
 import { useShopState, updateROStatus, isLostRevenueResolved } from "@/lib/shop-store";
+import { SHOP_KPIS } from "@/lib/financials";
 import { useModals } from "@/components/ui/ModalProvider";
 import { AtRiskCustomersWidget } from "@/components/ai/CustomerHealthScore";
 import { toast } from "sonner";

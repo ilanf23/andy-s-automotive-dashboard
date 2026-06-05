@@ -12,6 +12,7 @@ import {
   Timer,
 } from "lucide-react";
 import type { PeriodFinancials } from "@/lib/kpi-engine";
+import { SHOP_KPIS } from "@/lib/financials";
 
 export type KpiResult = {
   value: string;
@@ -69,6 +70,20 @@ const totalCost = (f: PeriodFinancials) =>
   f.partsCost + f.laborCost + f.tireCost + f.batteryCost;
 
 export const KPI_REGISTRY: KpiDef[] = [
+  // ---------- SHOP_KPIS-backed entries (single source of truth with financials.ts) ----------
+  {
+    id: "sales-today",
+    label: SHOP_KPIS.salesToday.label,
+    description: "Total posted sales for today.",
+    icon: DollarSign,
+    accent: "success",
+    compute: () => ({
+      value: SHOP_KPIS.salesToday.value,
+      delta: SHOP_KPIS.salesToday.delta ?? "—",
+      deltaDirection: SHOP_KPIS.salesToday.deltaDirection ?? "flat",
+    }),
+  },
+  // ---------- Computed KPIs ----------
   {
     id: "parts-gp",
     label: "Parts GP %",
