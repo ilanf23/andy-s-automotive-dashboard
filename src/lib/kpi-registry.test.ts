@@ -6,30 +6,40 @@ import {
   type PeriodFinancials,
 } from "@/lib/kpi-engine";
 
-test("registry has all 12 KPIs with unique ids", () => {
-  expect(KPI_REGISTRY).toHaveLength(12);
+// The 12 KPIs this feature owns. The registry may also contain additional
+// entries contributed by other modules (e.g. a SHOP_KPIS-backed "sales-today"
+// sourced from financials.ts), so these assertions check for a superset, not
+// an exact count.
+const REQUIRED_KPI_IDS = [
+  "aro",
+  "awro",
+  "cost-per-build-hr",
+  "elr",
+  "gp-dollars",
+  "gp-per-hr",
+  "hours-per-ro",
+  "labor-gp",
+  "parts-gp",
+  "proficiency",
+  "sold-hours",
+  "total-gp",
+];
+
+test("registry includes all 12 required KPIs with unique ids", () => {
   const ids = KPI_REGISTRY.map((k) => k.id);
-  expect(new Set(ids).size).toBe(12);
+  // No duplicate ids anywhere in the registry.
+  expect(new Set(ids).size).toBe(ids.length);
+  // Every required KPI is present.
+  for (const id of REQUIRED_KPI_IDS) {
+    expect(ids).toContain(id);
+  }
 });
 
-test("expected ids are present", () => {
-  const ids = KPI_REGISTRY.map((k) => k.id).sort();
-  expect(ids).toEqual(
-    [
-      "aro",
-      "awro",
-      "cost-per-build-hr",
-      "elr",
-      "gp-dollars",
-      "gp-per-hr",
-      "hours-per-ro",
-      "labor-gp",
-      "parts-gp",
-      "proficiency",
-      "sold-hours",
-      "total-gp",
-    ].sort(),
-  );
+test("expected required ids are present", () => {
+  const ids = new Set(KPI_REGISTRY.map((k) => k.id));
+  for (const id of REQUIRED_KPI_IDS) {
+    expect(ids.has(id)).toBe(true);
+  }
 });
 
 test("every KPI computes a formatted, non-empty value", () => {
