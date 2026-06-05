@@ -6,12 +6,14 @@
 
 **Architecture:** A pure `kpi-engine` produces per-period financial primitives (seeded, deterministic). A `kpi-registry` maps those primitives into 12 formatted KPI results. A `kpi-prefs` external store (localStorage-backed, same pattern as `shop-store.ts`) holds the 4–5 selected KPI ids. A `KpiStrip` renders selected KPIs via the existing `MetricTile`; a `KpiCustomizer` popover (owner-only) edits the selection. The dashboard gets a timeline `ToggleGroup` bound to existing `dateRange` state.
 
-**Tech Stack:** React 18, TanStack Router, TypeScript, Tailwind, Radix UI primitives (`popover`, `checkbox`, `toggle-group`), lucide-react icons, `useSyncExternalStore`. Tests run via Bun's built-in test runner (`bun test`) — no new dependencies.
+**Tech Stack:** React 18, TanStack Router, TypeScript, Tailwind, Radix UI primitives (`popover`, `checkbox`, `toggle-group`), lucide-react icons, `useSyncExternalStore`. Tests run via **Vitest** (Node environment) — added as a devDependency in Task 0. Runtime is Node 24 + npm (Bun is not installed).
 
 ---
 
 ## File Structure
 
+- Create: `vitest.config.ts` — standalone test config (Node env + `@/` alias).
+- Modify: `package.json` — add `vitest` devDependency + `test` script.
 - Create: `src/lib/kpi-engine.ts` — `Timeframe`, `PeriodFinancials`, seeded generators.
 - Create: `src/lib/kpi-engine.test.ts` — engine determinism + scaling tests.
 - Create: `src/lib/kpi-registry.ts` — `KpiDef`, `KpiResult`, the 12 KPI definitions, formatters.
@@ -21,6 +23,73 @@
 - Create: `src/components/shop/KpiStrip.tsx` — renders selected KPIs.
 - Create: `src/components/shop/KpiCustomizer.tsx` — owner-only selection popover.
 - Modify: `src/routes/dashboard.tsx` — KPI strip header (timeline + customizer), replace hardcoded array (`499-554`), remove the cycling date button (`609-622`).
+
+---
+
+## Task 0: Test Infrastructure (Vitest)
+
+**Files:**
+- Create: `vitest.config.ts`
+- Modify: `package.json`
+
+- [ ] **Step 1: Install Vitest**
+
+Run: `npm install -D vitest@^3`
+Expected: `vitest` appears under `devDependencies` in `package.json`.
+
+- [ ] **Step 2: Create the Vitest config**
+
+This is standalone (does NOT import the lovable Vite config, which pulls in
+Cloudflare/TanStack build plugins that would break the test runner). It only
+needs the `@/` alias and a Node environment.
+
+```ts
+// vitest.config.ts
+import { defineConfig } from "vitest/config";
+import { fileURLToPath } from "node:url";
+
+export default defineConfig({
+  resolve: {
+    alias: {
+      "@": fileURLToPath(new URL("./src", import.meta.url)),
+    },
+  },
+  test: {
+    environment: "node",
+    include: ["src/**/*.test.ts"],
+  },
+});
+```
+
+- [ ] **Step 3: Add the test script**
+
+In `package.json`, add to the `"scripts"` block:
+
+```json
+"test": "vitest run"
+```
+
+- [ ] **Step 4: Add a smoke test and verify the runner works**
+
+Create `src/lib/_smoke.test.ts`:
+
+```ts
+import { test, expect } from "vitest";
+
+test("vitest runs", () => {
+  expect(1 + 1).toBe(2);
+});
+```
+
+Run: `npm test`
+Expected: PASS (1 test). Then delete `src/lib/_smoke.test.ts`.
+
+- [ ] **Step 5: Commit**
+
+```bash
+git add package.json package-lock.json vitest.config.ts
+git commit -m "test: add vitest test runner with @ alias"
+```
 
 ---
 
@@ -34,7 +103,7 @@
 
 ```ts
 // src/lib/kpi-engine.test.ts
-import { test, expect } from "bun:test";
+import { test, expect } from "vitest";
 import {
   getPeriodFinancials,
   getPreviousPeriodFinancials,
@@ -83,7 +152,7 @@ test("previous period differs from current but stays deterministic", () => {
 
 - [ ] **Step 2: Run test to verify it fails**
 
-Run: `bun test src/lib/kpi-engine.test.ts`
+Run: `npx vitest run src/lib/kpi-engine.test.ts`
 Expected: FAIL — `Cannot find module '@/lib/kpi-engine'`.
 
 - [ ] **Step 3: Write minimal implementation**
@@ -185,7 +254,7 @@ export function getPreviousPeriodFinancials(tf: Timeframe): PeriodFinancials {
 
 - [ ] **Step 4: Run test to verify it passes**
 
-Run: `bun test src/lib/kpi-engine.test.ts`
+Run: `npx vitest run src/lib/kpi-engine.test.ts`
 Expected: PASS (4 tests).
 
 - [ ] **Step 5: Commit**
@@ -207,7 +276,7 @@ git commit -m "feat: add deterministic KPI financial engine"
 
 ```ts
 // src/lib/kpi-registry.test.ts
-import { test, expect } from "bun:test";
+import { test, expect } from "vitest";
 import { KPI_REGISTRY, getKpiById } from "@/lib/kpi-registry";
 import { getPeriodFinancials, getPreviousPeriodFinancials } from "@/lib/kpi-engine";
 
@@ -276,7 +345,7 @@ test("delta direction reflects current vs previous", () => {
 
 - [ ] **Step 2: Run test to verify it fails**
 
-Run: `bun test src/lib/kpi-registry.test.ts`
+Run: `npx vitest run src/lib/kpi-registry.test.ts`
 Expected: FAIL — `Cannot find module '@/lib/kpi-registry'`.
 
 - [ ] **Step 3: Write minimal implementation**
@@ -546,7 +615,7 @@ export function getKpiById(id: string): KpiDef | undefined {
 
 - [ ] **Step 4: Run test to verify it passes**
 
-Run: `bun test src/lib/kpi-registry.test.ts`
+Run: `npx vitest run src/lib/kpi-registry.test.ts`
 Expected: PASS (5 tests).
 
 - [ ] **Step 5: Commit**
@@ -568,7 +637,7 @@ git commit -m "feat: add 12-KPI registry with formatters and deltas"
 
 ```ts
 // src/lib/kpi-prefs.test.ts
-import { test, expect, beforeEach } from "bun:test";
+import { test, expect, beforeEach } from "vitest";
 import {
   DEFAULT_KPI_IDS,
   MIN_KPIS,
@@ -627,7 +696,7 @@ test("resetKpis restores defaults", () => {
 
 - [ ] **Step 2: Run test to verify it fails**
 
-Run: `bun test src/lib/kpi-prefs.test.ts`
+Run: `npx vitest run src/lib/kpi-prefs.test.ts`
 Expected: FAIL — `Cannot find module '@/lib/kpi-prefs'`.
 
 - [ ] **Step 3: Write minimal implementation**
@@ -739,12 +808,12 @@ export function useKpiPrefs(): {
 
 - [ ] **Step 4: Run test to verify it passes**
 
-Run: `bun test src/lib/kpi-prefs.test.ts`
+Run: `npx vitest run src/lib/kpi-prefs.test.ts`
 Expected: PASS (5 tests).
 
 - [ ] **Step 5: Run the whole suite + commit**
 
-Run: `bun test`
+Run: `npm test`
 Expected: PASS (all lib tests green).
 
 ```bash
@@ -830,7 +899,7 @@ export function KpiStrip({ timeframe }: { timeframe: Timeframe }) {
 
 - [ ] **Step 2: Type-check**
 
-Run: `bunx tsc --noEmit`
+Run: `npx tsc --noEmit`
 Expected: No errors in `KpiStrip.tsx`.
 
 - [ ] **Step 3: Commit**
@@ -937,7 +1006,7 @@ export function KpiCustomizer() {
 
 - [ ] **Step 2: Type-check**
 
-Run: `bunx tsc --noEmit`
+Run: `npx tsc --noEmit`
 Expected: No errors in `KpiCustomizer.tsx`.
 
 - [ ] **Step 3: Commit**
@@ -1019,14 +1088,14 @@ cycles `Today → Week → Month` (originally lines `609-622`, the button betwee
 
 - [ ] **Step 4: Type-check + lint**
 
-Run: `bunx tsc --noEmit && bun run lint`
+Run: `npx tsc --noEmit && npm run lint`
 Expected: No errors. (If `tsc` reports the `MetricTile` import is now unused —
 i.e. it's no longer referenced anywhere in `dashboard.tsx` — remove that import
 line. It may still be used elsewhere in the file; only remove if unused.)
 
 - [ ] **Step 5: Manual verification in the browser**
 
-Run: `bun run dev`
+Run: `npm run dev`
 Then verify:
 1. Sign in as the owner (`login.tsx` lists the Owner demo user) → the dashboard
    shows the default 5 KPIs (`total-gp`, `gp-dollars`, `aro`, `elr`,
