@@ -3,14 +3,8 @@ import { useState } from "react";
 import { format } from "date-fns";
 import {
   Plus,
-  DollarSign,
   Wrench,
   Activity,
-  Gauge,
-  Clock,
-  Truck,
-  Percent,
-  TrendingUp,
   AlertTriangle,
   CheckCircle,
   FileText,
@@ -30,10 +24,7 @@ import {
 import { PageShell, SectionHeader } from "@/components/shop/PageShell";
 import { KpiStrip } from "@/components/shop/KpiStrip";
 import { KpiCustomizer } from "@/components/shop/KpiCustomizer";
-import {
-  ToggleGroup,
-  ToggleGroupItem,
-} from "@/components/ui/toggle-group";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { CarCountChart, type CarCountBucket } from "@/components/shop/CarCountChart";
 import { HoursChart, type HoursBucket } from "@/components/shop/HoursChart";
 import {
