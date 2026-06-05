@@ -36,7 +36,7 @@ const PROPOSAL = {
   confidencePercent: 88,
   mitchell1Available: false,
   reasoning:
-    "Mitchell1 has no labor guide for this Frankenstein build (custom chassis, Allison 3000 swap). Falling back to your shop's history — 4 similar brake jobs on Class 5-6 modified trucks averaged 4.1 hrs. Your shop's median for this category is 3.9 hrs. Adding +5% margin for first-time vehicle.",
+    "Mitchell1 has no labor guide for this Frankenstein build (custom chassis, Allison 3000 swap). Falling back to your shop's history - 4 similar brake jobs on Class 5-6 modified trucks averaged 4.1 hrs. Your shop's median for this category is 3.9 hrs. Adding +5% margin for first-time vehicle.",
   similarJobs: [
     { roId: "4781", vehicle: "Med Trust MT-52 (E-450)", date: "Apr 4, 2026", hours: 4.2, techName: "Marcus" },
     { roId: "4733", vehicle: "City Form 221 (F-550)", date: "Jan 18, 2026", hours: 4.0, techName: "Marcus" },
@@ -47,7 +47,7 @@ const PROPOSAL = {
 
 const THINKING_STEPS = [
   "Checking Mitchell1 ProDemand for this VIN",
-  "Mitchell1 missing — falling back to shop history",
+  "Mitchell1 missing - falling back to shop history",
   "Indexing 47 brake jobs from your last 12 months",
   "Filtering to Class 5-6 + similar chassis weight",
   "Computing median + confidence interval",
@@ -105,7 +105,7 @@ export function FrankensteinLaborModal({
               onClick={() => onOpenChange(false)}
               className="rounded-md border border-border bg-background px-3 py-1.5 text-xs font-medium hover:bg-surface"
             >
-              Skip — enter manually
+              Skip - enter manually
             </button>
             <button
               type="button"
@@ -130,7 +130,7 @@ export function FrankensteinLaborModal({
             <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-[#9D174D]" />
             <div>
               <p className="text-xs font-semibold text-[#9D174D]">
-                Frankenstein vehicle — Mitchell1 has no labor guide
+                Frankenstein vehicle - Mitchell1 has no labor guide
               </p>
               <p className="mt-0.5 text-[10px] text-[#9D174D]/80">
                 {jobDescription ?? PROPOSAL.description} on {vehicleLabel ?? PROPOSAL.vehicleLabel}

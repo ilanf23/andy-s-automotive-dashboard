@@ -1,7 +1,7 @@
 import type { Scenario, ScenarioStep } from "./types";
 
 // ============================================================================
-// Scripted scenarios — hand-crafted demo paths
+// Scripted scenarios - hand-crafted demo paths
 // Each scenario matches on user input keywords and runs a sequence of steps.
 // ============================================================================
 
@@ -20,7 +20,7 @@ const BUILD_AND_SEND_ESTIMATE: Scenario = {
   context: {
     type: "ro",
     id: "4847",
-    label: "RO #4847 — Med Trust MT-47",
+    label: "RO #4847 - Med Trust MT-47",
     sub: "2019 Ford E-450 Ambulance · Awaiting Approval",
     fields: [
       { label: "Customer", value: "Med Trust (Fleet)" },
@@ -56,7 +56,7 @@ const BUILD_AND_SEND_ESTIMATE: Scenario = {
         "Identified 4 unestimated findings (front brakes, marker light, cabin filter, ABS sensor)",
         "Cross-referencing your shop's 47 brake jobs on Class 5-6 ambulances",
         "Pulling live parts pricing from Worldpac + OEM Ford",
-        "Computing labor times — Mitchell1 + your shop history",
+        "Computing labor times - Mitchell1 + your shop history",
         "Applying Med Trust's negotiated fleet rate ($138/hr vs $148 default)",
       ],
     },
@@ -129,7 +129,7 @@ const BUILD_AND_SEND_ESTIMATE: Scenario = {
         },
         {
           type: "text",
-          text: "Done. Med Trust will see it in Fleetio within 60 seconds. I'm watching for the approval — I'll notify you the moment Dana clicks Approve, or escalate to you if she pushes back on any line.",
+          text: "Done. Med Trust will see it in Fleetio within 60 seconds. I'm watching for the approval - I'll notify you the moment Dana clicks Approve, or escalate to you if she pushes back on any line.",
         },
         {
           type: "suggestions",
@@ -143,7 +143,7 @@ const BUILD_AND_SEND_ESTIMATE: Scenario = {
       onRejected: [
         {
           type: "text",
-          text: "No problem — I'll discard the proposal. Want me to suggest a different mix of lines, or open the AI Estimate Builder so you can edit before sending?",
+          text: "No problem - I'll discard the proposal. Want me to suggest a different mix of lines, or open the AI Estimate Builder so you can edit before sending?",
         },
       ],
     },
@@ -232,20 +232,20 @@ const LABOR_GP: Scenario = {
     {
       type: "result",
       card: {
-        title: "Labor GP — this week (real hourly basis)",
+        title: "Labor GP - this week (real hourly basis)",
         rows: [
           { label: "Labor sales", value: "$24,830" },
           { label: "Tech wages paid (actual)", value: "$10,330" },
           { label: "Gross profit", value: "$14,500", tone: "success" },
           { label: "GP %", value: "58.4%", sub: "+1.2 pts vs last week", tone: "success" },
-          { label: "Tekmetric's report", value: "82.6%", sub: "Inflated — uses flat-rate", tone: "warning" },
+          { label: "Tekmetric's report", value: "82.6%", sub: "Inflated - uses flat-rate", tone: "warning" },
         ],
         footer: "Formula: (Labor sales − wages paid) ÷ Labor sales = 14,500 ÷ 24,830 = 58.4%",
       },
     },
     {
       type: "text",
-      text: "Trevor is dragging the average — he's at 47% efficiency this week (18hrs over estimate on the Bayside Marine job). Want me to flag that for review?",
+      text: "Trevor is dragging the average - he's at 47% efficiency this week (18hrs over estimate on the Bayside Marine job). Want me to flag that for review?",
     },
     {
       type: "suggestions",
@@ -295,7 +295,7 @@ const SCHEDULE_APPOINTMENT: Scenario = {
     },
     {
       type: "text",
-      text: "They have 4 trucks on file. Wes usually rotates them by idle hours — RD-12 is overdue by ~600 hrs. I'll plan around that one. Checking bay availability...",
+      text: "They have 4 trucks on file. Wes usually rotates them by idle hours - RD-12 is overdue by ~600 hrs. I'll plan around that one. Checking bay availability...",
     },
     {
       type: "tool",
@@ -312,7 +312,7 @@ const SCHEDULE_APPOINTMENT: Scenario = {
     {
       type: "reasoning",
       steps: [
-        "RD-12 is jetter — diesel + hydraulic work, Marcus is the right tech",
+        "RD-12 is jetter - diesel + hydraulic work, Marcus is the right tech",
         "Bay 2 has the lift Marcus prefers + room for the cone holder",
         "10am gives Wes time to deliver after his morning route",
         "Adding 15 min buffer for VIN check-in",
@@ -372,7 +372,7 @@ const SCHEDULE_APPOINTMENT: Scenario = {
       onRejected: [
         {
           type: "text",
-          text: "Got it — not booking. Want a different time slot, or a different tech?",
+          text: "Got it - not booking. Want a different time slot, or a different tech?",
         },
       ],
     },
@@ -391,7 +391,7 @@ const STUCK_RO: Scenario = {
   context: {
     type: "ro",
     id: "4847",
-    label: "RO #4847 — Med Trust MT-47",
+    label: "RO #4847 - Med Trust MT-47",
     sub: "Awaiting Approval · 3 days in shop",
   },
   steps: [
@@ -419,14 +419,14 @@ const STUCK_RO: Scenario = {
       tool: "read_messages",
       args: { context: "RO-4847" },
       result:
-        "Last from Dana: 'reviewing with fleet manager — back to you by EOD' (3 days ago, no reply since)",
+        "Last from Dana: 'reviewing with fleet manager - back to you by EOD' (3 days ago, no reply since)",
     },
     {
       type: "reasoning",
       intro: "Diagnosing:",
       steps: [
         "Estimate covers only 1 of 5 inspection findings",
-        "Dana told fleet manager 'back to you by EOD' — implies she sent on, hasn't heard",
+        "Dana told fleet manager 'back to you by EOD' - implies she sent on, hasn't heard",
         "Fleet manager likely waiting for complete picture before signing off",
         "Lost revenue at risk: $1,213 (the 4 unestimated lines)",
       ],
@@ -452,7 +452,7 @@ const STUCK_RO: Scenario = {
     {
       type: "suggestions",
       prompts: [
-        "Yes — build the estimate and send it",
+        "Yes - build the estimate and send it",
         "Why didn't Marcus add those lines originally?",
         "What's Dana's typical approval turnaround?",
       ],
@@ -477,7 +477,7 @@ const DEMAND_LETTER: Scenario = {
     fields: [
       { label: "Contact", value: "Vince Marek" },
       { label: "Health", value: "At Risk (18)" },
-      { label: "Last reply", value: "Feb 13 — 'truck not running'" },
+      { label: "Last reply", value: "Feb 13 - 'truck not running'" },
     ],
   },
   steps: [
@@ -507,7 +507,7 @@ const DEMAND_LETTER: Scenario = {
         "Customer has not made a payment since Feb 14 ($500)",
         "Truck is still in their possession (not in our shop)",
         "Florida mechanic's lien is enforceable up to 1 year after work",
-        "Drafting formal lien notice — final step before filing",
+        "Drafting formal lien notice - final step before filing",
       ],
     },
     {
@@ -531,7 +531,7 @@ const DEMAND_LETTER: Scenario = {
         ],
         impact: "Triggers final 30-day clock before lien filing",
         tone: "danger",
-        body: `FINAL NOTICE — MECHANIC'S LIEN PENDING
+        body: `FINAL NOTICE - MECHANIC'S LIEN PENDING
 
 Northpoint Logistics, Inc.
 Attn: Vince Marek
@@ -576,7 +576,7 @@ Andy's Automotive, LLC`,
         },
         {
           type: "text",
-          text: "Sent both ways. Lien filing is queued for June 22 — I'll pause the auto-file the moment Vince responds or pays. I'll also alert you 7 days before the file date as a final reminder. This is locked behind your approval too; I won't auto-file without you saying go.",
+          text: "Sent both ways. Lien filing is queued for June 22 - I'll pause the auto-file the moment Vince responds or pays. I'll also alert you 7 days before the file date as a final reminder. This is locked behind your approval too; I won't auto-file without you saying go.",
         },
         {
           type: "suggestions",
@@ -590,7 +590,7 @@ Andy's Automotive, LLC`,
       onRejected: [
         {
           type: "text",
-          text: "Holding off. Want me to make a softer attempt first — a final personal call from you, or a payment-plan offer?",
+          text: "Holding off. Want me to make a softer attempt first - a final personal call from you, or a payment-plan offer?",
         },
       ],
     },
@@ -614,11 +614,11 @@ const GREETING: Scenario = {
   steps: [
     {
       type: "text",
-      text: "I'm your shop's AI copilot — I have access to every RO, customer, vehicle, estimate, inspection, part, message, and report in the platform. I can answer questions, run analytics, and take actions on your behalf.",
+      text: "I'm your shop's AI copilot - I have access to every RO, customer, vehicle, estimate, inspection, part, message, and report in the platform. I can answer questions, run analytics, and take actions on your behalf.",
     },
     {
       type: "text",
-      text: "When I take an action that touches money, contracts, or customer-facing communication, I'll pause and ask for your approval — you'll see exactly what I'm about to do before I do it.",
+      text: "When I take an action that touches money, contracts, or customer-facing communication, I'll pause and ask for your approval - you'll see exactly what I'm about to do before I do it.",
     },
     {
       type: "suggestions",
@@ -650,7 +650,7 @@ const CHURN_RISK: Scenario = {
       type: "tool",
       tool: "compute_health_scores",
       args: { period: "rolling_90d" },
-      result: "3 customers flagged: Reliable Ducks (52), First Coast (58), Northpoint (18 — already churned)",
+      result: "3 customers flagged: Reliable Ducks (52), First Coast (58), Northpoint (18 - already churned)",
       durationMs: 900,
     },
     {
@@ -677,7 +677,7 @@ const CHURN_RISK: Scenario = {
             tone: "danger",
           },
         ],
-        footer: "Three concrete actions below — I can run all three.",
+        footer: "Three concrete actions below - I can run all three.",
       },
     },
     {
@@ -689,7 +689,7 @@ const CHURN_RISK: Scenario = {
         details: [
           { label: "Reliable Ducks", value: "Personal SMS from Cameron + book-now link" },
           { label: "First Coast", value: "Email offering bundled-package pricing" },
-          { label: "Northpoint", value: "Skip — already in dunning flow" },
+          { label: "Northpoint", value: "Skip - already in dunning flow" },
         ],
         impact: "Targets ~$24k recoverable annual revenue",
         tone: "success",
@@ -711,7 +711,7 @@ const CHURN_RISK: Scenario = {
         },
         {
           type: "text",
-          text: "Done. Lori already opened the email — I'll watch for replies and surface them in your morning briefing.",
+          text: "Done. Lori already opened the email - I'll watch for replies and surface them in your morning briefing.",
         },
       ],
     },
@@ -746,7 +746,7 @@ const PARTS_LOOKUP: Scenario = {
       type: "tool",
       tool: "filter_by_shop_history",
       args: { vehicleClass: "ambulance_e450" },
-      result: "Wagner OEX HD ceramic pads — your shop has used these 11 of last 12 times",
+      result: "Wagner OEX HD ceramic pads - your shop has used these 11 of last 12 times",
     },
     {
       type: "result",
@@ -781,7 +781,7 @@ const PARTS_LOOKUP: Scenario = {
     },
     {
       type: "text",
-      text: "All in-network. Want me to place the order with Worldpac for the pads now? They close at 6pm — order before 5pm hits tomorrow morning.",
+      text: "All in-network. Want me to place the order with Worldpac for the pads now? They close at 6pm - order before 5pm hits tomorrow morning.",
     },
     {
       type: "suggestions",
@@ -795,7 +795,7 @@ const PARTS_LOOKUP: Scenario = {
 };
 
 // ============================================================================
-// Fallback — no scenario matched
+// Fallback - no scenario matched
 // ============================================================================
 
 export const FALLBACK_STEPS: ScenarioStep[] = [

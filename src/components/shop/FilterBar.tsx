@@ -78,7 +78,7 @@ export function FilterBar({
 
   const handleMoreFilters = () => {
     toast.info("Advanced filters", {
-      description: "More filters drawer — coming soon",
+      description: "More filters drawer - coming soon",
     });
   };
 

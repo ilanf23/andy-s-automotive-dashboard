@@ -8,7 +8,7 @@ import {
 } from "react";
 
 // ============================================================================
-// Auth — simple mock auth for the demo
+// Auth - simple mock auth for the demo
 // Persists across reloads via localStorage.
 // In production this is a real OAuth/session flow.
 // ============================================================================
@@ -36,7 +36,7 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 const STORAGE_KEY = "andys-os-auth-v1";
 
 // ----------------------------------------------------------------------------
-// Demo user database — any email works, but these get special role mapping
+// Demo user database - any email works, but these get special role mapping
 // ----------------------------------------------------------------------------
 
 const KNOWN_USERS: Record<string, Omit<AuthUser, "id" | "shopId" | "shopName">> = {
@@ -101,13 +101,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setUser(parsed);
       }
     } catch {
-      // ignore — corrupted storage
+      // ignore - corrupted storage
     }
     setHydrating(false);
   }, []);
 
   const signIn = useCallback(async (email: string, password: string) => {
-    // Mock auth — simulate a brief network call
+    // Mock auth - simulate a brief network call
     await new Promise((r) => setTimeout(r, 700));
     // For the demo, any non-empty email + password "works"
     if (!email.trim() || !password.trim()) {
@@ -118,7 +118,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(nextUser));
     } catch {
-      // ignore — storage may be disabled
+      // ignore - storage may be disabled
     }
     return nextUser;
   }, []);

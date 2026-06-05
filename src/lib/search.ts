@@ -96,7 +96,7 @@ export function runSearch(query: string): SearchResult[] {
     results.push({
       kind: "ro",
       id: ro.id,
-      title: `RO #${ro.id} — ${ro.description}`,
+      title: `RO #${ro.id} - ${ro.description}`,
       subtitle: `${customer?.name ?? "Unknown"} • ${vehicle?.unit ?? "Unknown vehicle"} • ${ro.status}`,
       href: `/repair-orders/${ro.id}`,
       score,

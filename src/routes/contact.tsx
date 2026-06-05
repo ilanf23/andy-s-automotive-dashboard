@@ -49,7 +49,7 @@ function ContactPage() {
     await new Promise((r) => setTimeout(r, 800));
     setSubmitting(false);
     setSubmitted(true);
-    toast.success("Request received — we'll call you within 1 business hour");
+    toast.success("Request received - we'll call you within 1 business hour");
   };
 
   return (
@@ -58,7 +58,8 @@ function ContactPage() {
       <section className="relative overflow-hidden bg-[var(--mkt-ink)] pb-20 pt-40 text-white md:pt-48">
         <div className="relative mx-auto max-w-7xl px-4 md:px-6">
           <Reveal>
-            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--mkt-gold)]">
+            <span className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--mkt-gold)]">
+              <span aria-hidden className="h-px w-6 bg-[var(--mkt-yellow)]" />
               Get in touch
             </span>
           </Reveal>
@@ -74,7 +75,7 @@ function ContactPage() {
           <Reveal delay={240}>
             <p className="mt-7 max-w-2xl text-base leading-relaxed text-white/75 md:text-lg">
               Quickest path: call us. If you'd rather type, use the form
-              below — we'll call you back within one business hour.
+              below - we'll call you back within one business hour.
             </p>
           </Reveal>
         </div>
@@ -209,7 +210,7 @@ function ContactPage() {
                           setForm((f) => ({ ...f, issue: e.target.value }))
                         }
                         rows={4}
-                        placeholder="Describe what's happening — symptoms, fault codes, anything you've already tried. More detail = faster diagnosis."
+                        placeholder="Describe what's happening - symptoms, fault codes, anything you've already tried. More detail = faster diagnosis."
                         className="mt-1.5 w-full resize-none rounded-md border border-[var(--mkt-border-light)] bg-white px-3.5 py-3 text-sm outline-none focus:border-[var(--mkt-ink)] focus:ring-2 focus:ring-[var(--mkt-ink)]/20"
                       />
                     </div>
@@ -313,7 +314,7 @@ function ContactPage() {
                   </h3>
                   <ol className="mt-4 space-y-3 text-xs">
                     {[
-                      { n: 1, t: "We call within 1 hr", b: "Cameron or Andy picks up — no call center." },
+                      { n: 1, t: "We call within 1 hr", b: "Cameron or Andy picks up - no call center." },
                       { n: 2, t: "Schedule mobile/pickup", b: "Most jobs we dispatch same-day." },
                       { n: 3, t: "Estimate w/ photos", b: "Inspection is digital. No surprises." },
                       { n: 4, t: "Truck back on road", b: "Most jobs done in 2-3 business days." },

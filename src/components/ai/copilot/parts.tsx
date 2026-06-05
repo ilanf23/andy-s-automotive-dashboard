@@ -57,7 +57,7 @@ export function PartRenderer({
 }
 
 // ============================================================================
-// Text — plain (possibly streaming) text
+// Text - plain (possibly streaming) text
 // ============================================================================
 
 function TextPart({ text, streaming }: { text: string; streaming?: boolean }) {
@@ -72,7 +72,7 @@ function TextPart({ text, streaming }: { text: string; streaming?: boolean }) {
 }
 
 // ============================================================================
-// Reasoning — collapsible "thinking" block
+// Reasoning - collapsible "thinking" block
 // ============================================================================
 
 function ReasoningPart({
@@ -130,7 +130,7 @@ function ReasoningPart({
 }
 
 // ============================================================================
-// Tool call card — looks like a real agentic tool invocation
+// Tool call card - looks like a real agentic tool invocation
 // ============================================================================
 
 function ToolPart({
@@ -223,7 +223,7 @@ function ToolPart({
 }
 
 // ============================================================================
-// Approval card — human-in-the-loop pause
+// Approval card - human-in-the-loop pause
 // ============================================================================
 
 function ApprovalPart({
@@ -334,7 +334,7 @@ function ApprovalPart({
             </button>
             <button
               type="button"
-              onClick={() => toast.info("Modify approval — coming soon")}
+              onClick={() => toast.info("Modify approval - coming soon")}
               className="rounded-md border border-border bg-background px-3 py-1.5 text-[11px] font-semibold hover:bg-surface"
             >
               Modify
@@ -372,7 +372,7 @@ function ApprovalPart({
 }
 
 // ============================================================================
-// Result card — structured response
+// Result card - structured response
 // ============================================================================
 
 function ResultPart({ card }: { card: ResultCard }) {
@@ -421,7 +421,7 @@ function ResultRowItem({ row }: { row: ResultRow }) {
 }
 
 // ============================================================================
-// Suggestion chips — clickable follow-up prompts
+// Suggestion chips - clickable follow-up prompts
 // ============================================================================
 
 function SuggestionsPart({

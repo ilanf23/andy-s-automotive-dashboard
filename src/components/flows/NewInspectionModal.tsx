@@ -91,7 +91,7 @@ export function NewInspectionModal({
     });
     const tech = technicians.find((t) => t.id === techId);
     toast.success(`Inspection ${ins.id} started`, {
-      description: `${selectedCustomer?.name ?? "—"} · ${selectedVehicle?.unit ?? "—"} — ${tech?.name.split(" ")[0] ?? "tech"}`,
+      description: `${selectedCustomer?.name ?? "-"} · ${selectedVehicle?.unit ?? "-"} - ${tech?.name.split(" ")[0] ?? "tech"}`,
       action: {
         label: "Open",
         onClick: () =>
@@ -113,8 +113,8 @@ export function NewInspectionModal({
       title="Start Inspection"
       description={
         step === "ro"
-          ? "Step 1 of 2 — Pick the repair order"
-          : "Step 2 of 2 — Assign tech & template"
+          ? "Step 1 of 2 - Pick the repair order"
+          : "Step 2 of 2 - Assign tech & template"
       }
       size="md"
       footer={
@@ -235,7 +235,7 @@ export function NewInspectionModal({
                               #{r.id}
                             </span>
                             <span className="truncate text-xs font-semibold">
-                              {c?.name ?? "—"}
+                              {c?.name ?? "-"}
                             </span>
                             {c?.type === "Fleet" && (
                               <span className="rounded-full bg-[#DBEAFE] px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-[#1E40AF]">
@@ -245,9 +245,9 @@ export function NewInspectionModal({
                           </div>
                           <div className="truncate text-[10px] text-muted-foreground">
                             <span className="font-medium text-foreground/80">
-                              {v?.unit ?? "—"}
+                              {v?.unit ?? "-"}
                             </span>{" "}
-                            · {v ? `${v.year} ${v.make} ${v.model}` : "—"}
+                            · {v ? `${v.year} ${v.make} ${v.model}` : "-"}
                           </div>
                         </div>
                       </div>
@@ -271,13 +271,13 @@ export function NewInspectionModal({
               <span className="text-muted-foreground">RO:</span>
               <span className="font-semibold tabular-nums">#{selectedRO.id}</span>
               <span className="text-muted-foreground">·</span>
-              <span className="font-semibold">{selectedCustomer?.name ?? "—"}</span>
+              <span className="font-semibold">{selectedCustomer?.name ?? "-"}</span>
             </div>
             <div className="mt-0.5 pl-5">
               <span className="text-muted-foreground">Vehicle:</span>{" "}
-              <span className="font-semibold">{selectedVehicle?.unit ?? "—"}</span>{" "}
+              <span className="font-semibold">{selectedVehicle?.unit ?? "-"}</span>{" "}
               <span className="text-muted-foreground">
-                · {selectedVehicle ? `${selectedVehicle.year} ${selectedVehicle.make} ${selectedVehicle.model}` : "—"}
+                · {selectedVehicle ? `${selectedVehicle.year} ${selectedVehicle.make} ${selectedVehicle.model}` : "-"}
               </span>
             </div>
           </div>

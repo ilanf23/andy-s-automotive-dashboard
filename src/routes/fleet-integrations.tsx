@@ -214,7 +214,7 @@ function ConnectionCard({ platform }: { platform: (typeof fleetPlatforms)[number
         </div>
         <div className="flex items-center gap-1">
           <button
-            onClick={() => toast.info(`${platform.name} settings — coming soon`)}
+            onClick={() => toast.info(`${platform.name} settings - coming soon`)}
             className="rounded-md p-1.5 text-muted-foreground hover:bg-surface hover:text-foreground"
             title="Settings"
           >

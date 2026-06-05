@@ -3,7 +3,7 @@ import { Sparkles, Zap, Check, ChevronDown, ChevronUp } from "lucide-react";
 import { useState } from "react";
 
 // ============================================================================
-// Confidence pill — used by every AI surface
+// Confidence pill - used by every AI surface
 // ============================================================================
 
 export type Confidence = "high" | "medium" | "low";
@@ -45,7 +45,7 @@ export function ConfidencePill({
 }
 
 // ============================================================================
-// Source pill — citations for AI proposals
+// Source pill - citations for AI proposals
 // ============================================================================
 
 export type Source =
@@ -100,7 +100,7 @@ export function SourcePill({ source }: { source: Source }) {
 }
 
 // ============================================================================
-// Thinking panel — streaming reasoning steps
+// Thinking panel - streaming reasoning steps
 // ============================================================================
 
 export function AIThinkingPanel({
@@ -170,7 +170,7 @@ export function AIThinkingPanel({
 }
 
 // ============================================================================
-// Reasoning trace — expandable "Why?" section
+// Reasoning trace - expandable "Why?" section
 // ============================================================================
 
 export function ReasoningTrace({
@@ -224,7 +224,7 @@ export function ReasoningTrace({
 }
 
 // ============================================================================
-// AI bubble — small "AI-proposed" header chip
+// AI bubble - small "AI-proposed" header chip
 // ============================================================================
 
 export function AIBubble({

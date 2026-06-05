@@ -74,7 +74,7 @@ function VehicleDetail() {
 
   // --- Header action handlers ---
   const handleEdit = () => {
-    toast.info("Edit vehicle", { description: "Inline edit — coming soon" });
+    toast.info("Edit vehicle", { description: "Inline edit - coming soon" });
     setEditing(true);
   };
 
@@ -254,7 +254,7 @@ function VehicleDetail() {
                   {customer.name}
                 </Link>
               ) : (
-                "—"
+                "-"
               )
             }
           />
@@ -421,7 +421,7 @@ function EditVehicleModal({
 
   const handleSave = () => {
     toast.success("Vehicle updated", {
-      description: `${year} ${make} ${model} — ${vin}`,
+      description: `${year} ${make} ${model} - ${vin}`,
     });
     onClose();
   };

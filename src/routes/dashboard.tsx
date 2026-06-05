@@ -58,7 +58,7 @@ export const Route = createFileRoute("/dashboard")({
 });
 
 // =========================================================================
-// Workflow column config — mirrors a standard shop-management RO pipeline.
+// Workflow column config - mirrors a standard shop-management RO pipeline.
 // =========================================================================
 const workflowConfig: Array<{
   status: ShopStatus;
@@ -103,7 +103,7 @@ const activity: ActivityItem[] = [
     icon: CheckCircle,
     tone: "success",
     actor: "Marcus",
-    text: "completed inspection on Med Trust Unit 47 — 2 red, 3 yellow findings",
+    text: "completed inspection on Med Trust Unit 47 - 2 red, 3 yellow findings",
     time: "14m",
   },
   {
@@ -119,7 +119,7 @@ const activity: ActivityItem[] = [
     icon: ThumbsUp,
     tone: "accent",
     actor: "Cameron",
-    text: "approved RO 4831 close-out — Davy Tree DT-7 ($6,104)",
+    text: "approved RO 4831 close-out - Davy Tree DT-7 ($6,104)",
     time: "2h",
   },
   {
@@ -135,7 +135,7 @@ const activity: ActivityItem[] = [
     icon: AlertTriangle,
     tone: "danger",
     actor: "AR",
-    text: "Northpoint Logistics — 185 days past due, $17,000 outstanding",
+    text: "Northpoint Logistics - 185 days past due, $17,000 outstanding",
     time: "3h",
   },
   {
@@ -143,7 +143,7 @@ const activity: ActivityItem[] = [
     icon: LogIn,
     tone: "muted",
     actor: "Andre",
-    text: "clocked in — assigned to bay 3",
+    text: "clocked in - assigned to bay 3",
     time: "6h",
   },
 ];
@@ -218,7 +218,7 @@ const appointments: AppointmentRow[] = [
 const partsOnOrder = [
   {
     id: "p1",
-    part: "Front brake pads — HDPAD-F",
+    part: "Front brake pads - HDPAD-F",
     qty: 4,
     vendor: "WorldPac",
     eta: "Tomorrow 10:00 AM",
@@ -267,7 +267,7 @@ const messages = [
   },
   {
     id: "m3",
-    from: "FSCJ — Patel",
+    from: "FSCJ - Patel",
     preview: "Need DOT inspection paperwork emailed by 5pm Friday",
     time: "2h",
     unread: false,
@@ -307,7 +307,7 @@ function Dashboard() {
         const t = r.technicianId ? techMap.get(r.technicianId) : undefined;
         return {
           roId: r.id,
-          unit: v?.unit ?? "—",
+          unit: v?.unit ?? "-",
           vehicle: v ? `${v.year} ${v.make} ${v.model}` : "",
           customer: c?.name ?? "",
           technician: t?.name?.split(" ")[0],
@@ -367,7 +367,7 @@ function Dashboard() {
     color: "#15803D",
   });
 
-  // Tech rows — synthetic billed/sold/available from utilization
+  // Tech rows - synthetic billed/sold/available from utilization
   const techRows: TechRow[] = technicians.map((t) => {
     const avail = 8;
     const billed = Math.round(((t.utilization / 100) * avail) * 10) / 10;
@@ -422,7 +422,7 @@ function Dashboard() {
       }
     >
       {/* ======================================================== */}
-      {/* HERO: Lost Revenue Risk banner — the AI value prop      */}
+      {/* HERO: Lost Revenue Risk banner - the AI value prop      */}
       {/* ======================================================== */}
       {(() => {
         const lostRevenueROs = repairOrders.filter(
@@ -457,7 +457,7 @@ function Dashboard() {
                   </div>
                   <p className="mt-0.5 truncate text-[11px] text-[#991B1B]/80">
                     {targetCustomer?.name} · {targetVehicle?.unit} (RO #{targetRO.id})
-                    {" "}— 4 findings need estimating · awaiting approval &gt;48hrs
+                    {" "}- 4 findings need estimating · awaiting approval &gt;48hrs
                   </p>
                 </div>
               </div>
@@ -493,7 +493,7 @@ function Dashboard() {
       })()}
 
       {/* ======================================================== */}
-      {/* TOP: KPI Strip — 6 shop metrics                            */}
+      {/* TOP: KPI Strip - 6 shop metrics                            */}
       {/* ======================================================== */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
         {(
@@ -584,12 +584,12 @@ function Dashboard() {
       </div>
 
       {/* ======================================================== */}
-      {/* AT-RISK CUSTOMERS — AI churn radar                         */}
+      {/* AT-RISK CUSTOMERS - AI churn radar                         */}
       {/* ======================================================== */}
       <AtRiskCustomersWidget />
 
       {/* ======================================================== */}
-      {/* RO WORKFLOW BOARD — Kanban-style columns                   */}
+      {/* RO WORKFLOW BOARD - Kanban-style columns                   */}
       {/* ======================================================== */}
       <div className="space-y-3">
         <SectionHeader
@@ -600,7 +600,7 @@ function Dashboard() {
               <button
                 type="button"
                 onClick={() =>
-                  toast.info("Tech filter", { description: "Filter dropdown — coming soon" })
+                  toast.info("Tech filter", { description: "Filter dropdown - coming soon" })
                 }
                 className="rounded-md border border-border bg-background px-2.5 py-1.5 text-[11px] font-medium text-foreground hover:bg-surface"
               >
@@ -766,13 +766,13 @@ function Dashboard() {
                 <span className="mt-1 h-1 w-1 shrink-0 rounded-full bg-destructive" />
                 <span>
                   <span className="font-semibold">RO 4847</span> awaiting customer
-                  approval — 3 days, $1,850 at risk
+                  approval - 3 days, $1,850 at risk
                 </span>
               </li>
               <li
                 onClick={() => {
                   toast.info("Northpoint Logistics", {
-                    description: "185 days past due — $17,000",
+                    description: "185 days past due - $17,000",
                   });
                   navigate({ to: "/customers" });
                 }}
@@ -780,13 +780,13 @@ function Dashboard() {
               >
                 <span className="mt-1 h-1 w-1 shrink-0 rounded-full bg-destructive" />
                 <span>
-                  Northpoint Logistics — 185 days past due,{" "}
+                  Northpoint Logistics - 185 days past due,{" "}
                   <span className="font-semibold">$17,000</span>
                 </span>
               </li>
               <li
                 onClick={() => {
-                  toast.info("Stuck job — FT-3");
+                  toast.info("Stuck job - FT-3");
                   navigate({ to: "/repair-orders" });
                 }}
                 className="flex cursor-pointer items-start gap-1.5 rounded px-1 py-0.5 hover:bg-destructive/10"
@@ -794,7 +794,7 @@ function Dashboard() {
                 <span className="mt-1 h-1 w-1 shrink-0 rounded-full bg-destructive" />
                 <span>
                   <span className="font-semibold">FT-3</span> stuck in Estimate
-                  Building — no labor guide for Frankenstein build
+                  Building - no labor guide for Frankenstein build
                 </span>
               </li>
             </ul>
@@ -924,7 +924,7 @@ function Dashboard() {
                 } else if (qa.id === "qa3") {
                   navigate({ to: "/inspections" });
                 } else if (qa.id === "qa4") {
-                  toast.info("Add customer — fill the form on the customers page");
+                  toast.info("Add customer - fill the form on the customers page");
                   navigate({ to: "/customers" });
                 } else if (qa.id === "qa5") {
                   navigate({ to: "/inventory" });

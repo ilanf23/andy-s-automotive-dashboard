@@ -47,12 +47,12 @@ const MOCK_NOTIFICATIONS: MockNotification[] = [
   { id: "n1", title: "RO #4847 awaiting customer approval", time: "3m ago" },
   { id: "n2", title: "Northpoint Logistics payment overdue · 32 days", time: "1h ago" },
   { id: "n3", title: "Marcus completed inspection on MT-47", time: "2h ago" },
-  { id: "n4", title: "New parts received — WorldPac PO #88421", time: "4h ago" },
+  { id: "n4", title: "New parts received - WorldPac PO #88421", time: "4h ago" },
 ];
 
 const MOCK_SHOPS = [
-  "Andy's Automotive — Heavy Duty",
-  "Andy's Automotive — South Bay",
+  "Andy's Automotive - Heavy Duty",
+  "Andy's Automotive - South Bay",
 ];
 
 type NavItem = {
@@ -182,7 +182,7 @@ export function AppShell() {
 
   const handleHelp = () => {
     toast.info("Help & Support", {
-      description: "Live chat with our team — coming soon",
+      description: "Live chat with our team - coming soon",
     });
   };
 
@@ -211,7 +211,7 @@ export function AppShell() {
   };
 
   // Parse selected shop into brand + suffix for display
-  const shopSuffix = selectedShop.split(" — ")[1] ?? "";
+  const shopSuffix = selectedShop.split(" - ")[1] ?? "";
 
   // Derive display name + initials from authenticated user, with sensible fallback
   const displayName = user?.name ?? "Cameron Mills";
@@ -245,7 +245,7 @@ export function AppShell() {
       )}
 
       {/* ==================================================================== */}
-      {/* Sidebar — dark, sectioned, dense                                     */}
+      {/* Sidebar - dark, sectioned, dense                                     */}
       {/* ==================================================================== */}
       <aside
         className={clsx(
@@ -335,7 +335,7 @@ export function AppShell() {
           )}
         </div>
 
-        {/* Quick actions — primary CTAs */}
+        {/* Quick actions - primary CTAs */}
         <div className={clsx("space-y-1.5 px-3 pt-3", collapsed && "md:px-2")}>
           <button
             type="button"
@@ -356,7 +356,7 @@ export function AppShell() {
               type="button"
               onClick={() => openModal("auto-ro-arrival", {})}
               className="flex w-full items-center justify-center gap-2 rounded-md border border-white/15 bg-white/5 px-3 py-1.5 text-[11px] font-semibold text-white/85 transition-colors hover:bg-white/15"
-              title="Vehicle Arrived — AI auto-creates RO from VIN/plate"
+              title="Vehicle Arrived - AI auto-creates RO from VIN/plate"
             >
               <ScanLine className="h-3 w-3" />
               <span>Vehicle Arrived</span>
@@ -458,7 +458,7 @@ export function AppShell() {
           ))}
         </nav>
 
-        {/* Bottom utility — user card + footer row */}
+        {/* Bottom utility - user card + footer row */}
         <div className="mt-auto border-t border-white/10">
           {!collapsed ? (
             <>
@@ -487,7 +487,7 @@ export function AppShell() {
                 </div>
               </div>
 
-              {/* Footer row — Help on left, Collapse on right */}
+              {/* Footer row - Help on left, Collapse on right */}
               <div className="flex items-center justify-between gap-1 border-t border-white/10 px-2 py-1.5">
                 <button
                   type="button"
@@ -510,12 +510,12 @@ export function AppShell() {
               </div>
             </>
           ) : (
-            // Collapsed state — stack of three centered icons
+            // Collapsed state - stack of three centered icons
             <div className="flex flex-col items-center gap-1 p-2">
               <button
                 type="button"
                 onClick={handleSignOut}
-                title={`${displayName} · ${displayRole} — click to sign out`}
+                title={`${displayName} · ${displayRole} - click to sign out`}
                 className="flex h-8 w-8 items-center justify-center rounded-full bg-accent text-[11px] font-bold text-accent-foreground"
               >
                 {initials}
@@ -670,7 +670,7 @@ export function AppShell() {
                           setProfileOpen(false);
                           toast.info("Switch role", {
                             description:
-                              "Service Advisor / Tech / Owner — coming soon",
+                              "Service Advisor / Tech / Owner - coming soon",
                           });
                         }}
                         className="w-full px-3 py-2 text-left text-[12px] hover:bg-surface"
@@ -709,7 +709,7 @@ export function AppShell() {
           </div>
         </header>
 
-        {/* AI Copilot bar — prioritized briefing below the topbar */}
+        {/* AI Copilot bar - prioritized briefing below the topbar */}
         <AICopilotBar />
 
         <main className="min-w-0 flex-1 p-4 md:p-6">

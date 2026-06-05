@@ -94,7 +94,7 @@ export function NewRepairOrderModal({
       technicianId: techId || undefined,
     });
     toast.success(`RO #${ro.id} created`, {
-      description: `${customer?.name} · ${vehicle?.unit} — assigned to ${advisor.split(" ")[0]}`,
+      description: `${customer?.name} · ${vehicle?.unit} - assigned to ${advisor.split(" ")[0]}`,
       action: {
         label: "Open",
         onClick: () => navigate({ to: "/repair-orders/$id", params: { id: ro.id } }),
@@ -117,10 +117,10 @@ export function NewRepairOrderModal({
       title="New Repair Order"
       description={
         step === "customer"
-          ? "Step 1 of 3 — Select customer"
+          ? "Step 1 of 3 - Select customer"
           : step === "vehicle"
-            ? "Step 2 of 3 — Select vehicle"
-            : "Step 3 of 3 — Concern & assignment"
+            ? "Step 2 of 3 - Select vehicle"
+            : "Step 3 of 3 - Concern & assignment"
       }
       size="md"
       footer={
@@ -247,7 +247,7 @@ export function NewRepairOrderModal({
           </ul>
           <button
             type="button"
-            onClick={() => toast.info("Add customer — coming soon")}
+            onClick={() => toast.info("Add customer - coming soon")}
             className="inline-flex w-full items-center justify-center gap-1.5 rounded-md border border-dashed border-border bg-background px-3 py-2 text-xs font-medium text-muted-foreground hover:bg-surface"
           >
             <User className="h-3 w-3" />
@@ -302,7 +302,7 @@ export function NewRepairOrderModal({
           )}
           <button
             type="button"
-            onClick={() => toast.info("Add vehicle — coming soon")}
+            onClick={() => toast.info("Add vehicle - coming soon")}
             className="inline-flex w-full items-center justify-center gap-1.5 rounded-md border border-dashed border-border bg-background px-3 py-2 text-xs font-medium text-muted-foreground hover:bg-surface"
           >
             <Truck className="h-3 w-3" />

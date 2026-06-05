@@ -15,7 +15,7 @@ type Props = {
 };
 
 /**
- * Side-drawer for "more details" panels — RO peek, vehicle quick view, etc.
+ * Side-drawer for "more details" panels - RO peek, vehicle quick view, etc.
  * Same chrome as Modal so things feel consistent.
  */
 export function AppDrawer({

@@ -34,7 +34,7 @@ export const customers: Customer[] = [
     openBalance: 12480,
     lastVisit: "2026-05-17",
     trucksInShop: 3,
-    notes: "Ambulance fleet — priority turnaround, dispatch needs 24/7 line",
+    notes: "Ambulance fleet - priority turnaround, dispatch needs 24/7 line",
   },
   {
     id: "CUST-CITY",
@@ -70,7 +70,7 @@ export const customers: Customer[] = [
     openBalance: 8240,
     lastVisit: "2026-05-18",
     trucksInShop: 1,
-    notes: "First-time customer — onboarded through Holman this week",
+    notes: "First-time customer - onboarded through Holman this week",
   },
   {
     id: "CUST-DUCKS",
@@ -88,7 +88,7 @@ export const customers: Customer[] = [
     openBalance: 4220,
     lastVisit: "2026-05-15",
     trucksInShop: 1,
-    notes: "Jetter trucks — schedule by idle hours, not mileage",
+    notes: "Jetter trucks - schedule by idle hours, not mileage",
   },
   {
     id: "CUST-FCS",
@@ -105,7 +105,7 @@ export const customers: Customer[] = [
     openBalance: 2140,
     lastVisit: "2026-04-29",
     trucksInShop: 0,
-    notes: "Repeat fleet — invoice net-30",
+    notes: "Repeat fleet - invoice net-30",
   },
   {
     id: "CUST-DAVY",
@@ -140,7 +140,7 @@ export const customers: Customer[] = [
     openBalance: 1560,
     lastVisit: "2026-05-10",
     trucksInShop: 1,
-    notes: "Frankenstein vehicle — labor guide unavailable",
+    notes: "Frankenstein vehicle - labor guide unavailable",
   },
   {
     id: "CUST-BAYSIDE",
@@ -221,7 +221,7 @@ export const customers: Customer[] = [
     openBalance: 17000,
     lastVisit: "2025-11-16",
     trucksInShop: 0,
-    notes: "Open balance 180+ days — collections follow-up required",
+    notes: "Open balance 180+ days - collections follow-up required",
   },
 
   // ===== WALK-IN RETAIL (passenger vehicles, personal customers) =====
@@ -240,7 +240,7 @@ export const customers: Customer[] = [
     openBalance: 0,
     lastVisit: "2026-04-12",
     trucksInShop: 0,
-    notes: "Returning customer — referred by Coastal HVAC",
+    notes: "Returning customer - referred by Coastal HVAC",
   },
   {
     id: "CUST-BRADLEY",
@@ -257,7 +257,7 @@ export const customers: Customer[] = [
     openBalance: 340,
     lastVisit: "2026-05-08",
     trucksInShop: 1,
-    notes: "Likes detailed explanations — prefers SMS over phone",
+    notes: "Likes detailed explanations - prefers SMS over phone",
   },
   {
     id: "CUST-NGUYEN",
@@ -291,7 +291,7 @@ export const customers: Customer[] = [
     openBalance: 0,
     lastVisit: "2026-05-14",
     trucksInShop: 1,
-    notes: "Three vehicles in household — F-150, Camry, Civic",
+    notes: "Three vehicles in household - F-150, Camry, Civic",
   },
   {
     id: "CUST-PETERSON",

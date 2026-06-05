@@ -43,7 +43,7 @@ const ADVISORS = ["Cameron Mills", "Stewart Park", "Cody Bell"];
 const GENERATED_LINES = [
   {
     id: "L1",
-    description: "Front brake service — pads & rotor turn",
+    description: "Front brake service - pads & rotor turn",
     hours: 2.5,
     labor: 370,
     parts: 312,
@@ -57,7 +57,7 @@ const GENERATED_LINES = [
   },
   {
     id: "L3",
-    description: "Cabin AC diagnostic — rear unit",
+    description: "Cabin AC diagnostic - rear unit",
     hours: 1.0,
     labor: 148,
     parts: 0,
@@ -105,7 +105,7 @@ export function CreateAndSendEstimateModal({ open, onOpenChange, roId }: Props) 
   useEffect(() => {
     if (customer && !customerMsg) {
       setCustomerMsg(
-        `Hi ${customer.contactName.split(" ")[0]} — your estimate for ${vehicle?.unit ?? "your vehicle"} is ready (${usd.format(total)} total). Review and approve at the link below. — Andy's Automotive`,
+        `Hi ${customer.contactName.split(" ")[0]} - your estimate for ${vehicle?.unit ?? "your vehicle"} is ready (${usd.format(total)} total). Review and approve at the link below. - Andy's Automotive`,
       );
     }
   }, [customer, vehicle, total, customerMsg]);
@@ -148,11 +148,11 @@ export function CreateAndSendEstimateModal({ open, onOpenChange, roId }: Props) 
       title="Create & Send Estimate"
       description={
         phase === "generating"
-          ? "Step 1 of 3 — Auto-generating from repair order"
+          ? "Step 1 of 3 - Auto-generating from repair order"
           : phase === "internal"
-            ? "Step 2 of 3 — Share with service advisor"
+            ? "Step 2 of 3 - Share with service advisor"
             : phase === "customer"
-              ? "Step 3 of 3 — Send to customer"
+              ? "Step 3 of 3 - Send to customer"
               : phase === "sending"
                 ? "Sending…"
                 : "Done"
@@ -318,7 +318,7 @@ export function CreateAndSendEstimateModal({ open, onOpenChange, roId }: Props) 
 }
 
 // ============================================================================
-// Phase 1 — Generating
+// Phase 1 - Generating
 // ============================================================================
 function GeneratingPanel({ step }: { step: number }) {
   return (
@@ -378,7 +378,7 @@ function GeneratingPanel({ step }: { step: number }) {
 }
 
 // ============================================================================
-// Phase 2 — Internal share
+// Phase 2 - Internal share
 // ============================================================================
 function InternalSharePanel({
   estimateId,
@@ -504,7 +504,7 @@ function InternalSharePanel({
 }
 
 // ============================================================================
-// Phase 3 — Send to customer
+// Phase 3 - Send to customer
 // ============================================================================
 function CustomerSendPanel({
   customer,

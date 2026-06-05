@@ -53,7 +53,7 @@ type Report = {
 
 const reports: Report[] = [
   // Sales
-  { id: "r1", name: "Sales Summary", description: "Revenue, ARO, ELR, GP$ — by day/week/month", category: "Sales", icon: DollarSign, starred: true },
+  { id: "r1", name: "Sales Summary", description: "Revenue, ARO, ELR, GP$ - by day/week/month", category: "Sales", icon: DollarSign, starred: true },
   { id: "r2", name: "Sales by Service Advisor", description: "Production, close rate, ARO per advisor", category: "Sales", icon: Users },
   { id: "r3", name: "Sales by Service Type", description: "Maintenance vs repair vs diagnostic", category: "Sales", icon: BarChart3 },
   { id: "r4", name: "Posted ROs", description: "All closed/posted ROs with totals", category: "Sales", icon: FileText },
@@ -142,7 +142,7 @@ function ReportsPage() {
           </button>
           <button
             type="button"
-            onClick={() => toast.info("Report filters — coming soon")}
+            onClick={() => toast.info("Report filters - coming soon")}
             className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-xs font-medium hover:bg-surface"
           >
             <Filter className="h-3 w-3" />
@@ -150,7 +150,7 @@ function ReportsPage() {
           </button>
           <button
             type="button"
-            onClick={() => toast.info("Schedule report — coming soon")}
+            onClick={() => toast.info("Schedule report - coming soon")}
             className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-xs font-medium hover:bg-surface"
           >
             <Clock className="h-3 w-3" />
@@ -162,7 +162,7 @@ function ReportsPage() {
               toast.success("Exporting report bundle…");
               setTimeout(() => {
                 const date = new Date().toISOString().split("T")[0];
-                toast.success(`Bundle ready — reports_${date}.zip`);
+                toast.success(`Bundle ready - reports_${date}.zip`);
               }, 1000);
             }}
             className="inline-flex items-center gap-1.5 rounded-md bg-foreground px-3 py-2 text-sm font-semibold text-background shadow-sm hover:opacity-90"
@@ -173,7 +173,7 @@ function ReportsPage() {
         </>
       }
     >
-      {/* Conversational Reports — AI Q&A surface */}
+      {/* Conversational Reports - AI Q&A surface */}
       <ConversationalReports />
 
       {/* Search */}

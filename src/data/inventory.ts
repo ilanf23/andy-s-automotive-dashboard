@@ -14,7 +14,7 @@ export const inventory: InventoryItem[] = [
   {
     id: "INV-001",
     partNumber: "FF5485",
-    description: "Fleetguard fuel/water separator — Cummins ISB/ISL",
+    description: "Fleetguard fuel/water separator - Cummins ISB/ISL",
     vendor: "Cummins Direct",
     onHand: 14,
     reorderPoint: 8,
@@ -24,7 +24,7 @@ export const inventory: InventoryItem[] = [
   {
     id: "INV-002",
     partNumber: "LF9001",
-    description: "Fleetguard oil filter — heavy duty diesel",
+    description: "Fleetguard oil filter - heavy duty diesel",
     vendor: "Cummins Direct",
     onHand: 22,
     reorderPoint: 10,
@@ -34,7 +34,7 @@ export const inventory: InventoryItem[] = [
   {
     id: "INV-003",
     partNumber: "FS19763",
-    description: "Fuel filter secondary — Cummins ISB6.7",
+    description: "Fuel filter secondary - Cummins ISB6.7",
     vendor: "Cummins Direct",
     onHand: 5,
     reorderPoint: 8,
@@ -86,7 +86,7 @@ export const inventory: InventoryItem[] = [
   {
     id: "INV-008",
     partNumber: "HDPAD-F",
-    description: "HD ceramic brake pads — front, Class 5",
+    description: "HD ceramic brake pads - front, Class 5",
     vendor: "WorldPac",
     onHand: 6,
     reorderPoint: 4,
@@ -96,7 +96,7 @@ export const inventory: InventoryItem[] = [
   {
     id: "INV-009",
     partNumber: "HDPAD-R",
-    description: "HD ceramic brake pads — rear, Class 5",
+    description: "HD ceramic brake pads - rear, Class 5",
     vendor: "WorldPac",
     onHand: 4,
     reorderPoint: 4,
@@ -117,7 +117,7 @@ export const inventory: InventoryItem[] = [
   {
     id: "INV-011",
     partNumber: "ABS-WS",
-    description: "ABS wheel speed sensor — Bendix",
+    description: "ABS wheel speed sensor - Bendix",
     vendor: "NAPA",
     onHand: 7,
     reorderPoint: 4,
@@ -127,7 +127,7 @@ export const inventory: InventoryItem[] = [
   {
     id: "INV-012",
     partNumber: "HYD-SEAL3",
-    description: "Hydraulic cylinder seal kit — 3in bore",
+    description: "Hydraulic cylinder seal kit - 3in bore",
     vendor: "WorldPac",
     onHand: 4,
     reorderPoint: 3,
@@ -137,7 +137,7 @@ export const inventory: InventoryItem[] = [
   {
     id: "INV-013",
     partNumber: "HYD-SEAL4",
-    description: "Hydraulic cylinder seal kit — 4in bore",
+    description: "Hydraulic cylinder seal kit - 4in bore",
     vendor: "WorldPac",
     onHand: 2,
     reorderPoint: 3,
@@ -148,7 +148,7 @@ export const inventory: InventoryItem[] = [
   {
     id: "INV-014",
     partNumber: "MRKLED",
-    description: "LED marker light — amber/red, 2.5in",
+    description: "LED marker light - amber/red, 2.5in",
     vendor: "NAPA",
     onHand: 32,
     reorderPoint: 20,
@@ -158,7 +158,7 @@ export const inventory: InventoryItem[] = [
   {
     id: "INV-015",
     partNumber: "WPR-HD22",
-    description: "HD wiper blade — 22in (pair)",
+    description: "HD wiper blade - 22in (pair)",
     vendor: "NAPA",
     onHand: 11,
     reorderPoint: 8,
@@ -168,7 +168,7 @@ export const inventory: InventoryItem[] = [
   {
     id: "INV-016",
     partNumber: "CAB-CL5",
-    description: "Cabin air filter — Class 5/6 truck",
+    description: "Cabin air filter - Class 5/6 truck",
     vendor: "NAPA",
     onHand: 9,
     reorderPoint: 6,
@@ -178,7 +178,7 @@ export const inventory: InventoryItem[] = [
   {
     id: "INV-017",
     partNumber: "ALT-200A",
-    description: "HD alternator 200A — Delco",
+    description: "HD alternator 200A - Delco",
     vendor: "Detroit Diesel",
     onHand: 2,
     reorderPoint: 2,
@@ -188,7 +188,7 @@ export const inventory: InventoryItem[] = [
   {
     id: "INV-018",
     partNumber: "SBELT-K6",
-    description: "Serpentine belt — 6 rib HD",
+    description: "Serpentine belt - 6 rib HD",
     vendor: "NAPA",
     onHand: 14,
     reorderPoint: 8,
@@ -208,7 +208,7 @@ export const inventory: InventoryItem[] = [
   {
     id: "INV-020",
     partNumber: "AIRDRY-AD9",
-    description: "Air dryer cartridge — Bendix AD-9",
+    description: "Air dryer cartridge - Bendix AD-9",
     vendor: "Detroit Diesel",
     onHand: 3,
     reorderPoint: 4,
@@ -219,7 +219,7 @@ export const inventory: InventoryItem[] = [
   {
     id: "INV-021",
     partNumber: "PSP-FORD",
-    description: "Power steering pump — Ford F-series",
+    description: "Power steering pump - Ford F-series",
     vendor: "WorldPac",
     onHand: 2,
     reorderPoint: 2,
@@ -229,7 +229,7 @@ export const inventory: InventoryItem[] = [
   {
     id: "INV-022",
     partNumber: "EGR-PS67",
-    description: "EGR cooler — Power Stroke 6.7L",
+    description: "EGR cooler - Power Stroke 6.7L",
     vendor: "WorldPac",
     onHand: 1,
     reorderPoint: 2,
@@ -240,7 +240,7 @@ export const inventory: InventoryItem[] = [
   {
     id: "INV-023",
     partNumber: "GLOW-PS",
-    description: "Glow plug set — Power Stroke 6.7L",
+    description: "Glow plug set - Power Stroke 6.7L",
     vendor: "WorldPac",
     onHand: 6,
     reorderPoint: 4,
@@ -250,7 +250,7 @@ export const inventory: InventoryItem[] = [
   {
     id: "INV-024",
     partNumber: "BAT-HD31",
-    description: "HD battery Group 31 — 1000 CCA",
+    description: "HD battery Group 31 - 1000 CCA",
     vendor: "NAPA",
     onHand: 8,
     reorderPoint: 5,
@@ -260,7 +260,7 @@ export const inventory: InventoryItem[] = [
   {
     id: "INV-025",
     partNumber: "TIE-ROD-F550",
-    description: "Tie rod end — Ford F-550",
+    description: "Tie rod end - Ford F-550",
     vendor: "WorldPac",
     onHand: 4,
     reorderPoint: 3,

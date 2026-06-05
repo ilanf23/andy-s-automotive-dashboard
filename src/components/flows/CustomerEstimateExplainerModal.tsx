@@ -11,7 +11,7 @@ type Message = {
   timestamp: string;
 };
 
-// Hand-crafted Q&A — Phase 1 mock answers
+// Hand-crafted Q&A - Phase 1 mock answers
 const SUGGESTED_QUESTIONS = [
   "Why does this cost so much?",
   "What happens if I skip the cabin filter?",
@@ -21,13 +21,13 @@ const SUGGESTED_QUESTIONS = [
 
 const SCRIPTED_ANSWERS: Record<string, string> = {
   "why does this cost so much":
-    "The brake job is the biggest line ($690). Here's how that breaks down: front pads + rotor resurface labor is 4 hours at $148/hr ($592), plus Wagner OEX HD ceramic pads ($98). We use HD ceramic instead of standard pads because this ambulance carries heavy patient-loading equipment — standard pads wear through in ~12k miles on duty vehicles. The labor includes pulling both wheels, machining the rotors on our in-house lathe, and re-greasing the slider pins. If we used standard pads and skipped the rotor turn, you'd save ~$280 today, but you'd be back in 4 months for the same job again.",
+    "The brake job is the biggest line ($690). Here's how that breaks down: front pads + rotor resurface labor is 4 hours at $148/hr ($592), plus Wagner OEX HD ceramic pads ($98). We use HD ceramic instead of standard pads because this ambulance carries heavy patient-loading equipment - standard pads wear through in ~12k miles on duty vehicles. The labor includes pulling both wheels, machining the rotors on our in-house lathe, and re-greasing the slider pins. If we used standard pads and skipped the rotor turn, you'd save ~$280 today, but you'd be back in 4 months for the same job again.",
   "what happens if i skip the cabin filter":
-    "Short-term: nothing dramatic. Long-term: the filter is heavily soiled (we have a photo). When it's that loaded, three things happen — your A/C compressor works harder (3-5% efficiency hit), cabin air carries more brake dust into the cab (driver/patient comfort), and the HVAC blower motor's bearings wear faster from the resistance. The $72 today vs ~$400 for a blower motor in 8-12 months is the trade. Your call.",
+    "Short-term: nothing dramatic. Long-term: the filter is heavily soiled (we have a photo). When it's that loaded, three things happen - your A/C compressor works harder (3-5% efficiency hit), cabin air carries more brake dust into the cab (driver/patient comfort), and the HVAC blower motor's bearings wear faster from the resistance. The $72 today vs ~$400 for a blower motor in 8-12 months is the trade. Your call.",
   "is the rotor turn really necessary":
-    "Honest answer: with new pads, technically you can skip it. We strongly recommend it for two reasons. (1) Your front rotors have a measurable groove pattern from the worn pads — new pads will conform to the groove, then wear unevenly and reduce stopping distance for the first 1-2k miles. (2) On an ambulance, that 1-2k mile window matters — every emergency run needs full braking confidence. The turn adds 1 hour of labor; we'd recommend it 9 times out of 10.",
+    "Honest answer: with new pads, technically you can skip it. We strongly recommend it for two reasons. (1) Your front rotors have a measurable groove pattern from the worn pads - new pads will conform to the groove, then wear unevenly and reduce stopping distance for the first 1-2k miles. (2) On an ambulance, that 1-2k mile window matters - every emergency run needs full braking confidence. The turn adds 1 hour of labor; we'd recommend it 9 times out of 10.",
   "can i bring my own parts":
-    "On 100%-customer-supplied parts, our standard policy is no warranty on the labor (because we can't vouch for the part). For brake pads on a duty vehicle, that's a hard tradeoff — if the pads fail in 2 months from a manufacturing defect, you're paying us labor again to redo the job. We don't price-match the parts, but we do match or beat on the *total* job for fleet customers. If price is the issue, talk to Cameron — he has authority to adjust on this.",
+    "On 100%-customer-supplied parts, our standard policy is no warranty on the labor (because we can't vouch for the part). For brake pads on a duty vehicle, that's a hard tradeoff - if the pads fail in 2 months from a manufacturing defect, you're paying us labor again to redo the job. We don't price-match the parts, but we do match or beat on the *total* job for fleet customers. If price is the issue, talk to Cameron - he has authority to adjust on this.",
 };
 
 function getAnswer(question: string): string {
@@ -37,8 +37,8 @@ function getAnswer(question: string): string {
       return SCRIPTED_ANSWERS[key];
     }
   }
-  // Fallback — looks like a thoughtful answer regardless of question
-  return "Great question — this would normally be answered live by reading the estimate, inspection notes, and Andy's pricing policies. In the demo, I have 4 scripted answers covering the most-asked customer questions. Try clicking one of the suggested questions below to see how the AI explains line items in plain English.";
+  // Fallback - looks like a thoughtful answer regardless of question
+  return "Great question - this would normally be answered live by reading the estimate, inspection notes, and Andy's pricing policies. In the demo, I have 4 scripted answers covering the most-asked customer questions. Try clicking one of the suggested questions below to see how the AI explains line items in plain English.";
 }
 
 type Props = {
@@ -65,7 +65,7 @@ export function CustomerEstimateExplainerModal({
         {
           id: "greet",
           from: "ai",
-          text: `Hi Dana — I'm Andy's AI assistant. I can answer questions about your estimate for ${estimateId}. Try one of the suggestions below, or ask anything.`,
+          text: `Hi Dana - I'm Andy's AI assistant. I can answer questions about your estimate for ${estimateId}. Try one of the suggestions below, or ask anything.`,
           timestamp: new Date().toISOString(),
         },
       ]);
@@ -104,7 +104,7 @@ export function CustomerEstimateExplainerModal({
       open={open}
       onOpenChange={onOpenChange}
       title="Customer Estimate View"
-      description={`How ${customerName} sees ${estimateId} — with the AI assistant`}
+      description={`How ${customerName} sees ${estimateId} - with the AI assistant`}
       size="lg"
     >
       {/* "Preview" banner so service advisor knows this is the customer's perspective */}

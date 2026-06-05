@@ -198,7 +198,7 @@ function JobsPage() {
                   <div className="flex items-center gap-1">
                     <button
                       onClick={() =>
-                        toast.info("Edit canned job — coming soon")
+                        toast.info("Edit canned job - coming soon")
                       }
                       className="rounded-md p-1.5 text-muted-foreground hover:bg-surface hover:text-foreground"
                       title="Edit"

@@ -21,9 +21,9 @@ const DEMO_TRANSCRIPT_FRAGMENTS = [
 // What the AI extracts from the transcript
 const PARSED = {
   category: "Brakes",
-  itemName: "Brake pads — front",
+  itemName: "Brake pads - front",
   severity: "red" as const,
-  notes: "2mm passenger side, metal-on-metal driver side — replace immediately",
+  notes: "2mm passenger side, metal-on-metal driver side - replace immediately",
   needsPhoto: true,
 };
 
@@ -39,7 +39,7 @@ export function VoiceToInspection() {
       const t = setTimeout(() => setFragmentIdx((i) => i + 1), 280);
       return () => clearTimeout(t);
     }
-    // Done streaming — show "transcribing" briefly then "parsed"
+    // Done streaming - show "transcribing" briefly then "parsed"
     const t = setTimeout(() => setPhase("transcribing"), 400);
     return () => clearTimeout(t);
   }, [phase, fragmentIdx]);
@@ -77,18 +77,18 @@ export function VoiceToInspection() {
 
   return (
     <>
-      {/* Trigger button — goes anywhere in inspection UI */}
+      {/* Trigger button - goes anywhere in inspection UI */}
       <button
         type="button"
         onClick={startListening}
         className="inline-flex items-center gap-1.5 rounded-md border border-brand-green/40 bg-brand-green-tint px-2.5 py-1.5 text-[11px] font-semibold text-brand-green-soft transition-colors hover:bg-brand-green/20"
-        title="Voice-to-Inspection — speak findings hands-free"
+        title="Voice-to-Inspection - speak findings hands-free"
       >
         <Mic className="h-3 w-3" />
         Voice finding
       </button>
 
-      {/* Floating panel — appears bottom-right while active */}
+      {/* Floating panel - appears bottom-right while active */}
       {open && (
         <div className="fixed bottom-4 right-4 z-50 w-[380px] rounded-lg border border-border bg-background shadow-2xl">
           {/* Header */}

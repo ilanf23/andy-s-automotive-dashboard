@@ -21,16 +21,25 @@ type Props = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   roId: string;
+  totalDue?: number;
+  balance?: number;
 };
 
-export function TakePaymentModal({ open, onOpenChange, roId }: Props) {
+export function TakePaymentModal({
+  open,
+  onOpenChange,
+  roId,
+  totalDue: totalDueProp,
+  balance: balanceProp,
+}: Props) {
   const ro = selectRO(roId);
   const customer = ro ? customers.find((c) => c.id === ro.customerId) : undefined;
   const vehicle = ro ? vehicles.find((v) => v.id === ro.vehicleId) : undefined;
 
-  // Use RO total as the "total due" — in real life would account for paid amounts
-  const totalDue = ro?.total ?? selectBalance(roId);
-  const balance = selectBalance(roId);
+  // Prefer the live total/balance computed from the RO's jobs; fall back to
+  // the stored RO total for callers that don't pass one in.
+  const totalDue = totalDueProp ?? ro?.total ?? selectBalance(roId);
+  const balance = balanceProp ?? selectBalance(roId);
   const initialAmount = balance > 0 ? balance : totalDue;
 
   const [amount, setAmount] = useState<string>(initialAmount.toFixed(2));
@@ -77,7 +86,7 @@ export function TakePaymentModal({ open, onOpenChange, roId }: Props) {
       open={open}
       onOpenChange={onOpenChange}
       title="Take Payment"
-      description={`RO #${ro.id} — ${customer?.name ?? ""}`}
+      description={`RO #${ro.id} - ${customer?.name ?? ""}`}
       size="md"
       footer={
         <>

@@ -19,12 +19,12 @@ type Props = {
   size?: Size;
   footer?: React.ReactNode;
   children: React.ReactNode;
-  /** Disable closing on outside click / Esc — useful for unsaved-changes flows */
+  /** Disable closing on outside click / Esc - useful for unsaved-changes flows */
   modal?: boolean;
 };
 
 /**
- * Reusable modal — same chrome everywhere in the platform.
+ * Reusable modal - same chrome everywhere in the platform.
  * Header (title + close), scrollable body, sticky footer.
  */
 export function Modal({

@@ -34,7 +34,7 @@ export function AICopilotBar() {
   const { repairOrders } = useShopState();
   const { open: openModal } = useModals();
 
-  // Compute priorities from store state — the actual AI copilot prioritization
+  // Compute priorities from store state - the actual AI copilot prioritization
   const priorities: Priority[] = [];
 
   // 1) Lost Revenue Risk
@@ -50,7 +50,7 @@ export function AICopilotBar() {
       icon: TrendingDown,
       severity: "high",
       title: `$1,213 lost revenue on RO #${r.id}`,
-      detail: "4 inspection findings unestimated — AI can resolve in 30 seconds",
+      detail: "4 inspection findings unestimated - AI can resolve in 30 seconds",
       action: {
         label: "Run AI Builder",
         onClick: () => openModal("ai-estimate-builder", { roId: r.id }),
@@ -76,8 +76,8 @@ export function AICopilotBar() {
     id: "ar",
     icon: CreditCard,
     severity: "high",
-    title: "Northpoint 185 days past due — $17k",
-    detail: "Day 75 of dunning — AI will draft lien notice if you approve",
+    title: "Northpoint 185 days past due - $17k",
+    detail: "Day 75 of dunning - AI will draft lien notice if you approve",
     action: {
       label: "Open AR",
       onClick: () => (window.location.href = "/ar"),
@@ -91,7 +91,7 @@ export function AICopilotBar() {
       id: "stuck",
       icon: Clock,
       severity: "medium",
-      title: `RO #${longRO.id} stuck — ${longRO.daysInShop} days in shop`,
+      title: `RO #${longRO.id} stuck - ${longRO.daysInShop} days in shop`,
       detail: longRO.description,
       action: {
         label: "View RO",
@@ -106,7 +106,7 @@ export function AICopilotBar() {
     icon: TrendingDown,
     severity: "info",
     title: "Reliable Ducks overdue for service",
-    detail: "Normally services every 2 weeks — last visit was 5 weeks ago",
+    detail: "Normally services every 2 weeks - last visit was 5 weeks ago",
     action: {
       label: "Send Outreach",
       onClick: () => (window.location.href = "/customers/CUST-DUCKS"),
@@ -118,7 +118,7 @@ export function AICopilotBar() {
 
   return (
     <>
-      {/* The bar itself — slim, sticky, between topbar and main */}
+      {/* The bar itself - slim, sticky, between topbar and main */}
       <div className="flex items-center gap-3 border-b border-border bg-gradient-to-r from-brand-green-tint via-background to-background px-4 py-2">
         <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand-green text-brand-green-foreground">
           <Sparkles className="h-3.5 w-3.5" />
@@ -182,7 +182,7 @@ export function AICopilotBar() {
         open={drawerOpen}
         onOpenChange={setDrawerOpen}
         title="Morning Briefing"
-        description={`Good morning, Cameron — ${priorities.length} items need your attention`}
+        description={`Good morning, Cameron - ${priorities.length} items need your attention`}
         side="right"
       >
         <div className="space-y-3">

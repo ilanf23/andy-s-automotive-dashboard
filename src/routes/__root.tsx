@@ -70,10 +70,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Andy's OS — Andy's Automotive" },
+      { title: "Andy's OS - Andy's Automotive" },
       { name: "description", content: "Shop management for Andy's Automotive." },
-      { property: "og:title", content: "Andy's OS — Andy's Automotive" },
-      { name: "twitter:title", content: "Andy's OS — Andy's Automotive" },
+      { property: "og:title", content: "Andy's OS - Andy's Automotive" },
+      { name: "twitter:title", content: "Andy's OS - Andy's Automotive" },
       { property: "og:description", content: "Shop management for Andy's Automotive." },
       { name: "twitter:description", content: "Shop management for Andy's Automotive." },
       { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/86a46a91-48b9-4f25-8dd9-6d15d6a6bb38" },

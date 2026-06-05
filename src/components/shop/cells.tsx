@@ -2,7 +2,7 @@ import clsx from "clsx";
 import { Link } from "@tanstack/react-router";
 import { Truck, User } from "lucide-react";
 
-/** Money cell — right-aligned, tabular nums, optional muted zero. */
+/** Money cell - right-aligned, tabular nums, optional muted zero. */
 export function MoneyCell({
   value,
   className,
@@ -13,7 +13,7 @@ export function MoneyCell({
   showZero?: boolean;
 }) {
   if (value === 0 && !showZero) {
-    return <span className="text-muted-foreground">—</span>;
+    return <span className="text-muted-foreground">-</span>;
   }
   return (
     <span className={clsx("tabular-nums", className)}>
@@ -22,7 +22,7 @@ export function MoneyCell({
   );
 }
 
-/** Date cell — short formatted date with optional "today" highlight. */
+/** Date cell - short formatted date with optional "today" highlight. */
 export function DateCell({
   date,
   className,
@@ -46,7 +46,7 @@ export function DateCell({
   );
 }
 
-/** Customer reference chip — links to customer detail. */
+/** Customer reference chip - links to customer detail. */
 export function CustomerChip({
   customerId,
   name,
@@ -73,7 +73,7 @@ export function CustomerChip({
   );
 }
 
-/** Vehicle reference chip — links to vehicle detail. */
+/** Vehicle reference chip - links to vehicle detail. */
 export function VehicleChip({
   vehicleId,
   unit,
@@ -104,7 +104,7 @@ export function VehicleChip({
   );
 }
 
-/** RO reference chip — links to RO detail. */
+/** RO reference chip - links to RO detail. */
 export function RoChip({
   id,
   className,

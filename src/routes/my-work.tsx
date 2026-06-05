@@ -47,7 +47,7 @@ function MyWorkPage() {
   );
   const [roStates, setRoStates] = useState<Record<string, ROState>>({});
   const [entries, setEntries] = useState<ClockEntry[]>([]);
-  // Header clock pill timer — counts up while clocked-in. Seed at ~04:38:12 to match prior literal.
+  // Header clock pill timer - counts up while clocked-in. Seed at ~04:38:12 to match prior literal.
   const [seconds, setSeconds] = useState<number>(4 * 3600 + 38 * 60 + 12);
 
   useEffect(() => {
@@ -308,11 +308,11 @@ function TimeClockPanel({
 }) {
   const seed = [
     { id: "s1", type: "Clock In", time: "08:14 AM", duration: "" },
-    { id: "s2", type: "RO #4847 — Started", time: "08:22 AM", duration: "2h 18m" },
+    { id: "s2", type: "RO #4847 - Started", time: "08:22 AM", duration: "2h 18m" },
     { id: "s3", type: "Break", time: "10:40 AM", duration: "12m" },
-    { id: "s4", type: "RO #4847 — Resumed", time: "10:52 AM", duration: "1h 06m" },
+    { id: "s4", type: "RO #4847 - Resumed", time: "10:52 AM", duration: "1h 06m" },
     { id: "s5", type: "Lunch", time: "11:58 AM", duration: "32m" },
-    { id: "s6", type: "RO #4842 — Started", time: "12:30 PM", duration: "Current" },
+    { id: "s6", type: "RO #4842 - Started", time: "12:30 PM", duration: "Current" },
   ];
   const userEntries = entries.map((e, i) => ({
     id: `u${i}`,

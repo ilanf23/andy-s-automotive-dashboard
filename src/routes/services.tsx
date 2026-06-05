@@ -23,7 +23,7 @@ const SERVICES = [
     category: "On-site",
     title: "Mobile Fleet Maintenance",
     blurb:
-      "We bring the shop to you. Routine maintenance and minor diagnostics performed at your yard, jobsite, or driveway — so your trucks never leave production.",
+      "We bring the shop to you. Routine maintenance and minor diagnostics performed at your yard, jobsite, or driveway - so your trucks never leave production.",
     image:
       "https://images.unsplash.com/photo-1559416523-140ddc3d238c?auto=format&fit=crop&w=1200&q=80",
     imageAlt: "White crew cab pickup truck on a jobsite",
@@ -59,7 +59,7 @@ const SERVICES = [
     category: "Heavy Mechanical",
     title: "Engine, Transmission & Drivetrain",
     blurb:
-      "Diesel and gas, light to heavy duty. From regular service to full engine or transmission replacement — done right the first time.",
+      "Diesel and gas, light to heavy duty. From regular service to full engine or transmission replacement - done right the first time.",
     image:
       "https://images.unsplash.com/photo-1551830820-330a71b99659?auto=format&fit=crop&w=1200&q=80",
     imageAlt: "Blue Ford pickup truck",
@@ -113,7 +113,7 @@ const SERVICES = [
     category: "Preventative Maintenance",
     title: "Scheduled before it breaks.",
     blurb:
-      "We track your fleet's service intervals so you don't have to. Mileage-based, hour-based, or calendar-based — whatever fits your operation.",
+      "We track your fleet's service intervals so you don't have to. Mileage-based, hour-based, or calendar-based - whatever fits your operation.",
     image:
       "https://images.unsplash.com/photo-1686715018049-f73970aa97d3?auto=format&fit=crop&w=1200&q=80",
     imageAlt: "Black Ford F-150 Raptor pickup truck",
@@ -143,7 +143,8 @@ function ServicesPage() {
 
         <div className="relative mx-auto max-w-7xl px-4 md:px-6">
           <Reveal>
-            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--mkt-gold)]">
+            <span className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--mkt-gold)]">
+              <span aria-hidden className="h-px w-6 bg-[var(--mkt-yellow)]" />
               Services
             </span>
           </Reveal>
@@ -157,7 +158,7 @@ function ServicesPage() {
           <Reveal delay={240}>
             <p className="mt-7 max-w-2xl text-base leading-relaxed text-white/75 md:text-lg">
               If it has wheels and an engine and your business depends on it,
-              we work on it. Mobile, in-shop, after-hours — we structure
+              we work on it. Mobile, in-shop, after-hours - we structure
               service around your operation, not ours.
             </p>
           </Reveal>
@@ -280,7 +281,7 @@ function ServicesPage() {
             </h2>
             <p className="mt-2 text-base text-[var(--mkt-ink)]/80">
               We've taken on plenty of things we couldn't put in a brochure.
-              Call us — odds are we've seen something like it.
+              Call us - odds are we've seen something like it.
             </p>
           </div>
           <div className="flex flex-col gap-3 sm:flex-row">

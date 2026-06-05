@@ -93,7 +93,7 @@ const VALUES = [
   {
     icon: Shield,
     title: "Safety",
-    body: "We view safety as the foundation — for your vehicles, your employees, and everyone on the road. If we wouldn't put our own family in it, it doesn't leave the shop.",
+    body: "We view safety as the foundation - for your vehicles, your employees, and everyone on the road. If we wouldn't put our own family in it, it doesn't leave the shop.",
   },
   {
     icon: Eye,
@@ -123,7 +123,8 @@ function AboutPage() {
         <div className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-4 md:grid-cols-[1.1fr_0.9fr] md:px-6">
           <div>
             <Reveal>
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--mkt-gold)]">
+              <span className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--mkt-gold)]">
+                <span aria-hidden className="h-px w-6 bg-[var(--mkt-yellow)]" />
                 About Andy's
               </span>
             </Reveal>
@@ -176,7 +177,7 @@ function AboutPage() {
               type="button"
               onClick={() =>
                 toast.info("Gallery", {
-                  description: "Full gallery — coming soon",
+                  description: "Full gallery - coming soon",
                 })
               }
               className="mx-3 block h-64 w-80 shrink-0 cursor-pointer overflow-hidden rounded-xl border border-white/10 transition-shadow hover:shadow-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--mkt-gold)]"
@@ -205,7 +206,7 @@ function AboutPage() {
           <Reveal delay={150}>
             <blockquote className="mkt-display mt-8 text-3xl leading-tight text-[var(--mkt-ink)] md:text-4xl">
               Our passion is to empower the business owner to focus on their
-              end client — and not let maintenance be a distraction from that.
+              end client - and not let maintenance be a distraction from that.
               Simply put, if we can safely and transparently keep your vehicle
               on the road during your business hours, we've hit success.
             </blockquote>
@@ -232,7 +233,7 @@ function AboutPage() {
         </div>
       </section>
 
-      {/* Values — Manifesto Stack */}
+      {/* Values - Manifesto Stack */}
       <section className="relative overflow-hidden bg-[var(--mkt-ink)] text-white">
         {/* Drifting diagonal stripes */}
         <div
@@ -254,7 +255,7 @@ function AboutPage() {
           }}
         />
 
-        {/* Marquee ticker — top */}
+        {/* Marquee ticker - top */}
         <div className="relative border-y border-white/10 bg-black/40 backdrop-blur-sm">
           <Marquee speedSec={45} pauseOnHover={false}>
             <div className="flex items-center gap-10 py-4 pr-10 text-[10px] font-black uppercase tracking-[0.4em] text-white/45">
@@ -312,7 +313,7 @@ function AboutPage() {
           </div>
         </div>
 
-        {/* Pillars — manifesto rows */}
+        {/* Pillars - manifesto rows */}
         <ul className="relative mx-auto mt-20 max-w-[1500px] px-4 md:mt-24 md:px-10">
           <li
             aria-hidden
@@ -393,7 +394,7 @@ function AboutPage() {
                   </div>
                 </div>
 
-                {/* Row divider — lights up on hover */}
+                {/* Row divider - lights up on hover */}
                 <div
                   aria-hidden
                   className="relative h-px w-full bg-gradient-to-r from-transparent via-white/15 to-transparent"
@@ -458,8 +459,8 @@ function AboutPage() {
                 The first move was mobile service. If we could come to the
                 customer's yard, they didn't have to send two employees and
                 two trucks to deliver one broken vehicle. The second was
-                consistency — same techs, same approach, every service
-                interval. The third was transparency — every estimate
+                consistency - same techs, same approach, every service
+                interval. The third was transparency - every estimate
                 explained, every recommendation reasoned.
               </p>
             </Reveal>
@@ -467,7 +468,7 @@ function AboutPage() {
               <p>
                 Today we run a NAPA-affiliated shop and a mobile service
                 operation that covers Jacksonville and the surrounding areas.
-                Our customers don't think of us as their mechanic — they think
+                Our customers don't think of us as their mechanic - they think
                 of us as their fleet partner. When their truck rolls by, we
                 think the same thing: "there goes our truck."
               </p>

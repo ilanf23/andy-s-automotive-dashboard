@@ -24,7 +24,7 @@ export const jobs: Job[] = [
   },
   {
     id: "JOB-BFRONT",
-    name: "Brake Pad & Rotor Replacement — Front (Heavy Duty)",
+    name: "Brake Pad & Rotor Replacement - Front (Heavy Duty)",
     category: "Brakes",
     standardLaborHours: 3.0,
     defaultParts: [
@@ -37,7 +37,7 @@ export const jobs: Job[] = [
   },
   {
     id: "JOB-BREAR",
-    name: "Brake Pad & Rotor Replacement — Rear (Heavy Duty)",
+    name: "Brake Pad & Rotor Replacement - Rear (Heavy Duty)",
     category: "Brakes",
     standardLaborHours: 2.5,
     defaultParts: [
@@ -59,7 +59,7 @@ export const jobs: Job[] = [
   },
   {
     id: "JOB-AMBAC",
-    name: "Ambulance AC Recharge — Dual System",
+    name: "Ambulance AC Recharge - Dual System",
     category: "AC",
     standardLaborHours: 2.5,
     defaultParts: ["R134a refrigerant (4lb)", "AC dye", "O-ring kit"],
@@ -122,7 +122,7 @@ export const jobs: Job[] = [
   },
   {
     id: "JOB-CABFLT",
-    name: "Cabin Air Filter — Class 5/6",
+    name: "Cabin Air Filter - Class 5/6",
     category: "Filters",
     standardLaborHours: 0.5,
     defaultParts: ["Cabin air filter"],

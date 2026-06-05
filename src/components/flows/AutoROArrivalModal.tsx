@@ -14,7 +14,7 @@ type Phase = "scan" | "manual" | "thinking" | "match" | "creating";
 
 const SCAN_STEPS = [
   "Reading VIN/plate via camera OCR",
-  "Decoding VIN — 1FDXE4FS7KDC42718",
+  "Decoding VIN - 1FDXE4FS7KDC42718",
   "Matching customer in your CRM",
   "Pulling vehicle service history (12 prior visits)",
   "Identifying next-available specialist tech",
@@ -71,14 +71,14 @@ export function AutoROArrivalModal({ open, onOpenChange }: Props) {
     setPhase("thinking");
     // After a short delay, the thinking-phase effect will advance to match.
     setTimeout(() => {
-      // No-op — phase progression handled by useEffect above; kept for symmetry.
+      // No-op - phase progression handled by useEffect above; kept for symmetry.
     }, 1200);
   };
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    // Simulate OCR — autofill the captured VIN from the demo target.
+    // Simulate OCR - autofill the captured VIN from the demo target.
     setVin("1FDXE4FS7KDC42718");
     toast.info("Reading VIN from photo…");
     startScan();
@@ -93,7 +93,7 @@ export function AutoROArrivalModal({ open, onOpenChange }: Props) {
     const ro = createRepairOrder({
       customerId: matchedCustomer.id,
       vehicleId: matchedVehicle.id,
-      description: "Vehicle arrived — concern pending tech intake",
+      description: "Vehicle arrived - concern pending tech intake",
       technicianId: assignedTech?.id,
     });
     toast.success(`RO #${ro.id} created on arrival`, {
@@ -110,7 +110,7 @@ export function AutoROArrivalModal({ open, onOpenChange }: Props) {
       title="Auto-RO on Arrival"
       description={
         phase === "scan"
-          ? "Scan VIN or license plate — RO is created automatically"
+          ? "Scan VIN or license plate - RO is created automatically"
           : phase === "manual"
             ? "Enter VIN or license plate manually"
             : phase === "thinking"
@@ -145,7 +145,7 @@ export function AutoROArrivalModal({ open, onOpenChange }: Props) {
       {phase === "scan" && (
         <div className="py-6">
           <div className="mx-auto max-w-sm space-y-4">
-            {/* Camera viewport stub — entire div is clickable */}
+            {/* Camera viewport stub - entire div is clickable */}
             <button
               type="button"
               onClick={startScan}

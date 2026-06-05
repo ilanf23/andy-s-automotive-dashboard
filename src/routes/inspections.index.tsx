@@ -72,10 +72,10 @@ function InspectionsList() {
       return {
         id: ins.id,
         roId: ins.repairOrderId,
-        customer: c?.name ?? "—",
+        customer: c?.name ?? "-",
         customerType: c?.type ?? "Retail",
-        vehicleUnit: v?.unit ?? "—",
-        vehicleYMM: v ? `${v.year} ${v.make} ${v.model}` : "—",
+        vehicleUnit: v?.unit ?? "-",
+        vehicleYMM: v ? `${v.year} ${v.make} ${v.model}` : "-",
         tech: t?.name,
         techInitials: t?.initials,
         completedAt: ins.completedAt,
@@ -287,7 +287,7 @@ function InspectionsList() {
                     {r.completedAt ? (
                       <DateCell date={r.completedAt} className="text-[11px]" />
                     ) : (
-                      <span className="text-[11px] text-muted-foreground">—</span>
+                      <span className="text-[11px] text-muted-foreground">-</span>
                     )}
                   </td>
                   <td className="px-3 py-2.5">

@@ -205,7 +205,7 @@ function CustomersIndex() {
                         <MoneyCell value={c.openBalance} />
                       </span>
                     ) : (
-                      <span className="text-[11px] text-muted-foreground">—</span>
+                      <span className="text-[11px] text-muted-foreground">-</span>
                     )}
                   </td>
                   <td className="px-3 py-2.5 text-right">
@@ -217,7 +217,7 @@ function CustomersIndex() {
                         {c.fleetPlatform}
                       </span>
                     ) : (
-                      <span className="text-[10px] text-muted-foreground">—</span>
+                      <span className="text-[10px] text-muted-foreground">-</span>
                     )}
                   </td>
                 </TableRow>

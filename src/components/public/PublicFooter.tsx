@@ -29,8 +29,12 @@ export function PublicFooter() {
 
   return (
     <footer className="bg-[var(--mkt-ink)] text-[var(--mkt-text-on-dark)]">
-      {/* Decorative top edge with gold accent line */}
-      <div className="h-[3px] w-full bg-gradient-to-r from-transparent via-[var(--mkt-gold)] to-transparent" />
+      {/* Decorative top edge — red primary with yellow accent flanks */}
+      <div className="flex h-[3px] w-full">
+        <div className="h-full flex-1 bg-gradient-to-r from-transparent via-[var(--mkt-yellow)]/70 to-[var(--mkt-gold)]" />
+        <div className="h-full w-24 bg-[var(--mkt-gold)]" />
+        <div className="h-full flex-1 bg-gradient-to-l from-transparent via-[var(--mkt-yellow)]/70 to-[var(--mkt-gold)]" />
+      </div>
 
       {/* Pre-footer CTA band */}
       <Reveal>
@@ -86,7 +90,7 @@ export function PublicFooter() {
             </div>
             <p className="mt-5 max-w-sm text-sm leading-relaxed text-[var(--mkt-text-on-dark-muted)]">
               Jacksonville's fleet maintenance and management partner. We
-              service your trucks where they live — your shop, your jobsite,
+              service your trucks where they live - your shop, your jobsite,
               your driveway. NAPA-affiliated, family-run, transparent in every
               estimate.
             </p>
@@ -101,7 +105,7 @@ export function PublicFooter() {
                   {[1, 2, 3, 4, 5].map((i) => (
                     <Star
                       key={i}
-                      className="h-3 w-3 fill-[var(--mkt-gold)] text-[var(--mkt-gold)]"
+                      className="h-3 w-3 fill-[var(--mkt-yellow)] text-[var(--mkt-yellow)]"
                     />
                   ))}
                 </div>
@@ -225,11 +229,12 @@ export function PublicFooter() {
         {/* Newsletter */}
         <div className="mt-12 flex flex-col items-start justify-between gap-4 rounded-2xl border border-[var(--mkt-border-dark)] bg-white/[0.02] p-6 md:flex-row md:items-center md:p-7">
           <div>
-            <h4 className="text-[10px] font-black uppercase tracking-[0.18em] text-[var(--mkt-gold)]">
+            <h4 className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.18em] text-[var(--mkt-gold)]">
+              <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-[var(--mkt-yellow)]" />
               Shop updates
             </h4>
             <p className="mt-1.5 text-sm text-[var(--mkt-text-on-dark-muted)]">
-              Fleet tips, seasonal reminders, and shop news — once a month.
+              Fleet tips, seasonal reminders, and shop news - once a month.
             </p>
           </div>
           <div className="flex w-full max-w-md items-center gap-2">

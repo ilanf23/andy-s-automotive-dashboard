@@ -27,7 +27,7 @@ export type Estimate = {
 };
 
 export const estimates: Estimate[] = [
-  // ===== HERO ESTIMATE — intentionally thin (only oil change) =====
+  // ===== HERO ESTIMATE - intentionally thin (only oil change) =====
   {
     id: "EST-4847",
     repairOrderId: "4847",
@@ -55,7 +55,7 @@ export const estimates: Estimate[] = [
     total: 372.36,
   },
 
-  // ===== Frankenstein truck — AI-estimated line items =====
+  // ===== Frankenstein truck - AI-estimated line items =====
   {
     id: "EST-FT3-001",
     repairOrderId: "4851",
@@ -66,7 +66,7 @@ export const estimates: Estimate[] = [
     lineItems: [
       {
         id: "EST-FT3-L1",
-        description: "Transmission rebuild — Allison 3000 (AI labor estimate, no OEM time)",
+        description: "Transmission rebuild - Allison 3000 (AI labor estimate, no OEM time)",
         qty: 1,
         partPrice: 3850.0,
         laborHours: 14.0,
@@ -115,7 +115,7 @@ export const estimates: Estimate[] = [
     total: 7704.54,
   },
 
-  // ===== City Form 304 — approved estimate, multi-line =====
+  // ===== City Form 304 - approved estimate, multi-line =====
   {
     id: "EST-CF304",
     repairOrderId: "4848",
@@ -151,7 +151,7 @@ export const estimates: Estimate[] = [
       },
       {
         id: "EST-CF304-L3",
-        description: "Rear brake adjustment — slack adjuster replacement",
+        description: "Rear brake adjustment - slack adjuster replacement",
         qty: 2,
         partPrice: 142.0,
         laborHours: 2.0,
@@ -199,7 +199,7 @@ export const estimates: Estimate[] = [
     total: 2125.56,
   },
 
-  // ===== Davy Tree DT-7 — completed estimate =====
+  // ===== Davy Tree DT-7 - completed estimate =====
   {
     id: "EST-DT7",
     repairOrderId: "4840",
@@ -211,7 +211,7 @@ export const estimates: Estimate[] = [
     lineItems: [
       {
         id: "EST-DT7-L1",
-        description: "Hydraulic cylinder reseal — boom main lift",
+        description: "Hydraulic cylinder reseal - boom main lift",
         partNumber: "HYD-SEAL4",
         vendor: "WorldPac",
         qty: 1,

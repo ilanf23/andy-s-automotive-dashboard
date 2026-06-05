@@ -162,9 +162,9 @@ function InspectionDetail() {
       eyebrow={
         inspection.completedAt
           ? `INSPECTION · COMPLETED ${format(parseISO(inspection.completedAt), "MMM d, yyyy 'AT' h:mm a").toUpperCase()}`
-          : `INSPECTION · IN PROGRESS — ${gradedCount} OF ${inspection.items.length} GRADED`
+          : `INSPECTION · IN PROGRESS - ${gradedCount} OF ${inspection.items.length} GRADED`
       }
-      title={`${inspection.id} — ${vehicle?.unit ?? "Unknown vehicle"}`}
+      title={`${inspection.id} - ${vehicle?.unit ?? "Unknown vehicle"}`}
       titleMeta={
         <div className="flex flex-wrap items-center gap-2">
           <span className="rounded-full bg-surface px-2 py-0.5 text-[10px] font-semibold">
@@ -287,8 +287,8 @@ function InspectionDetail() {
       }
       metaRow={
         <div className="grid grid-cols-2 gap-4 md:grid-cols-5">
-          <MetaPair label="Customer" value={customer?.name ?? "—"} />
-          <MetaPair label="Vehicle" value={vehicle?.unit ?? "—"} />
+          <MetaPair label="Customer" value={customer?.name ?? "-"} />
+          <MetaPair label="Vehicle" value={vehicle?.unit ?? "-"} />
           <MetaPair
             label="Mileage"
             value={
@@ -297,7 +297,7 @@ function InspectionDetail() {
                 : `${(vehicle?.mileage ?? 0).toLocaleString()} mi`
             }
           />
-          <MetaPair label="Technician" value={tech?.name ?? "—"} />
+          <MetaPair label="Technician" value={tech?.name ?? "-"} />
           <MetaPair label="Template" value="37-Point DVI" />
         </div>
       }
@@ -530,7 +530,7 @@ function FindingsTab({
                           "mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full transition-transform hover:scale-110",
                           meta.bg,
                         )}
-                        aria-label={`Cycle status — current ${meta.label}`}
+                        aria-label={`Cycle status - current ${meta.label}`}
                       >
                         <Icon className="h-3 w-3" />
                       </button>

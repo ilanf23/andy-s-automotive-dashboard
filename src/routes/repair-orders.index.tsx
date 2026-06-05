@@ -84,10 +84,10 @@ function RepairOrdersList() {
       const t = ro.technicianId ? techMap.get(ro.technicianId) : undefined;
       return {
         ...ro,
-        customerName: c?.name ?? "—",
+        customerName: c?.name ?? "-",
         customerType: c?.type ?? "Retail",
-        vehicleUnit: v?.unit ?? "—",
-        vehicleYMM: v ? `${v.year} ${v.make} ${v.model}` : "—",
+        vehicleUnit: v?.unit ?? "-",
+        vehicleYMM: v ? `${v.year} ${v.make} ${v.model}` : "-",
         techName: t?.name,
         techInitials: t?.initials,
         advisor: advisors[i % advisors.length],
@@ -263,7 +263,7 @@ function RepairOrdersList() {
                         onClick={(e) => {
                           e.stopPropagation();
                           toast.info("Flags", {
-                            description: "View flags — coming soon",
+                            description: "View flags - coming soon",
                           });
                         }}
                         title={r.flags.join(", ")}
@@ -282,7 +282,7 @@ function RepairOrdersList() {
                       onClick={(e) => {
                         e.stopPropagation();
                         toast.info("Change status", {
-                          description: "Status menu — coming soon",
+                          description: "Status menu - coming soon",
                         });
                       }}
                       className="cursor-pointer"

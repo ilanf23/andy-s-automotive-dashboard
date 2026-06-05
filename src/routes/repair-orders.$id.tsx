@@ -64,9 +64,40 @@ type SubTab =
   | "files"
   | "activity";
 
+const INITIAL_JOBS: JobItem[] = [
+  {
+    id: "J1",
+    name: "Brake service - front pads & rotor turn",
+    hours: 2.5,
+    labor: 350,
+    parts: 184,
+    status: "In Progress",
+    authorized: true,
+  },
+  {
+    id: "J2",
+    name: "Diesel oil & filter service",
+    hours: 1.5,
+    labor: 210,
+    parts: 138,
+    status: "Scheduled",
+    authorized: true,
+  },
+  {
+    id: "J3",
+    name: "Cabin AC diagnostic - rear unit",
+    hours: 1.0,
+    labor: 140,
+    parts: 0,
+    status: "Pending",
+    authorized: false,
+  },
+];
+
 function RepairOrderDetail() {
   const { id } = Route.useParams();
   const [tab, setTab] = useState<SubTab>("overview");
+  const [jobs, setJobs] = useState<JobItem[]>(INITIAL_JOBS);
   const { repairOrders } = useShopState();
   const { open: openModal } = useModals();
 
@@ -105,10 +136,12 @@ function RepairOrderDetail() {
   const aiLines = selectAILinesForRO(ro.id);
   const aiAddedTotal = aiLines.reduce((acc, l) => acc + l.total, 0);
 
-  // Totals — reactive to applied payments from the store
-  const subtotal = estimate?.subtotal ?? ro.total;
-  const tax = estimate?.tax ?? subtotal * 0.07;
-  const total = estimate?.total ?? subtotal + tax;
+  // Totals - subtotal is driven by the actual jobs on this RO so the
+  // customer-facing total stays in sync as jobs are added or edited.
+  const jobsSubtotal = jobs.reduce((acc, j) => acc + j.labor + j.parts, 0);
+  const subtotal = jobsSubtotal + aiAddedTotal;
+  const tax = subtotal * 0.07;
+  const total = subtotal + tax;
   const payments = selectPaymentsForRO(ro.id);
   const sessionPaid = payments.reduce((acc, p) => acc + p.amount, 0);
   const paid = sessionPaid > 0 ? sessionPaid : ro.status === "completed" ? total : 0;
@@ -151,7 +184,7 @@ function RepairOrderDetail() {
       backTo="/repair-orders"
       backLabel="All repair orders"
       eyebrow={`REPAIR ORDER · OPENED ${format(parseISO(ro.openedAt), "MMM d, yyyy").toUpperCase()}`}
-      title={`#${ro.id} — ${customer?.name ?? "Unknown customer"}`}
+      title={`#${ro.id} - ${customer?.name ?? "Unknown customer"}`}
       titleMeta={
         <div className="flex flex-wrap items-center gap-2">
           <StatusBadge status={ro.status} size="md" />
@@ -230,7 +263,7 @@ function RepairOrderDetail() {
           </button>
           <div className="ml-auto flex items-center gap-2">
             <button
-              onClick={() => openModal("take-payment", { roId: ro.id })}
+              onClick={() => openModal("take-payment", { roId: ro.id, totalDue: total, balance })}
               className="inline-flex items-center gap-1.5 rounded-md border border-brand-green/40 bg-brand-green-tint px-2.5 py-1.5 text-[11px] font-semibold text-brand-green-soft hover:bg-brand-green/20"
             >
               <CreditCard className="h-3 w-3" />
@@ -248,14 +281,14 @@ function RepairOrderDetail() {
                 onClick={(e) => {
                   e.stopPropagation();
                   toast.info(
-                    "Post options: Close / Email / Print — coming soon",
+                    "Post options: Close / Email / Print - coming soon",
                   );
                 }}
                 onKeyDown={(e) => {
                   if (e.key === "Enter" || e.key === " ") {
                     e.stopPropagation();
                     toast.info(
-                      "Post options: Close / Email / Print — coming soon",
+                      "Post options: Close / Email / Print - coming soon",
                     );
                   }
                 }}
@@ -267,7 +300,7 @@ function RepairOrderDetail() {
             <button
               onClick={() =>
                 toast.info(
-                  "More actions: Duplicate, Archive, Print WO — coming soon",
+                  "More actions: Duplicate, Archive, Print WO - coming soon",
                 )
               }
               className="rounded-md border border-border bg-background p-1.5 hover:bg-surface"
@@ -287,7 +320,7 @@ function RepairOrderDetail() {
                 params={{ id: ro.customerId }}
                 className="hover:underline"
               >
-                {customer?.name ?? "—"}
+                {customer?.name ?? "-"}
               </Link>
             }
           />
@@ -299,7 +332,7 @@ function RepairOrderDetail() {
                 params={{ id: ro.vehicleId }}
                 className="hover:underline"
               >
-                {vehicle?.unit ?? "—"}
+                {vehicle?.unit ?? "-"}
               </Link>
             }
           />
@@ -323,7 +356,7 @@ function RepairOrderDetail() {
       activeTabId={tab}
       onTabChange={(id) => setTab(id as SubTab)}
     >
-      {/* No-estimate-yet banner — surface the create+send workflow */}
+      {/* No-estimate-yet banner - surface the create+send workflow */}
       {!estimate && !isLostRevenue && (
         <div className="mb-4 flex items-start justify-between gap-4 rounded-lg border border-brand-green/30 bg-brand-green-tint px-4 py-3">
           <div className="flex items-start gap-2">
@@ -333,7 +366,7 @@ function RepairOrderDetail() {
                 Ready to create the estimate
               </p>
               <p className="mt-0.5 text-xs text-brand-green-soft/80">
-                Auto-generate from this RO, share with your advisor, and send to {customer?.contactName ?? "the customer"} — in one flow.
+                Auto-generate from this RO, share with your advisor, and send to {customer?.contactName ?? "the customer"} - in one flow.
               </p>
             </div>
           </div>
@@ -357,7 +390,7 @@ function RepairOrderDetail() {
                 {(findings?.red ?? 0) + (findings?.yellow ?? 0) - (findings?.estimated ?? 0)} inspection findings not yet on estimate
               </p>
               <p className="mt-0.5 text-xs text-[#991B1B]/80">
-                Lost Revenue Risk — ~$1,200 potential revenue unestimated
+                Lost Revenue Risk - ~$1,200 potential revenue unestimated
               </p>
             </div>
           </div>
@@ -371,7 +404,7 @@ function RepairOrderDetail() {
         </div>
       )}
 
-      {/* Confirmation strip — shown after AI Builder has resolved the gap */}
+      {/* Confirmation strip - shown after AI Builder has resolved the gap */}
       {lostRevenueFlagSet && isLostRevenueResolved(ro.id) && aiAddedTotal > 0 && (
         <div className="mb-4 flex items-center justify-between gap-3 rounded-lg border border-brand-green/30 bg-brand-green-tint px-4 py-2.5">
           <div className="flex items-center gap-2">
@@ -393,9 +426,14 @@ function RepairOrderDetail() {
             <OverviewTab
               roDescription={ro.description}
               onViewAllActivity={() => setTab("activity")}
+              jobs={jobs}
+              setJobs={setJobs}
+              tech={tech?.name}
             />
           )}
-          {tab === "jobs" && <JobsTab tech={tech?.name} />}
+          {tab === "jobs" && (
+            <JobsTab tech={tech?.name} jobs={jobs} setJobs={setJobs} />
+          )}
           {tab === "parts" && <PartsTab />}
           {tab === "labor" && <LaborTab tech={tech?.name} />}
           {tab === "inspections" && (
@@ -435,7 +473,7 @@ function RepairOrderDetail() {
             </div>
             {balance > 0 && (
               <button
-                onClick={() => openModal("take-payment", { roId: ro.id })}
+                onClick={() => openModal("take-payment", { roId: ro.id, totalDue: total, balance })}
                 className="mt-3 inline-flex w-full items-center justify-center gap-1.5 rounded-md bg-brand-green px-3 py-2 text-xs font-semibold text-brand-green-foreground hover:opacity-90"
               >
                 <CreditCard className="h-3.5 w-3.5" />
@@ -624,9 +662,15 @@ function KV({ label, value, mono }: { label: string; value: string; mono?: boole
 function OverviewTab({
   roDescription,
   onViewAllActivity,
+  jobs,
+  setJobs,
+  tech,
 }: {
   roDescription: string;
   onViewAllActivity: () => void;
+  jobs: JobItem[];
+  setJobs: React.Dispatch<React.SetStateAction<JobItem[]>>;
+  tech?: string;
 }) {
   return (
     <div className="space-y-4">
@@ -634,7 +678,7 @@ function OverviewTab({
         <p className="text-sm text-foreground">{roDescription}</p>
       </Section>
 
-      <JobsTab />
+      <JobsTab jobs={jobs} setJobs={setJobs} tech={tech} />
 
       <Section title="Recent Activity" actions={
         <button
@@ -677,36 +721,15 @@ type JobItem = {
 
 type JobRunState = "scheduled" | "in-progress" | "paused" | "done";
 
-function JobsTab({ tech }: { tech?: string } = {}) {
-  const [jobs, setJobs] = useState<JobItem[]>([
-    {
-      id: "J1",
-      name: "Brake service — front pads & rotor turn",
-      hours: 2.5,
-      labor: 350,
-      parts: 184,
-      status: "In Progress",
-      authorized: true,
-    },
-    {
-      id: "J2",
-      name: "Diesel oil & filter service",
-      hours: 1.5,
-      labor: 210,
-      parts: 138,
-      status: "Scheduled",
-      authorized: true,
-    },
-    {
-      id: "J3",
-      name: "Cabin AC diagnostic — rear unit",
-      hours: 1.0,
-      labor: 140,
-      parts: 0,
-      status: "Pending",
-      authorized: false,
-    },
-  ]);
+function JobsTab({
+  tech,
+  jobs,
+  setJobs,
+}: {
+  tech?: string;
+  jobs: JobItem[];
+  setJobs: React.Dispatch<React.SetStateAction<JobItem[]>>;
+}) {
   const [jobStates, setJobStates] = useState<Record<string, JobRunState>>({});
   const [showAddJob, setShowAddJob] = useState(false);
   const [showLaborSearch, setShowLaborSearch] = useState(false);
@@ -1575,7 +1598,7 @@ function MessagesTab({ customerName }: { customerName: string }) {
     {
       id: "B2",
       from: "me",
-      text: "Sure thing Dana, adding it now — should bring the total to about $1,950.",
+      text: "Sure thing Dana, adding it now - should bring the total to about $1,950.",
       meta: "Just now · drafted",
     },
   ]);
@@ -1728,7 +1751,7 @@ function ActivityTab({ roId }: { roId: string }) {
       id: "AC1",
       icon: CheckCircle,
       title: "Inspection completed",
-      detail: "Marcus completed 37-point inspection — 2 red, 3 yellow",
+      detail: "Marcus completed 37-point inspection - 2 red, 3 yellow",
       time: "2h ago",
       actor: "Marcus Reeves",
     },

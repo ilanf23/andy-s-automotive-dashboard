@@ -2,7 +2,7 @@
  * Mock heavy-duty truck labor-time guide.
  *
  * In a real shop, this data comes from Mitchell 1 / AllData / WorldPac. The
- * numbers here are realistic flat-rate hours for Class 7/8 diesel work — pad
+ * numbers here are realistic flat-rate hours for Class 7/8 diesel work - pad
  * R&R on a heavy front axle really is ~2 hrs; an injector swap on a DD15 is
  * really ~7 hrs; a forced regen is really ~1 hr at the keyboard.
  *
@@ -62,7 +62,7 @@ export const laborGuide: LaborGuideEntry[] = [
     category: "Brakes",
     description: "Drum brake reline (per axle)",
     detail:
-      "Reline S-cam drum brakes — shoes, return springs, anchor pins, slack adjuster inspection, drum machining if within spec.",
+      "Reline S-cam drum brakes - shoes, return springs, anchor pins, slack adjuster inspection, drum machining if within spec.",
     applicableMakes: ["Freightliner", "Peterbilt", "Kenworth", "International", "Volvo", "Ford SD"],
     laborHours: 4.5,
     skillLevel: "A",
@@ -208,7 +208,7 @@ export const laborGuide: LaborGuideEntry[] = [
     applicableMakes: ["Freightliner", "Peterbilt", "Kenworth", "International", "Volvo", "Ford SD"],
     laborHours: 2.5,
     skillLevel: "A",
-    notes: "Hourly diag — actual repair time billed separately.",
+    notes: "Hourly diag - actual repair time billed separately.",
   },
   {
     id: "lg-016",
@@ -346,7 +346,7 @@ export const laborGuide: LaborGuideEntry[] = [
     category: "Diagnostics",
     description: "No-start diagnosis",
     detail:
-      "Systematic no-start diagnosis — batteries, starter draw, fuel pressure, ECM communication, crank/cam sensor signal.",
+      "Systematic no-start diagnosis - batteries, starter draw, fuel pressure, ECM communication, crank/cam sensor signal.",
     applicableMakes: ["Freightliner", "Peterbilt", "Kenworth", "International", "Volvo", "Ford SD"],
     laborHours: 2.0,
     skillLevel: "A",
@@ -357,7 +357,7 @@ export const laborGuide: LaborGuideEntry[] = [
     category: "Diagnostics",
     description: "MIL (check engine) diagnosis",
     detail:
-      "Diagnose active MIL — fault tree per code, sensor live-data review, root-cause documentation.",
+      "Diagnose active MIL - fault tree per code, sensor live-data review, root-cause documentation.",
     applicableMakes: ["Freightliner", "Peterbilt", "Kenworth", "International", "Volvo", "Ford SD"],
     laborHours: 1.5,
     skillLevel: "B",

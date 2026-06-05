@@ -54,7 +54,7 @@ export function ARDunningTimeline({
     {
       day: 31,
       channel: "sms",
-      title: "Day 31 — Friendly SMS reminder",
+      title: "Day 31 - Friendly SMS reminder",
       body: `Hi Vince, this is Andy's Automotive. Your invoice for $${amount.toLocaleString()} (Dec service) is now 1 day past due. Reply PAY to receive a payment link, or call us at (904) 555-0100.`,
       status: "done",
       sentAt: "Dec 16, 2025 · 10:14 AM",
@@ -63,8 +63,8 @@ export function ARDunningTimeline({
     {
       day: 45,
       channel: "email",
-      title: "Day 45 — Direct email with payment link",
-      body: "Subject: Invoice past due — Northpoint Logistics — Body explained the balance breakdown, payment options, and offered a 12-month payment plan if cash flow is the issue.",
+      title: "Day 45 - Direct email with payment link",
+      body: "Subject: Invoice past due - Northpoint Logistics - Body explained the balance breakdown, payment options, and offered a 12-month payment plan if cash flow is the issue.",
       status: "done",
       sentAt: "Dec 30, 2025 · 9:00 AM",
       response: "Opened · no reply",
@@ -72,7 +72,7 @@ export function ARDunningTimeline({
     {
       day: 60,
       channel: "voice",
-      title: "Day 60 — AI voice call to Vince",
+      title: "Day 60 - AI voice call to Vince",
       body: "AI agent introduced itself, referenced the specific invoice, and offered the payment plan option. Vince said his crew was let go and the truck isn't generating revenue.",
       status: "done",
       sentAt: "Jan 14, 2026 · 2:38 PM",
@@ -81,8 +81,8 @@ export function ARDunningTimeline({
     {
       day: 75,
       channel: "email",
-      title: "Day 75 — Formal demand letter",
-      body: "Subject: FINAL NOTICE — Pending collection action. Drafted but held for Andy's signature given the customer relationship context.",
+      title: "Day 75 - Formal demand letter",
+      body: "Subject: FINAL NOTICE - Pending collection action. Drafted but held for Andy's signature given the customer relationship context.",
       status: "done",
       sentAt: "Jan 29, 2026 · 9:00 AM",
       response: "Andy approved · sent",
@@ -90,7 +90,7 @@ export function ARDunningTimeline({
     {
       day: 90,
       channel: "voice",
-      title: "Day 90 — Second AI voice call (firmer tone)",
+      title: "Day 90 - Second AI voice call (firmer tone)",
       body: "AI agent referenced the prior conversation, noted no payment received, and warned of mechanic's lien filing within 30 days.",
       status: "done",
       sentAt: "Feb 13, 2026 · 11:21 AM",
@@ -99,7 +99,7 @@ export function ARDunningTimeline({
     {
       day: 120,
       channel: "sms",
-      title: "Day 120 — Payment plan reminder",
+      title: "Day 120 - Payment plan reminder",
       body: "Plan offered: $1,500/month for 12 months. AI generated a one-tap acceptance link.",
       status: "done",
       sentAt: "Mar 15, 2026 · 10:00 AM",
@@ -108,10 +108,10 @@ export function ARDunningTimeline({
     {
       day: 185,
       channel: "lien",
-      title: "Day 185 — Mechanic's lien filing draft ready",
+      title: "Day 185 - Mechanic's lien filing draft ready",
       body: "AI has prepared the FL mechanic's lien filing. Document includes invoice, signed estimate, service records. Filing fee $42. Requires Andy's signature.",
       status: "pending",
-      scheduledFor: "Today — awaiting Andy's review",
+      scheduledFor: "Today - awaiting Andy's review",
     },
   ];
 

@@ -250,7 +250,7 @@ function CustomerDetail() {
 
         {/* Right rail */}
         <aside className="space-y-4">
-          {/* Health Score — AI insights at the top */}
+          {/* Health Score - AI insights at the top */}
           <CustomerHealthCard
             customerName={customer.name}
             detail={getHealthDetail(customer.id)}

@@ -1,8 +1,8 @@
 // ============================================================================
-// Copilot tool schema — shared between server (OpenAI request) and client
+// Copilot tool schema - shared between server (OpenAI request) and client
 // (tool executor). The JSON schemas conform to OpenAI's tools format.
 //
-// The TOOL_META map carries metadata that's NOT part of OpenAI's schema —
+// The TOOL_META map carries metadata that's NOT part of OpenAI's schema -
 // namely, whether a tool requires user approval before execution and a
 // human-friendly title for the approval card.
 // ============================================================================
@@ -25,12 +25,12 @@ export type ToolMeta = {
   requiresApproval: boolean;
   /** Short label for the approval card title */
   title?: string;
-  /** "default" | "danger" | "success" — visual tone for the approval card */
+  /** "default" | "danger" | "success" - visual tone for the approval card */
   tone?: "default" | "danger" | "success";
 };
 
 // ----------------------------------------------------------------------------
-// READ tools — executed silently on the client, results streamed back to model
+// READ tools - executed silently on the client, results streamed back to model
 // ----------------------------------------------------------------------------
 
 const READ_TOOLS: OpenAITool[] = [
@@ -150,7 +150,7 @@ const READ_TOOLS: OpenAITool[] = [
     function: {
       name: "get_today_schedule",
       description:
-        "Get today's schedule — repair orders currently in the shop with their assigned technician, status, and customer.",
+        "Get today's schedule - repair orders currently in the shop with their assigned technician, status, and customer.",
       parameters: {
         type: "object",
         properties: {},
@@ -160,7 +160,7 @@ const READ_TOOLS: OpenAITool[] = [
 ];
 
 // ----------------------------------------------------------------------------
-// WRITE tools — paused for approval before execution. The exception is
+// WRITE tools - paused for approval before execution. The exception is
 // `navigate_to`, which is benign and runs without approval.
 // ----------------------------------------------------------------------------
 
@@ -170,7 +170,7 @@ const WRITE_TOOLS: OpenAITool[] = [
     function: {
       name: "create_repair_order",
       description:
-        "Create a new repair order. Requires a known customerId and vehicleId — look these up first if needed.",
+        "Create a new repair order. Requires a known customerId and vehicleId - look these up first if needed.",
       parameters: {
         type: "object",
         properties: {
@@ -203,7 +203,7 @@ const WRITE_TOOLS: OpenAITool[] = [
     function: {
       name: "send_estimate",
       description:
-        "Send an estimate to the customer via the specified channels (sms, email). Simulated send — emits a toast.",
+        "Send an estimate to the customer via the specified channels (sms, email). Simulated send - emits a toast.",
       parameters: {
         type: "object",
         properties: {
@@ -240,7 +240,7 @@ const WRITE_TOOLS: OpenAITool[] = [
     function: {
       name: "post_ro",
       description:
-        "Post (close) a repair order — marks it completed and stamps the close date. Use this after the customer pays and picks up the truck.",
+        "Post (close) a repair order - marks it completed and stamps the close date. Use this after the customer pays and picks up the truck.",
       parameters: {
         type: "object",
         properties: { id: { type: "string" } },
@@ -284,7 +284,7 @@ const WRITE_TOOLS: OpenAITool[] = [
     function: {
       name: "navigate_to",
       description:
-        "Navigate the user to a route in the app, e.g. '/repair-orders/4847', '/customers/CUST-MED', '/dashboard'. Benign — no approval needed.",
+        "Navigate the user to a route in the app, e.g. '/repair-orders/4847', '/customers/CUST-MED', '/dashboard'. Benign - no approval needed.",
       parameters: {
         type: "object",
         properties: { path: { type: "string" } },
@@ -319,7 +319,7 @@ export const TOOL_META: Record<string, ToolMeta> = {
 };
 
 // ============================================================================
-// Snapshot type — compact shop state passed to the model as context
+// Snapshot type - compact shop state passed to the model as context
 // ============================================================================
 
 export type ShopSnapshot = {
@@ -390,16 +390,16 @@ export type ChatMessage =
   | { role: "tool"; tool_call_id: string; content: string };
 
 // ============================================================================
-// System prompt — short, focused
+// System prompt - short, focused
 // ============================================================================
 
-export const SYSTEM_PROMPT = `You are the AI Copilot for Andy's Automotive — a heavy-duty truck repair shop.
+export const SYSTEM_PROMPT = `You are the AI Copilot for Andy's Automotive - a heavy-duty truck repair shop.
 Your job: help the service advisor and shop manager run their day. You can read all shop data and take real actions (creating repair orders, sending estimates, taking payments, etc.) through the available tools.
 
 Rules:
 - Be concise. Two sentences when one will do.
 - When you take an action, say what you did briefly.
-- For write actions, the system will pause for the user to approve before executing — that's expected, don't apologize for it.
+- For write actions, the system will pause for the user to approve before executing - that's expected, don't apologize for it.
 - If you don't have enough info, ask one short clarifying question.
 - Use the customer's preferred terminology (RO = repair order, ARO = avg repair order, ELR = effective labor rate, DVI = digital vehicle inspection).
 - Never invent IDs, prices, or customer details. Look them up via the tools or use the CURRENT SHOP STATE snapshot you were given.

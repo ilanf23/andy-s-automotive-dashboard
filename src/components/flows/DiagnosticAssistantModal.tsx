@@ -32,13 +32,13 @@ const SCENARIO_CAUSES: Cause[] = [
   {
     id: "c1",
     probability: 62,
-    label: "Rear wheel speed sensor — driver side (corrosion at connector)",
+    label: "Rear wheel speed sensor - driver side (corrosion at connector)",
     confidence: "high",
     reasoning:
-      "Code C0040 specifically points to LR wheel speed circuit. 'Above 45mph only' rules out a hard short — it's intermittent at higher rotational speed, typical of corrosion that opens under vibration. Your shop has seen this exact pattern 3 times on E-450 ambulances, all driver-side LR.",
+      "Code C0040 specifically points to LR wheel speed circuit. 'Above 45mph only' rules out a hard short - it's intermittent at higher rotational speed, typical of corrosion that opens under vibration. Your shop has seen this exact pattern 3 times on E-450 ambulances, all driver-side LR.",
     estimatedTime: "0.8–1.2 hrs",
     parts: ["MTC-ALS-2245 (ABS sensor)", "Dielectric grease"],
-    similar: "RO #4774 — MT-52, March 2026, fixed in 1.1 hrs",
+    similar: "RO #4774 - MT-52, March 2026, fixed in 1.1 hrs",
   },
   {
     id: "c2",
@@ -46,7 +46,7 @@ const SCENARIO_CAUSES: Cause[] = [
     label: "Loose tone ring at rear hub",
     confidence: "medium",
     reasoning:
-      "Less common but matches the 'speed-dependent' pattern. Tone ring shifts under high RPM, sensor reads noise. Requires hub removal — significantly more labor than sensor swap.",
+      "Less common but matches the 'speed-dependent' pattern. Tone ring shifts under high RPM, sensor reads noise. Requires hub removal - significantly more labor than sensor swap.",
     estimatedTime: "2.5–3.5 hrs",
     parts: ["Hub bearing assembly (if damaged)", "Tone ring"],
     similar: "No prior matches in your shop",
@@ -85,7 +85,7 @@ const THINKING_STEPS = [
 type Props = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  /** Pre-fill symptom (optional — from inspection finding) */
+  /** Pre-fill symptom (optional - from inspection finding) */
   initialSymptom?: string;
 };
 
@@ -98,7 +98,7 @@ export function DiagnosticAssistantModal({
   const [step, setStep] = useState(0);
   const [symptom, setSymptom] = useState(
     initialSymptom ??
-      "Intermittent ABS code C0040, occurs above 45mph only — MT-47 E-450",
+      "Intermittent ABS code C0040, occurs above 45mph only - MT-47 E-450",
   );
   const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -134,11 +134,11 @@ export function DiagnosticAssistantModal({
       open={open}
       onOpenChange={onOpenChange}
       title="Diagnostic Assistant"
-      description="Describe a symptom — AI ranks causes, suggests next steps from your shop history"
+      description="Describe a symptom - AI ranks causes, suggests next steps from your shop history"
       size="xl"
     >
       <div className="space-y-4">
-        {/* Symptom input — always visible */}
+        {/* Symptom input - always visible */}
         <div className="rounded-lg border border-border bg-surface/30 p-3">
           <div className="mb-2 flex items-center justify-between">
             <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
@@ -163,7 +163,7 @@ export function DiagnosticAssistantModal({
               onChange={(e) => setSymptom(e.target.value)}
               disabled={phase !== "input"}
               rows={2}
-              placeholder="Describe the issue — fault code, when it happens, what changes…"
+              placeholder="Describe the issue - fault code, when it happens, what changes…"
               className="flex-1 resize-none rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:border-brand-green focus:ring-2 focus:ring-brand-green/20 disabled:bg-surface disabled:opacity-70"
             />
             {phase === "input" && (
@@ -225,7 +225,7 @@ export function DiagnosticAssistantModal({
             <div>
               <h3 className="mb-2 flex items-center gap-1.5 text-xs font-semibold">
                 <TrendingUp className="h-3.5 w-3.5 text-brand-green-soft" />
-                Likely causes — ranked by probability
+                Likely causes - ranked by probability
               </h3>
               <ul className="space-y-2">
                 {SCENARIO_CAUSES.map((c, idx) => (

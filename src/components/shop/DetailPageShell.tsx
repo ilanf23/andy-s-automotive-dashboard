@@ -17,7 +17,7 @@ type Props = {
   headerRight?: React.ReactNode;
   /** Action buttons row */
   actions?: React.ReactNode;
-  /** Optional meta strip below the header — key/value chips */
+  /** Optional meta strip below the header - key/value chips */
   metaRow?: React.ReactNode;
   /** Tabs */
   tabs?: TabItem[];

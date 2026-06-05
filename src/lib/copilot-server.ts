@@ -7,7 +7,7 @@ import {
 } from "./copilot-tools";
 
 // ============================================================================
-// Key resolution — Workers (process.env), Vite dev (import.meta.env), and a
+// Key resolution - Workers (process.env), Vite dev (import.meta.env), and a
 // globalThis fallback so we work in both runtimes. NEVER reads from the
 // client-exposed VITE_* namespace.
 // ============================================================================
@@ -17,13 +17,13 @@ function getKey(): string | undefined {
   if (typeof process !== "undefined" && process.env?.OPENAI_API_KEY) {
     return process.env.OPENAI_API_KEY;
   }
-  // 2. Vite dev — loaded from .env.local on the server side
+  // 2. Vite dev - loaded from .env.local on the server side
   try {
     const metaEnv = (import.meta as unknown as { env?: Record<string, string | undefined> })
       .env;
     if (metaEnv?.OPENAI_API_KEY) return metaEnv.OPENAI_API_KEY;
   } catch {
-    /* import.meta.env may not be available — ignore */
+    /* import.meta.env may not be available - ignore */
   }
   // 3. Final fallback: anything dropped on globalThis (Workers env binding bridge)
   const g = globalThis as unknown as { OPENAI_API_KEY?: string };
@@ -32,7 +32,7 @@ function getKey(): string | undefined {
 }
 
 // ============================================================================
-// OpenAI proxy — takes the running conversation + shop snapshot, returns the
+// OpenAI proxy - takes the running conversation + shop snapshot, returns the
 // raw OpenAI chat completion response. The client loops on this until the
 // model stops calling tools.
 // ============================================================================

@@ -47,8 +47,8 @@ export const repairOrders: RepairOrder[] = [
     daysInShop: 2,
     openedAt: "2026-05-18",
     description:
-      "Transmission slipping + coolant leak — Frankenstein build, no OEM labor guide",
-    flags: ["Frankenstein vehicle — labor guide unavailable"],
+      "Transmission slipping + coolant leak - Frankenstein build, no OEM labor guide",
+    flags: ["Frankenstein vehicle - labor guide unavailable"],
     inspectionFindings: { red: 3, yellow: 4, green: 19, estimated: 4 },
   },
   {
@@ -85,7 +85,7 @@ export const repairOrders: RepairOrder[] = [
     total: 0,
     daysInShop: 0,
     openedAt: "2026-05-20",
-    description: "Check-in only — driver reports rear AC weak, intermittent",
+    description: "Check-in only - driver reports rear AC weak, intermittent",
   },
   {
     id: "4848",
@@ -108,7 +108,7 @@ export const repairOrders: RepairOrder[] = [
     total: 0,
     daysInShop: 1,
     openedAt: "2026-05-19",
-    description: "Initial fleet onboarding inspection — first visit",
+    description: "Initial fleet onboarding inspection - first visit",
   },
   {
     id: "4844",

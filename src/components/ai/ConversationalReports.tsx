@@ -28,7 +28,7 @@ const SUGGESTED_QUESTIONS = [
 
 const SCRIPTED: Record<string, Message["answer"]> = {
   "what's my real labor gp this week using hourly pay": {
-    headline: "Labor GP — this week (hourly pay basis)",
+    headline: "Labor GP - this week (hourly pay basis)",
     value: "58.4%",
     delta: { direction: "up", value: "+1.2 pts vs last week" },
     formula:
@@ -55,10 +55,10 @@ const SCRIPTED: Record<string, Message["answer"]> = {
     ],
     sources: ["shop-history"],
     note:
-      "Trevor has been spending most of his time on the Bayside Marine F-250 — that job has run 18h over estimate. Worth reviewing his RO assignment mix.",
+      "Trevor has been spending most of his time on the Bayside Marine F-250 - that job has run 18h over estimate. Worth reviewing his RO assignment mix.",
   },
   "how much did med trust spend with us in q1": {
-    headline: "Med Trust — Q1 2026 spend",
+    headline: "Med Trust - Q1 2026 spend",
     value: "$284,700",
     delta: { direction: "up", value: "+14% vs Q1 2025" },
     breakdown: [
@@ -70,10 +70,10 @@ const SCRIPTED: Record<string, Message["answer"]> = {
     ],
     sources: ["shop-history"],
     note:
-      "Trending up — on pace for $1.14M this year vs $1.05M last year. Their fleet has been growing.",
+      "Trending up - on pace for $1.14M this year vs $1.05M last year. Their fleet has been growing.",
   },
   "what's my parts margin on diesel oil services": {
-    headline: "Diesel oil service — parts margin (last 30 days)",
+    headline: "Diesel oil service - parts margin (last 30 days)",
     value: "61.2%",
     delta: { direction: "down", value: "−3.4 pts vs prior 30 days" },
     formula:
@@ -242,7 +242,7 @@ export function ConversationalReports() {
             onKeyDown={(e) => {
               if (e.key === "Enter") send(input);
             }}
-            placeholder="Ask anything — 'what's my GP this month', 'who's my top customer'…"
+            placeholder="Ask anything - 'what's my GP this month', 'who's my top customer'…"
             className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
           />
           <button

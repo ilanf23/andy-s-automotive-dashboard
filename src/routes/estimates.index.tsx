@@ -71,9 +71,9 @@ function EstimatesListPage() {
     const vehMap = new Map(vehicles.map((v) => [v.id, v]));
     return estimates.map((e) => ({
       ...e,
-      customerName: custMap.get(e.customerId)?.name ?? "—",
+      customerName: custMap.get(e.customerId)?.name ?? "-",
       customerType: custMap.get(e.customerId)?.type ?? "Retail",
-      vehicleUnit: vehMap.get(e.vehicleId)?.unit ?? "—",
+      vehicleUnit: vehMap.get(e.vehicleId)?.unit ?? "-",
     }));
   }, []);
 
@@ -158,7 +158,7 @@ function EstimatesListPage() {
         />
       }
     >
-      {/* Lost Revenue callout — platform differentiator, kept */}
+      {/* Lost Revenue callout - platform differentiator, kept */}
       {lostRevenueEstimate && (
         <div className="border-b border-border bg-accent/10 px-3 py-2.5">
           <div className="flex items-start gap-3 rounded-md px-2 py-1.5 transition-colors hover:bg-accent/20">
@@ -169,7 +169,7 @@ function EstimatesListPage() {
               className="min-w-0 flex-1"
             >
               <div className="text-xs font-semibold text-[#991B1B]">
-                EST-4847 — {lostRevenueEstimate.customerName} ·{" "}
+                EST-4847 - {lostRevenueEstimate.customerName} ·{" "}
                 {lostRevenueEstimate.vehicleUnit}
               </div>
               <div className="mt-0.5 text-[11px] text-[#991B1B]/80">

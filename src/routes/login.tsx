@@ -85,7 +85,7 @@ function LoginPage() {
   return (
     <div className="grid min-h-screen grid-cols-1 lg:grid-cols-[1fr_460px]">
       {/* ====================================================================== */}
-      {/* LEFT — Brand panel                                                     */}
+      {/* LEFT - Brand panel                                                     */}
       {/* ====================================================================== */}
       <div className="relative hidden overflow-hidden bg-[var(--mkt-ink)] text-white lg:block">
         <div
@@ -173,7 +173,7 @@ function LoginPage() {
       </div>
 
       {/* ====================================================================== */}
-      {/* RIGHT — Form panel                                                     */}
+      {/* RIGHT - Form panel                                                     */}
       {/* ====================================================================== */}
       <div className="flex items-center justify-center bg-[var(--mkt-paper)] p-6 md:p-10">
         <div className="w-full max-w-sm">
@@ -325,7 +325,7 @@ function LoginPage() {
                   type="button"
                   onClick={() =>
                     toast.info("SSO", {
-                      description: "Single sign-on — coming soon",
+                      description: "Single sign-on - coming soon",
                     })
                   }
                   className="inline-flex w-full items-center justify-center gap-2 rounded-md border border-[var(--mkt-border-light)] bg-white px-4 py-2.5 text-xs font-bold text-[var(--mkt-ink)] transition-all hover:border-[var(--mkt-ink)]/30 hover:bg-[var(--mkt-paper-soft)]"
@@ -354,7 +354,7 @@ function LoginPage() {
                   type="button"
                   onClick={() =>
                     toast.info("SSO", {
-                      description: "Single sign-on — coming soon",
+                      description: "Single sign-on - coming soon",
                     })
                   }
                   className="inline-flex w-full items-center justify-center gap-2 rounded-md border border-[var(--mkt-border-light)] bg-white px-4 py-2.5 text-xs font-bold text-[var(--mkt-ink)] transition-all hover:border-[var(--mkt-ink)]/30 hover:bg-[var(--mkt-paper-soft)]"

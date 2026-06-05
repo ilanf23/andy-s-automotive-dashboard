@@ -41,7 +41,7 @@ export const vehicles: Vehicle[] = [
     mileage: 96740,
     lastService: "2026-04-30",
     serviceNotes:
-      "Additional AC unit rear, inverter rear, emergency lighting — Stryker power-load",
+      "Additional AC unit rear, inverter rear, emergency lighting - Stryker power-load",
   },
   {
     id: "VEH-RD12",
@@ -55,7 +55,7 @@ export const vehicles: Vehicle[] = [
     hours: 8420,
     lastService: "2026-05-08",
     serviceNotes:
-      "Weekly oil change, idle hours not mileage, multi-filter diesel — Cummins ISB",
+      "Weekly oil change, idle hours not mileage, multi-filter diesel - Cummins ISB",
   },
   {
     id: "VEH-RD08",
@@ -69,7 +69,7 @@ export const vehicles: Vehicle[] = [
     hours: 11260,
     lastService: "2026-04-18",
     serviceNotes:
-      "Weekly oil change, idle hours not mileage, multi-filter diesel — Cummins ISL",
+      "Weekly oil change, idle hours not mileage, multi-filter diesel - Cummins ISL",
   },
   {
     id: "VEH-CF304",
@@ -82,7 +82,7 @@ export const vehicles: Vehicle[] = [
     customerId: "CUST-CITY",
     mileage: 61240,
     lastService: "2026-05-14",
-    serviceNotes: "16ft dry box, lift gate — Maxon TE-20",
+    serviceNotes: "16ft dry box, lift gate - Maxon TE-20",
   },
   {
     id: "VEH-CF221",
@@ -123,7 +123,7 @@ export const vehicles: Vehicle[] = [
     mileage: 218430,
     lastService: "2026-05-10",
     serviceNotes:
-      "No labor guide available — AI labor times only. Cab from C6500, chassis modified, Allison 3000 swap",
+      "No labor guide available - AI labor times only. Cab from C6500, chassis modified, Allison 3000 swap",
     isFrankenstein: true,
   },
   {
@@ -191,7 +191,7 @@ export const vehicles: Vehicle[] = [
     lastService: "2026-05-02",
   },
 
-  // ===== WALK-IN RETAIL — passenger vehicles =====
+  // ===== WALK-IN RETAIL - passenger vehicles =====
   {
     id: "VEH-HOL-RAV4",
     unit: "Hollis · RAV4",

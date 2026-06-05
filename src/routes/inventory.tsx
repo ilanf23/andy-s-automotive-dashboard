@@ -45,8 +45,8 @@ function InventoryPage() {
   );
 
   const RETURNED_ITEMS = [
-    { partNumber: "BR-RTN-001", description: "Brake rotor — wrong size", vendor: "Worldpac", category: "Brakes", reason: "Wrong fitment", returnedAt: "May 18" },
-    { partNumber: "FL-RTN-114", description: "Oil filter — duplicate", vendor: "NAPA", category: "Filters", reason: "Duplicate order", returnedAt: "May 16" },
+    { partNumber: "BR-RTN-001", description: "Brake rotor - wrong size", vendor: "Worldpac", category: "Brakes", reason: "Wrong fitment", returnedAt: "May 18" },
+    { partNumber: "FL-RTN-114", description: "Oil filter - duplicate", vendor: "NAPA", category: "Filters", reason: "Duplicate order", returnedAt: "May 16" },
     { partNumber: "SP-RTN-220", description: "Spark plug set", vendor: "AutoZone", category: "Engine", reason: "Defective", returnedAt: "May 12" },
     { partNumber: "AB-RTN-309", description: "Air brake hose", vendor: "Worldpac", category: "Brakes", reason: "Cracked on arrival", returnedAt: "May 9" },
     { partNumber: "CB-RTN-401", description: "Cabin filter", vendor: "NAPA", category: "Filters", reason: "Wrong model", returnedAt: "May 4" },
@@ -125,7 +125,7 @@ function InventoryPage() {
             onClick={() => {
               toast.info("Scanning…");
               setTimeout(() => {
-                toast.success("Found: BR-4521 — Brake pad set");
+                toast.success("Found: BR-4521 - Brake pad set");
               }, 800);
             }}
             className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-xs font-medium hover:bg-surface"
@@ -137,7 +137,7 @@ function InventoryPage() {
             type="button"
             onClick={() =>
               toast.info("Parts Matrix", {
-                description: "Opening matrix view — coming soon",
+                description: "Opening matrix view - coming soon",
               })
             }
             className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-xs font-medium hover:bg-surface"
@@ -337,7 +337,7 @@ function ReceivePOModal({
           <button
             type="button"
             onClick={() => {
-              toast.success("PO received — 3 parts added to stock");
+              toast.success("PO received - 3 parts added to stock");
               onOpenChange(false);
             }}
             className="rounded-md bg-foreground px-3 py-1.5 text-xs font-semibold text-background hover:opacity-90"

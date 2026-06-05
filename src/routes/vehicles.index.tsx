@@ -64,7 +64,7 @@ function VehiclesIndex() {
 
   const handleSaveVehicle = () => {
     toast.success("Vehicle added", {
-      description: `${newYear || ""} ${newMake} ${newModel} — ${newVin}`.trim(),
+      description: `${newYear || ""} ${newMake} ${newModel} - ${newVin}`.trim(),
     });
     closeAddVehicle();
   };
@@ -81,7 +81,7 @@ function VehiclesIndex() {
       const c = custMap.get(v.customerId);
       return {
         ...v,
-        customer: c?.name ?? "—",
+        customer: c?.name ?? "-",
         customerType: c?.type ?? "Retail",
         openRO: openROMap.get(v.id),
         inShop: openROMap.has(v.id),
@@ -141,7 +141,7 @@ function VehiclesIndex() {
     <>
     <ListPageShell
       title="Vehicles"
-      description="All vehicles serviced — fleet and retail"
+      description="All vehicles serviced - fleet and retail"
       tabs={tabs}
       activeTabId={activeTab}
       onTabChange={(id) => setActiveTab(id as TabKey)}
@@ -242,7 +242,7 @@ function VehiclesIndex() {
                         #{v.openRO}
                       </span>
                     ) : (
-                      <span className="text-[10px] text-muted-foreground">—</span>
+                      <span className="text-[10px] text-muted-foreground">-</span>
                     )}
                   </td>
                 </TableRow>

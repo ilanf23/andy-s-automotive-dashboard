@@ -116,8 +116,8 @@ type UnscheduledItem = {
 };
 
 const INITIAL_UNSCHEDULED: UnscheduledItem[] = [
-  { id: "u1", customer: "Nguyen — Linh", vehicle: "2020 Honda Civic", type: "Oil change", note: "Drop-off Thu AM", priority: "Standard" },
-  { id: "u2", customer: "Peterson — Janelle", vehicle: "2017 Subaru Outback", type: "Diagnostic — check engine", priority: "Standard" },
+  { id: "u1", customer: "Nguyen - Linh", vehicle: "2020 Honda Civic", type: "Oil change", note: "Drop-off Thu AM", priority: "Standard" },
+  { id: "u2", customer: "Peterson - Janelle", vehicle: "2017 Subaru Outback", type: "Diagnostic - check engine", priority: "Standard" },
   { id: "u3", customer: "FSCJ", vehicle: "FSCJ-09 · F-350", type: "DOT inspection", priority: "Fleet" },
   { id: "u4", customer: "Reyes & Sons", vehicle: "2018 Ram 2500", type: "Brake service", priority: "Standard" },
 ];
@@ -139,7 +139,7 @@ function SchedulePage() {
   );
   const today = parseISO(TODAY_ISO);
 
-  // New Appointment modal — shared between header CTA, empty cells, unscheduled "+ Add"
+  // New Appointment modal - shared between header CTA, empty cells, unscheduled "+ Add"
   const [showNewAppt, setShowNewAppt] = useState(false);
   const [apptCustomer, setApptCustomer] = useState("");
   const [apptVin, setApptVin] = useState("");
@@ -168,14 +168,14 @@ function SchedulePage() {
 
   const handleCreateAppt = () => {
     toast.success("Appointment created", {
-      description: `${apptCustomer || "(no customer)"} — ${apptVin || "(no VIN)"} on ${apptDate} at ${apptTime}`,
+      description: `${apptCustomer || "(no customer)"} - ${apptVin || "(no VIN)"} on ${apptDate} at ${apptTime}`,
     });
     setShowNewAppt(false);
     setApptCustomer("");
     setApptVin("");
   };
 
-  // Local state — appointments and unscheduled queue (drag-and-drop mutates these)
+  // Local state - appointments and unscheduled queue (drag-and-drop mutates these)
   const [appts, setAppts] = useState<Appointment[]>(APPOINTMENTS);
   const [unscheduled, setUnscheduled] = useState<UnscheduledItem[]>(INITIAL_UNSCHEDULED);
   const [draggingItem, setDraggingItem] = useState<UnscheduledItem | null>(null);
@@ -305,7 +305,7 @@ function SchedulePage() {
             type="button"
             onClick={() =>
               toast.info("Schedule filters", {
-                description: "Tech / bay / status filters — coming soon",
+                description: "Tech / bay / status filters - coming soon",
               })
             }
             className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-xs font-medium hover:bg-surface"
@@ -399,7 +399,7 @@ function SchedulePage() {
             <ul className="divide-y divide-border">
               {unscheduled.length === 0 ? (
                 <li className="px-4 py-6 text-center text-[11px] text-muted-foreground">
-                  Nothing waiting — go grab a coffee
+                  Nothing waiting - go grab a coffee
                 </li>
               ) : (
                 unscheduled.map((u) => {
@@ -410,7 +410,7 @@ function SchedulePage() {
                       draggable
                       onClick={() =>
                         toast.info(u.customer, {
-                          description: "Edit unscheduled request — coming soon",
+                          description: "Edit unscheduled request - coming soon",
                         })
                       }
                       onDragStart={(e) => {
@@ -464,7 +464,7 @@ function SchedulePage() {
       </div>
 
       {/* ===================================================== */}
-      {/* New Appointment modal — inline overlay                */}
+      {/* New Appointment modal - inline overlay                */}
       {/* ===================================================== */}
       {showNewAppt && (
         <div
@@ -640,7 +640,7 @@ function SchedulePage() {
 }
 
 // ====================================================================
-// Day view — bays × time slots
+// Day view - bays × time slots
 // ====================================================================
 function DayView({
   todayApptsByBay,
@@ -702,7 +702,7 @@ function DayView({
             </div>
           ))}
 
-          {/* Bay cells — empty grid (drop targets) */}
+          {/* Bay cells - empty grid (drop targets) */}
           {HOURS.flatMap((h, hi) =>
             BAYS.map((b, bi) => {
               const isHovered =
@@ -815,7 +815,7 @@ function DayView({
 }
 
 // ====================================================================
-// Week view — techs × days
+// Week view - techs × days
 // ====================================================================
 function WeekView({
   techs,
@@ -964,7 +964,7 @@ function ListView({
                 <div className="text-[10px] text-muted-foreground">{a.unit}</div>
               </td>
               <td className="px-3 py-2.5 text-xs">#{a.ro}</td>
-              <td className="px-3 py-2.5 text-xs">{t?.name?.split(" ")[0] ?? "—"}</td>
+              <td className="px-3 py-2.5 text-xs">{t?.name?.split(" ")[0] ?? "-"}</td>
               <td className="px-3 py-2.5 text-xs">Bay {a.bay}</td>
               <td className="px-3 py-2.5">
                 <span className="rounded-full bg-surface px-2 py-0.5 text-[10px] font-semibold">

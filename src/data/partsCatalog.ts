@@ -44,7 +44,7 @@ export const partsCatalog: PartsCatalogEntry[] = [
   {
     id: "pc-001",
     partNumber: "BR-FL-FRT-001",
-    description: "Front brake pad set — heavy-duty steer axle",
+    description: "Front brake pad set - heavy-duty steer axle",
     category: "Brakes",
     vendor: "Bendix",
     unitPrice: 218,
@@ -56,7 +56,7 @@ export const partsCatalog: PartsCatalogEntry[] = [
   {
     id: "pc-002",
     partNumber: "BR-FL-FRT-002",
-    description: "Front brake pad set — premium long-life",
+    description: "Front brake pad set - premium long-life",
     category: "Brakes",
     vendor: "WorldPac",
     unitPrice: 248,
@@ -67,7 +67,7 @@ export const partsCatalog: PartsCatalogEntry[] = [
   {
     id: "pc-003",
     partNumber: "BR-FL-RR-003",
-    description: "Rear brake pad set — drive axle",
+    description: "Rear brake pad set - drive axle",
     category: "Brakes",
     vendor: "Bendix",
     unitPrice: 232,
@@ -78,7 +78,7 @@ export const partsCatalog: PartsCatalogEntry[] = [
   {
     id: "pc-004",
     partNumber: "BR-FL-RR-004",
-    description: "Rear brake pad set — severe-service formula",
+    description: "Rear brake pad set - severe-service formula",
     category: "Brakes",
     vendor: "WorldPac",
     unitPrice: 258,
@@ -101,7 +101,7 @@ export const partsCatalog: PartsCatalogEntry[] = [
   {
     id: "pc-006",
     partNumber: "BR-FLD-DOT4-006",
-    description: "Brake fluid DOT 4 — 5 gallon pail",
+    description: "Brake fluid DOT 4 - 5 gallon pail",
     category: "Brakes",
     vendor: "NAPA",
     unitPrice: 78,
@@ -112,7 +112,7 @@ export const partsCatalog: PartsCatalogEntry[] = [
   {
     id: "pc-007",
     partNumber: "BR-ABS-SNS-007",
-    description: "ABS wheel speed sensor — straight 90deg",
+    description: "ABS wheel speed sensor - straight 90deg",
     category: "Brakes",
     vendor: "Bendix",
     unitPrice: 64,
@@ -123,7 +123,7 @@ export const partsCatalog: PartsCatalogEntry[] = [
   {
     id: "pc-008",
     partNumber: "BR-HOSE-008",
-    description: "Air brake hose — 25 ft DOT-approved",
+    description: "Air brake hose - 25 ft DOT-approved",
     category: "Brakes",
     vendor: "WorldPac",
     unitPrice: 42,
@@ -136,7 +136,7 @@ export const partsCatalog: PartsCatalogEntry[] = [
   {
     id: "pc-009",
     partNumber: "FLT-OIL-CAT-009",
-    description: "Oil filter — Cat C15 / C13",
+    description: "Oil filter - Cat C15 / C13",
     category: "Filters",
     vendor: "Fleetguard",
     unitPrice: 38,
@@ -148,7 +148,7 @@ export const partsCatalog: PartsCatalogEntry[] = [
   {
     id: "pc-010",
     partNumber: "FLT-OIL-DD15-010",
-    description: "Oil filter — Detroit DD15 / DD13",
+    description: "Oil filter - Detroit DD15 / DD13",
     category: "Filters",
     vendor: "Detroit Diesel",
     unitPrice: 42,
@@ -160,7 +160,7 @@ export const partsCatalog: PartsCatalogEntry[] = [
   {
     id: "pc-011",
     partNumber: "FLT-AIR-CAS-011",
-    description: "Air filter — Cascadia primary",
+    description: "Air filter - Cascadia primary",
     category: "Filters",
     vendor: "Donaldson",
     unitPrice: 86,
@@ -196,7 +196,7 @@ export const partsCatalog: PartsCatalogEntry[] = [
   {
     id: "pc-014",
     partNumber: "OIL-15W40-CASE",
-    description: "Engine oil 15W-40 CK-4 — case (3 gal)",
+    description: "Engine oil 15W-40 CK-4 - case (3 gal)",
     category: "Fluids",
     vendor: "NAPA",
     unitPrice: 92,
@@ -207,7 +207,7 @@ export const partsCatalog: PartsCatalogEntry[] = [
   {
     id: "pc-015",
     partNumber: "ATF-MERCON-LV",
-    description: "ATF Mercon LV — case (4 gal)",
+    description: "ATF Mercon LV - case (4 gal)",
     category: "Fluids",
     vendor: "NAPA",
     unitPrice: 124,
@@ -218,7 +218,7 @@ export const partsCatalog: PartsCatalogEntry[] = [
   {
     id: "pc-016",
     partNumber: "COOL-ELC-5G",
-    description: "Coolant — extended-life (ELC) 5 gallon",
+    description: "Coolant - extended-life (ELC) 5 gallon",
     category: "Fluids",
     vendor: "WorldPac",
     unitPrice: 96,
@@ -229,7 +229,7 @@ export const partsCatalog: PartsCatalogEntry[] = [
   {
     id: "pc-017",
     partNumber: "DEF-2.5G",
-    description: "Diesel Exhaust Fluid — 2.5 gallon",
+    description: "Diesel Exhaust Fluid - 2.5 gallon",
     category: "Fluids",
     vendor: "NAPA",
     unitPrice: 18,
@@ -242,7 +242,7 @@ export const partsCatalog: PartsCatalogEntry[] = [
   {
     id: "pc-018",
     partNumber: "ENG-WP-CAT-018",
-    description: "Water pump — Cat C15",
+    description: "Water pump - Cat C15",
     category: "Engine",
     vendor: "WorldPac",
     unitPrice: 488,
@@ -253,7 +253,7 @@ export const partsCatalog: PartsCatalogEntry[] = [
   {
     id: "pc-019",
     partNumber: "ENG-WP-ISX-019",
-    description: "Water pump — Cummins ISX",
+    description: "Water pump - Cummins ISX",
     category: "Engine",
     vendor: "Cummins",
     unitPrice: 524,
@@ -275,7 +275,7 @@ export const partsCatalog: PartsCatalogEntry[] = [
   {
     id: "pc-021",
     partNumber: "ENG-STR-39MT",
-    description: "Starter motor — 39MT heavy-duty",
+    description: "Starter motor - 39MT heavy-duty",
     category: "Engine",
     vendor: "WorldPac",
     unitPrice: 486,
@@ -286,7 +286,7 @@ export const partsCatalog: PartsCatalogEntry[] = [
   {
     id: "pc-022",
     partNumber: "ENG-BELT-SERP",
-    description: "Serpentine belt — 8-rib HD",
+    description: "Serpentine belt - 8-rib HD",
     category: "Engine",
     vendor: "NAPA",
     unitPrice: 64,
@@ -297,7 +297,7 @@ export const partsCatalog: PartsCatalogEntry[] = [
   {
     id: "pc-023",
     partNumber: "ENG-RAD-HOSE-UP",
-    description: "Upper radiator hose — Cascadia",
+    description: "Upper radiator hose - Cascadia",
     category: "Engine",
     vendor: "WorldPac",
     unitPrice: 78,
@@ -311,7 +311,7 @@ export const partsCatalog: PartsCatalogEntry[] = [
   {
     id: "pc-024",
     partNumber: "EL-BAT-GRP31",
-    description: "Battery — Group 31 AGM 950CCA",
+    description: "Battery - Group 31 AGM 950CCA",
     category: "Electrical",
     vendor: "NAPA",
     unitPrice: 248,
@@ -322,7 +322,7 @@ export const partsCatalog: PartsCatalogEntry[] = [
   {
     id: "pc-025",
     partNumber: "EL-BAT-GRP4D",
-    description: "Battery — Group 4D flooded 1100CCA",
+    description: "Battery - Group 4D flooded 1100CCA",
     category: "Electrical",
     vendor: "NAPA",
     unitPrice: 282,
@@ -333,7 +333,7 @@ export const partsCatalog: PartsCatalogEntry[] = [
   {
     id: "pc-026",
     partNumber: "EL-HLP-HAL",
-    description: "Headlamp assembly — halogen",
+    description: "Headlamp assembly - halogen",
     category: "Electrical",
     vendor: "WorldPac",
     unitPrice: 168,
@@ -344,7 +344,7 @@ export const partsCatalog: PartsCatalogEntry[] = [
   {
     id: "pc-027",
     partNumber: "EL-HLP-LED",
-    description: "Headlamp assembly — full LED",
+    description: "Headlamp assembly - full LED",
     category: "Electrical",
     vendor: "WorldPac",
     unitPrice: 384,
@@ -357,7 +357,7 @@ export const partsCatalog: PartsCatalogEntry[] = [
   {
     id: "pc-028",
     partNumber: "HV-AC-COMP",
-    description: "A/C compressor — clutch-style HD",
+    description: "A/C compressor - clutch-style HD",
     category: "HVAC",
     vendor: "WorldPac",
     unitPrice: 528,
@@ -392,7 +392,7 @@ export const partsCatalog: PartsCatalogEntry[] = [
   {
     id: "pc-031",
     partNumber: "AT-DPF-KIT-DET",
-    description: "DPF service kit — Detroit DD15",
+    description: "DPF service kit - Detroit DD15",
     category: "Aftertreatment",
     vendor: "Detroit Diesel",
     unitPrice: 1840,
@@ -405,7 +405,7 @@ export const partsCatalog: PartsCatalogEntry[] = [
   {
     id: "pc-032",
     partNumber: "AT-EGR-COOL-CUM",
-    description: "EGR cooler — Cummins ISX",
+    description: "EGR cooler - Cummins ISX",
     category: "Aftertreatment",
     vendor: "Cummins",
     unitPrice: 1620,
@@ -416,7 +416,7 @@ export const partsCatalog: PartsCatalogEntry[] = [
   {
     id: "pc-033",
     partNumber: "AT-DEF-TNK-23G",
-    description: "DEF tank — 23 gallon with sensor + heater",
+    description: "DEF tank - 23 gallon with sensor + heater",
     category: "Aftertreatment",
     vendor: "WorldPac",
     unitPrice: 692,
@@ -427,7 +427,7 @@ export const partsCatalog: PartsCatalogEntry[] = [
   {
     id: "pc-034",
     partNumber: "AT-NOX-SNS",
-    description: "NOx sensor — inlet or outlet",
+    description: "NOx sensor - inlet or outlet",
     category: "Aftertreatment",
     vendor: "Cummins",
     unitPrice: 478,
@@ -440,7 +440,7 @@ export const partsCatalog: PartsCatalogEntry[] = [
   {
     id: "pc-035",
     partNumber: "SUS-AB-REAR",
-    description: "Air bag — rear suspension",
+    description: "Air bag - rear suspension",
     category: "Suspension",
     vendor: "WorldPac",
     unitPrice: 198,
@@ -462,7 +462,7 @@ export const partsCatalog: PartsCatalogEntry[] = [
   {
     id: "pc-037",
     partNumber: "SUS-SHK-HD",
-    description: "Shock absorber — heavy-duty (each)",
+    description: "Shock absorber - heavy-duty (each)",
     category: "Suspension",
     vendor: "NAPA",
     unitPrice: 88,
@@ -473,7 +473,7 @@ export const partsCatalog: PartsCatalogEntry[] = [
   {
     id: "pc-038",
     partNumber: "SUS-UBOLT-KIT",
-    description: "U-bolt kit — axle to leaf spring",
+    description: "U-bolt kit - axle to leaf spring",
     category: "Suspension",
     vendor: "WorldPac",
     unitPrice: 78,
@@ -484,7 +484,7 @@ export const partsCatalog: PartsCatalogEntry[] = [
   {
     id: "pc-039",
     partNumber: "SUS-KP-SET",
-    description: "Kingpin set with bushings — per side",
+    description: "Kingpin set with bushings - per side",
     category: "Suspension",
     vendor: "WorldPac",
     unitPrice: 312,
@@ -495,7 +495,7 @@ export const partsCatalog: PartsCatalogEntry[] = [
   {
     id: "pc-040",
     partNumber: "SUS-TRE",
-    description: "Tie rod end — heavy-duty",
+    description: "Tie rod end - heavy-duty",
     category: "Suspension",
     vendor: "NAPA",
     unitPrice: 124,

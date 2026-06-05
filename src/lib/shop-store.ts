@@ -46,7 +46,7 @@ export type AIBuilderRun = {
 export type ShopState = {
   repairOrders: RepairOrder[];
   payments: Payment[];
-  /** RO ids that were created in this session — used for "NEW" badges */
+  /** RO ids that were created in this session - used for "NEW" badges */
   newlyCreatedROs: Set<string>;
   /** AI-added estimate lines, indexed by RO id */
   aiLinesByRO: Map<string, AIEstimateLine[]>;
@@ -306,7 +306,7 @@ export function postRepairOrder(roId: string) {
 }
 
 // ============================================================================
-// Selectors (do not subscribe — call from inside components that already do)
+// Selectors (do not subscribe - call from inside components that already do)
 // ============================================================================
 
 export function selectRO(roId: string): RepairOrder | undefined {

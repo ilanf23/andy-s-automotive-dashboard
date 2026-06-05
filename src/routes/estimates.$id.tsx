@@ -244,7 +244,7 @@ function EstimateDetail() {
       backTo="/estimates"
       backLabel="All estimates"
       eyebrow={`ESTIMATE · CREATED ${format(parseISO(estimate.createdAt), "MMM d, yyyy 'AT' h:mm a").toUpperCase()}`}
-      title={`${estimate.id} — ${customer?.name ?? "Unknown"}`}
+      title={`${estimate.id} - ${customer?.name ?? "Unknown"}`}
       titleMeta={
         <div className="flex flex-wrap items-center gap-2">
           <span
@@ -383,12 +383,12 @@ function EstimateDetail() {
       }
       metaRow={
         <div className="grid grid-cols-2 gap-4 md:grid-cols-5">
-          <MetaPair label="Customer" value={customer?.name ?? "—"} />
-          <MetaPair label="Vehicle" value={vehicle?.unit ?? "—"} />
+          <MetaPair label="Customer" value={customer?.name ?? "-"} />
+          <MetaPair label="Vehicle" value={vehicle?.unit ?? "-"} />
           <MetaPair
             label="Y/M/M"
             value={
-              vehicle ? `${vehicle.year} ${vehicle.make} ${vehicle.model}` : "—"
+              vehicle ? `${vehicle.year} ${vehicle.make} ${vehicle.model}` : "-"
             }
           />
           <MetaPair
@@ -413,7 +413,7 @@ function EstimateDetail() {
             <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-[#991B1B]" />
             <div>
               <p className="text-sm font-semibold text-[#991B1B]">
-                5 inspection findings — only 1 on this estimate
+                5 inspection findings - only 1 on this estimate
               </p>
               <p className="mt-0.5 text-xs text-[#991B1B]/80">
                 4 unestimated items totaling ~$1,200 potential revenue
@@ -671,10 +671,10 @@ function LinesTab({
                       )}
                     </td>
                     <td className="px-3 py-2.5 align-top font-mono text-[10px] text-muted-foreground">
-                      {li.partNumber ?? "—"}
+                      {li.partNumber ?? "-"}
                     </td>
                     <td className="px-3 py-2.5 align-top text-[11px] text-muted-foreground">
-                      {li.vendor ?? "—"}
+                      {li.vendor ?? "-"}
                     </td>
                     <td className="px-3 py-2.5 text-right align-top">
                       <input
@@ -763,9 +763,9 @@ function LinesTab({
                   </span>
                 </td>
                 <td className="px-3 py-2.5 align-top font-mono text-[10px] text-muted-foreground">
-                  {line.partNumber ?? "—"}
+                  {line.partNumber ?? "-"}
                 </td>
-                <td className="px-3 py-2.5 align-top text-[11px] text-muted-foreground">—</td>
+                <td className="px-3 py-2.5 align-top text-[11px] text-muted-foreground">-</td>
                 <td className="px-3 py-2.5 text-right align-top tabular-nums text-xs">
                   {line.qty}
                 </td>
@@ -1177,7 +1177,7 @@ function SendEstimateModal({
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               rows={3}
-              placeholder="Hi — your estimate is ready for review."
+              placeholder="Hi - your estimate is ready for review."
               className="mt-1 w-full rounded-md border border-border bg-background px-2.5 py-1.5 text-xs"
             />
           </div>
@@ -1430,7 +1430,7 @@ function AddLineModal({
         setDescription(entry.description);
         setPartNumber(entry.partNumber);
         setQty(1);
-        // Price stored as cents in this modal — convert dollars → cents.
+        // Price stored as cents in this modal - convert dollars → cents.
         setPartPrice(entry.unitPrice * 100);
         toast.success(`Loaded ${entry.partNumber}`);
       }}

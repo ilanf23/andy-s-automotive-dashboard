@@ -40,7 +40,7 @@ const HEALTH_META: Record<
 };
 
 // ============================================================================
-// Inline badge — small chip for customer list / RO header
+// Inline badge - small chip for customer list / RO header
 // ============================================================================
 
 export function HealthBadge({ status }: { status: HealthStatus }) {
@@ -60,7 +60,7 @@ export function HealthBadge({ status }: { status: HealthStatus }) {
 }
 
 // ============================================================================
-// Customer detail widget — shows score + reasoning + actions
+// Customer detail widget - shows score + reasoning + actions
 // ============================================================================
 
 export type HealthDetail = {
@@ -172,7 +172,7 @@ export function CustomerHealthCard({
 }
 
 // ============================================================================
-// Dashboard widget — at-risk customers panel
+// Dashboard widget - at-risk customers panel
 // ============================================================================
 
 export type AtRiskCustomer = {
@@ -189,7 +189,7 @@ const HERO_AT_RISK: AtRiskCustomer[] = [
     customerId: "CUST-DUCKS",
     name: "Reliable Ducks",
     status: "declining",
-    signal: "Last visit 5 weeks ago — normal cadence is 2 weeks",
+    signal: "Last visit 5 weeks ago - normal cadence is 2 weeks",
     daysSinceVisit: 35,
     suggestedAction: "Send check-in SMS",
   },
@@ -276,14 +276,14 @@ export function getHealthDetail(customerId: string): HealthDetail {
         { label: "Lifetime spend", weight: "positive", detail: "$1.05M · top customer" },
       ],
       recommendation:
-        "Offer a PM subscription plan — this customer is a strong candidate for $500-700/mo recurring per truck.",
+        "Offer a PM subscription plan - this customer is a strong candidate for $500-700/mo recurring per truck.",
       suggestedOutreach: "Pitch PM subscription",
     },
     "CUST-CITY": {
       status: "champion",
       score: 88,
       signals: [
-        { label: "Visit cadence", weight: "positive", detail: "Steady — every 3 weeks on average" },
+        { label: "Visit cadence", weight: "positive", detail: "Steady - every 3 weeks on average" },
         { label: "Estimate approval", weight: "positive", detail: "89% approval rate" },
         { label: "Payments", weight: "neutral", detail: "Net-30, occasionally late by 5-10 days" },
         { label: "Lifetime spend", weight: "positive", detail: "$1.02M" },
@@ -294,7 +294,7 @@ export function getHealthDetail(customerId: string): HealthDetail {
       status: "declining",
       score: 52,
       signals: [
-        { label: "Visit cadence", weight: "negative", detail: "Last visit 35 days ago — normal is 14 days" },
+        { label: "Visit cadence", weight: "negative", detail: "Last visit 35 days ago - normal is 14 days" },
         { label: "Estimate approval", weight: "neutral", detail: "Dropped from 91% to 76% this quarter" },
         { label: "Payments", weight: "positive", detail: "Always pays on time" },
         { label: "Fleet platform signal", weight: "negative", detail: "Enterprise opened 2 estimates with competitors recently" },
@@ -307,7 +307,7 @@ export function getHealthDetail(customerId: string): HealthDetail {
       status: "declining",
       score: 58,
       signals: [
-        { label: "Estimate approval", weight: "negative", detail: "92% → 64% this quarter — they're declining work" },
+        { label: "Estimate approval", weight: "negative", detail: "92% → 64% this quarter - they're declining work" },
         { label: "ARO", weight: "negative", detail: "Average RO dropped from $1,840 to $980" },
         { label: "Payments", weight: "positive", detail: "Net-30, on time" },
         { label: "Visits", weight: "neutral", detail: "Same cadence, but smaller scope" },
@@ -321,12 +321,12 @@ export function getHealthDetail(customerId: string): HealthDetail {
       score: 18,
       signals: [
         { label: "Open balance", weight: "negative", detail: "$17,000 past due 185 days" },
-        { label: "Communication", weight: "negative", detail: "Last reply from Vince was Feb — radio silence since" },
+        { label: "Communication", weight: "negative", detail: "Last reply from Vince was Feb - radio silence since" },
         { label: "Visits", weight: "negative", detail: "Zero visits in 6 months" },
         { label: "Truck status", weight: "negative", detail: "Vince reported his crew was let go" },
       ],
       recommendation:
-        "Approve mechanic's lien filing. Customer has effectively churned — collecting the debt is the focus, not retention.",
+        "Approve mechanic's lien filing. Customer has effectively churned - collecting the debt is the focus, not retention.",
       suggestedOutreach: "Approve lien filing",
     },
   };
@@ -338,7 +338,7 @@ export function getHealthDetail(customerId: string): HealthDetail {
         { label: "New customer", weight: "neutral", detail: "Not enough history for full assessment" },
         { label: "Visit cadence", weight: "positive", detail: "On track" },
       ],
-      recommendation: "Continue normal service relationship — too early for tailored actions.",
+      recommendation: "Continue normal service relationship - too early for tailored actions.",
     }
   );
 }

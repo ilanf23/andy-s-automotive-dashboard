@@ -34,7 +34,7 @@ export const Route = createFileRoute("/")({
 });
 
 // ============================================================================
-// HomePage — Andy's ATS marketing site (motion-rich, dark navy + gold)
+// HomePage - Andy's ATS marketing site (motion-rich, dark navy + gold)
 // ============================================================================
 
 function HomePage() {
@@ -94,7 +94,7 @@ function Hero() {
 
   return (
     <section className="relative overflow-hidden bg-[var(--mkt-paper-soft)] text-white">
-      {/* Two photos flanking the panel — left + right */}
+      {/* Two photos flanking the panel - left + right */}
       <div className="absolute inset-0 grid grid-cols-2" aria-hidden>
         <div className="relative h-full overflow-hidden">
           {HERO_IMAGES.map((img, i) => (
@@ -156,14 +156,14 @@ function Hero() {
             />
 
             <div className="relative overflow-hidden rounded-2xl bg-[var(--mkt-ink)] px-[2.3rem] py-[2.875rem] text-center shadow-[0_34px_104px_-23px_rgba(10,10,10,0.6)] md:px-[5.2rem] md:py-[3.8rem]">
-              {/* Faint gold corner accents */}
+              {/* Corner accents — yellow hint on red-dominant hero */}
               <span className="pointer-events-none absolute left-0 top-0 h-14 w-14">
-                <span className="absolute left-0 top-0 h-px w-14 bg-[var(--mkt-gold)]/60" />
-                <span className="absolute left-0 top-0 h-14 w-px bg-[var(--mkt-gold)]/60" />
+                <span className="absolute left-0 top-0 h-px w-14 bg-[var(--mkt-yellow)]/70" />
+                <span className="absolute left-0 top-0 h-14 w-px bg-[var(--mkt-yellow)]/70" />
               </span>
               <span className="pointer-events-none absolute bottom-0 right-0 h-14 w-14">
-                <span className="absolute bottom-0 right-0 h-px w-14 bg-[var(--mkt-gold)]/60" />
-                <span className="absolute bottom-0 right-0 h-14 w-px bg-[var(--mkt-gold)]/60" />
+                <span className="absolute bottom-0 right-0 h-px w-14 bg-[var(--mkt-yellow)]/70" />
+                <span className="absolute bottom-0 right-0 h-14 w-px bg-[var(--mkt-yellow)]/70" />
               </span>
 
               <Reveal>
@@ -175,7 +175,13 @@ function Hero() {
               <Reveal delay={120}>
                 <h1 className="mkt-display mx-auto mt-[2.0125rem] max-w-[36.8rem] text-[2.6rem] leading-[1.05] text-white md:text-[4.3rem]">
                   When a truck is{" "}
-                  <span className="italic text-[var(--mkt-gold)]">down,</span>
+                  <span className="relative inline-block italic text-[var(--mkt-gold)]">
+                    down,
+                    <span
+                      aria-hidden
+                      className="pointer-events-none absolute inset-x-0 -bottom-1 h-[3px] bg-[var(--mkt-yellow)]/80"
+                    />
+                  </span>
                   <br />
                   our commitment can't be.
                 </h1>
@@ -183,7 +189,7 @@ function Hero() {
 
               <Reveal delay={220}>
                 <p className="mx-auto mt-[2.0125rem] max-w-[27.6rem] text-[16px] leading-relaxed text-white/75 md:text-[18.4px]">
-                  At Andy's, we keep mobile fleets moving — pickup, drop-off,
+                  At Andy's, we keep mobile fleets moving - pickup, drop-off,
                   on-site, and after-hours service for businesses running 3 to
                   20 vehicles. Your trucks stay on the road during your hours,
                   because that's when they make you money.
@@ -245,7 +251,7 @@ function Hero() {
 }
 
 // ----------------------------------------------------------------------------
-// Stats bar — large animated counters
+// Stats bar - large animated counters
 // ----------------------------------------------------------------------------
 
 function StatsBar() {
@@ -262,7 +268,7 @@ function StatsBar() {
   ];
   return (
     <section className="relative overflow-hidden bg-white py-14 md:py-20">
-      {/* Background — subtle radial accent */}
+      {/* Background - subtle radial accent */}
       <div
         className="pointer-events-none absolute inset-0"
         style={{
@@ -273,10 +279,11 @@ function StatsBar() {
 
       <div className="relative mx-auto max-w-7xl px-4 md:px-6">
         <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-12">
-          {/* Header — compact, left-aligned on desktop */}
+          {/* Header - compact, left-aligned on desktop */}
           <div className="lg:col-span-4">
             <Reveal>
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--mkt-gold)]">
+              <span className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--mkt-gold)]">
+                <span aria-hidden className="h-2 w-2 rounded-full bg-[var(--mkt-yellow)]" />
                 By the numbers
               </span>
             </Reveal>
@@ -288,7 +295,7 @@ function StatsBar() {
             </Reveal>
           </div>
 
-          {/* Stats — inline row with hairline dividers */}
+          {/* Stats - inline row with hairline dividers */}
           <div className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-[var(--mkt-border-light)] bg-[var(--mkt-border-light)] lg:col-span-8 lg:grid-cols-4">
             {stats.map((s, i) => (
               <Reveal
@@ -321,7 +328,7 @@ function StatsBar() {
 }
 
 // ----------------------------------------------------------------------------
-// Trust marquee — industries served
+// Trust marquee - industries served
 // ----------------------------------------------------------------------------
 
 function TrustMarquee() {
@@ -345,8 +352,10 @@ function TrustMarquee() {
     <section className="bg-white py-14">
       <div className="mx-auto max-w-7xl px-4 md:px-6">
         <Reveal>
-          <p className="text-center text-[10px] font-black uppercase tracking-[0.2em] text-[var(--mkt-text-on-light-muted)]">
+          <p className="flex items-center justify-center gap-2 text-center text-[10px] font-black uppercase tracking-[0.2em] text-[var(--mkt-text-on-light-muted)]">
+            <span aria-hidden className="h-px w-6 bg-[var(--mkt-yellow)]/80" />
             Trusted by fleets in 13+ industries
+            <span aria-hidden className="h-px w-6 bg-[var(--mkt-yellow)]/80" />
           </p>
         </Reveal>
       </div>
@@ -366,7 +375,7 @@ function TrustMarquee() {
 }
 
 // ----------------------------------------------------------------------------
-// About Us video — large branded image
+// About Us video - large branded image
 // ----------------------------------------------------------------------------
 
 function AboutUsVideo() {
@@ -375,7 +384,8 @@ function AboutUsVideo() {
       <div className="mx-auto max-w-5xl px-4 md:px-6">
         <div className="text-center">
           <Reveal>
-            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--mkt-gold-deep)]">
+            <span className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--mkt-gold-deep)]">
+              <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-[var(--mkt-yellow)]" />
               Meet Andy's
             </span>
           </Reveal>
@@ -391,7 +401,7 @@ function AboutUsVideo() {
             type="button"
             onClick={() =>
               toast.info("Video player", {
-                description: "Demo video — coming soon",
+                description: "Demo video - coming soon",
               })
             }
             className="group relative mt-10 block w-full cursor-pointer overflow-hidden rounded-2xl border border-[var(--mkt-border-light)] shadow-[0_18px_50px_-20px_rgba(10,10,10,0.35)] transition-transform duration-500 hover:scale-[1.01]"
@@ -399,7 +409,7 @@ function AboutUsVideo() {
           >
             <img
               src="/images/about-us-video.png"
-              alt="Andy's Auto & Truck Services — about us"
+              alt="Andy's Auto & Truck Services - about us"
               className="block h-auto w-full"
             />
             <span className="pointer-events-none absolute inset-0 flex items-center justify-center">
@@ -419,7 +429,7 @@ function AboutUsVideo() {
 }
 
 // ----------------------------------------------------------------------------
-// About section — "We aim to keep your vehicles on the road"
+// About section - "We aim to keep your vehicles on the road"
 // ----------------------------------------------------------------------------
 
 type AboutCapability = {
@@ -455,7 +465,7 @@ const ABOUT_CAPABILITIES: AboutCapability[] = [
   {
     key: "parts",
     icon: PackageCheck,
-    label: "NAPA-affiliated — quality parts, real warranty",
+    label: "NAPA-affiliated - quality parts, real warranty",
     subtitle: "Every part traceable. Every job covered.",
     preview: () => <PreviewParts />,
   },
@@ -533,7 +543,7 @@ function AboutSection() {
                   </div>
                 </div>
 
-                {/* Mini-UI — swaps per active tab */}
+                {/* Mini-UI - swaps per active tab */}
                 <div
                   key={active.key}
                   className="relative bg-white px-5 pb-6 pt-5 md:px-6 md:pb-7"
@@ -596,7 +606,8 @@ function AboutSection() {
           {/* Copy + interactive tabs */}
           <div>
             <Reveal>
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--mkt-gold-deep)]">
+              <span className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--mkt-gold-deep)]">
+                <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-[var(--mkt-yellow)]" />
                 Why Andy's
               </span>
             </Reveal>
@@ -613,7 +624,7 @@ function AboutSection() {
             </Reveal>
             <Reveal delay={200}>
               <p className="mt-6 max-w-xl text-base leading-relaxed text-[var(--mkt-text-on-light-muted)] md:text-lg">
-                Tap any capability below to see how we run it — live dispatch,
+                Tap any capability below to see how we run it - live dispatch,
                 pickup logistics, after-hours coverage, NAPA-grade parts, and
                 photo-backed estimates.
               </p>
@@ -689,7 +700,7 @@ function AboutSection() {
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </Link>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--mkt-text-on-light-muted)]">
-                  {paused ? "Paused — tap any tab" : "Auto-rotating · tap to pin"}
+                  {paused ? "Paused - tap any tab" : "Auto-rotating · tap to pin"}
                 </span>
               </div>
             </Reveal>
@@ -1005,7 +1016,7 @@ function PreviewEstimate() {
         type="button"
         onClick={() => {
           toast.success("Estimate approved", {
-            description: "Work order created — RO #4847",
+            description: "Work order created - RO #4847",
           });
           navigate({ to: "/estimates/EST-4847" });
         }}
@@ -1019,27 +1030,27 @@ function PreviewEstimate() {
 }
 
 // ----------------------------------------------------------------------------
-// Values section — Safety, Transparency, Partnership
+// Values section - Safety, Transparency, Partnership
 // ----------------------------------------------------------------------------
 
 const VALUES = [
   {
     icon: Shield,
     label: "Safety",
-    title: "Safety isn't a checkbox — it's the foundation.",
+    title: "Safety isn't a checkbox - it's the foundation.",
     body: "Every wrench turn ends with a vehicle that's safe for your driver, your team, and everyone sharing the road. We don't pass a vehicle until we'd put our own family in it.",
   },
   {
     icon: Eye,
     label: "Transparency",
-    title: "We educate — not upsell.",
+    title: "We educate - not upsell.",
     body: "Most shops fix the problem and move on. We tell you what's wrong, why it happened, and what could happen if you skip the work. The estimate is the conversation, not a surprise.",
   },
   {
     icon: Handshake,
     label: "Partnership",
     title: "When your truck rolls by, we say 'that's ours.'",
-    body: "We don't see customers — we see partners. Your fleet's uptime is our scoreboard. When you grow, we grow. When you call after-hours, we answer.",
+    body: "We don't see customers - we see partners. Your fleet's uptime is our scoreboard. When you grow, we grow. When you call after-hours, we answer.",
   },
 ];
 
@@ -1049,8 +1060,10 @@ function ValuesSection() {
       <div className="mx-auto max-w-7xl px-4 md:px-6">
         <div className="text-center">
           <Reveal>
-            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--mkt-gold)]">
+            <span className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--mkt-gold)]">
+              <span aria-hidden className="h-px w-6 bg-[var(--mkt-yellow)]/80" />
               What we won't compromise on
+              <span aria-hidden className="h-px w-6 bg-[var(--mkt-yellow)]/80" />
             </span>
           </Reveal>
           <Reveal delay={100}>
@@ -1103,7 +1116,7 @@ function ValuesSection() {
             />
             <blockquote className="mkt-display mt-6 text-2xl leading-tight text-white md:text-3xl">
               Our passion is to empower the business owner to focus on their
-              end client — and not let maintenance be a distraction from that.
+              end client - and not let maintenance be a distraction from that.
             </blockquote>
             <figcaption className="mt-6 text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--mkt-gold)]">
               Andy Andrews · Co-founder
@@ -1116,7 +1129,7 @@ function ValuesSection() {
 }
 
 // ----------------------------------------------------------------------------
-// Services preview — 6 service cards
+// Services preview - 6 service cards
 // ----------------------------------------------------------------------------
 
 const SERVICES = [
@@ -1159,7 +1172,8 @@ function ServicesPreview() {
         <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
           <div>
             <Reveal>
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--mkt-gold-deep)]">
+              <span className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--mkt-gold-deep)]">
+                <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-[var(--mkt-yellow)]" />
                 What we do
               </span>
             </Reveal>
@@ -1262,6 +1276,78 @@ function Testimonials() {
         className="pointer-events-none absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-white/70 to-transparent"
       />
 
+      <div className="relative mx-auto max-w-7xl px-4 md:px-6">
+        <div className="text-center">
+          <Reveal>
+            <div className="inline-flex items-center gap-2 rounded-full border border-[var(--mkt-gold)]/30 bg-[var(--mkt-gold)]/10 px-3 py-1.5">
+              <Star className="h-3 w-3 fill-[var(--mkt-yellow)] text-[var(--mkt-yellow)]" />
+              <span className="text-[10px] font-black uppercase tracking-[0.18em] text-[var(--mkt-gold)]">
+                5.0 · 25+ Google reviews
+              </span>
+            </div>
+          </Reveal>
+          <Reveal delay={100}>
+            <h2 className="mkt-display mt-5 text-4xl md:text-5xl">
+              Real fleet owners.
+              <br />
+              <span className="text-[var(--mkt-gold)]">Real reviews.</span>
+            </h2>
+          </Reveal>
+        </div>
+
+        <div className="mt-14 grid grid-cols-1 gap-5 md:grid-cols-2">
+          {TESTIMONIALS.map((t, i) => (
+            <Reveal key={t.author} delay={i * 100}>
+              <figure className="group flex h-full flex-col rounded-2xl border border-[var(--mkt-border-light)] bg-white p-7 transition-all duration-500 hover:-translate-y-1 hover:border-[var(--mkt-gold)]/40 hover:shadow-lg">
+                <div className="flex items-center justify-between">
+                  <Quote
+                    className="h-8 w-8 text-[var(--mkt-gold)]"
+                    strokeWidth={1.5}
+                  />
+                  <div className="flex gap-0.5">
+                    {[1, 2, 3, 4, 5].map((s) => (
+                      <Star
+                        key={s}
+                        className="h-3.5 w-3.5 fill-[var(--mkt-yellow)] text-[var(--mkt-yellow)]"
+                      />
+                    ))}
+                  </div>
+                </div>
+                <blockquote className="mt-6 flex-1 text-base leading-relaxed text-[var(--mkt-ink)]/85">
+                  "{t.quote}"
+                </blockquote>
+                <figcaption className="mt-6 flex items-center gap-3 border-t border-[var(--mkt-border-light)] pt-5">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[var(--mkt-gold)] text-sm font-black text-white">
+                    {t.author
+                      .split(" ")
+                      .map((w) => w[0])
+                      .slice(0, 2)
+                      .join("")}
+                  </div>
+                  <div>
+                    <div className="text-sm font-black text-[var(--mkt-ink)]">{t.author}</div>
+                    <div className="text-[11px] text-[var(--mkt-text-on-light-muted)]">{t.role}</div>
+                  </div>
+                </figcaption>
+              </figure>
+            </Reveal>
+          ))}
+        </div>
+
+        <Reveal delay={400}>
+          <div className="mt-12 text-center">
+            <a
+              href="https://goo.gl/maps/s1Bk7rNLzCFT978s9"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group inline-flex items-center gap-2 text-sm font-black uppercase tracking-wider text-[var(--mkt-gold)] hover:text-[var(--mkt-ink)]"
+            >
+              Read all Google reviews
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </a>
+          </div>
+        </Reveal>
+      </div>
     </section>
   );
 }
@@ -1274,7 +1360,7 @@ const FAQS = [
   {
     tag: "The fit",
     q: "What types of businesses typically work with Andy's?",
-    a: "Fleets of 3 to 20 vehicles is our sweet spot. Most customers are in HVAC, landscape, pest control, construction, pool service, delivery, security, medical, school / government, moving, custodial, plumbing, and food service. If your business doesn't fit that list — call us anyway.",
+    a: "Fleets of 3 to 20 vehicles is our sweet spot. Most customers are in HVAC, landscape, pest control, construction, pool service, delivery, security, medical, school / government, moving, custodial, plumbing, and food service. If your business doesn't fit that list - call us anyway.",
   },
   {
     tag: "The math",
@@ -1284,7 +1370,7 @@ const FAQS = [
   {
     tag: "The difference",
     q: "How is Andy's different from other fleet maintenance providers?",
-    a: "Two things. We come to you — most shops force you to deliver. And we don't rotate the technician working on your fleet. The same team services your trucks every time, so they actually learn your vehicles, your modifications, and your preferences.",
+    a: "Two things. We come to you - most shops force you to deliver. And we don't rotate the technician working on your fleet. The same team services your trucks every time, so they actually learn your vehicles, your modifications, and your preferences.",
   },
   {
     tag: "The people",
@@ -1331,12 +1417,12 @@ function FAQSection() {
         <Reveal>
           <div className="text-center">
             <div className="inline-flex items-center gap-3">
-              <span className="h-px w-10 bg-[var(--mkt-gold)]" />
+              <span className="h-px w-10 bg-gradient-to-r from-[var(--mkt-yellow)] to-[var(--mkt-gold)]" />
               <span className="inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-[0.25em] text-[var(--mkt-gold-deep)]">
                 <Sparkles className="h-3 w-3" />
                 Frequently asked
               </span>
-              <span className="h-px w-10 bg-[var(--mkt-gold)]" />
+              <span className="h-px w-10 bg-gradient-to-l from-[var(--mkt-yellow)] to-[var(--mkt-gold)]" />
             </div>
             <h2 className="mkt-display mt-4 text-4xl text-[var(--mkt-ink)] md:text-6xl">
               The honest{" "}
@@ -1481,6 +1567,12 @@ function FinalCTA() {
         }}
       />
       <div className="relative mx-auto max-w-7xl px-4 text-center md:px-6">
+        <Reveal>
+          <span
+            aria-hidden
+            className="mx-auto mb-5 block h-1 w-12 rounded-full bg-[var(--mkt-yellow)]"
+          />
+        </Reveal>
         <Reveal>
           <h2 className="mkt-display text-4xl text-[var(--mkt-ink)] md:text-6xl">
             Ready to put us

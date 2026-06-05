@@ -513,7 +513,7 @@ function EmployeesPanel() {
 
 function NotificationsPanel() {
   return (
-    <Panel title="Notifications" description="What gets sent automatically — and to whom">
+    <Panel title="Notifications" description="What gets sent automatically - and to whom">
       <div className="divide-y divide-border">
         <Toggle
           label="SMS estimate to customer"
@@ -575,7 +575,7 @@ function IntegrationsPanel() {
               <code className="rounded bg-surface px-1 py-0.5 font-mono text-[10px]">
                 OPENAI_API_KEY
               </code>{" "}
-              (.env.local) — server-managed, never exposed to the client.
+              (.env.local) - server-managed, never exposed to the client.
             </p>
           </div>
           <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-success/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-success">
@@ -644,7 +644,7 @@ function PaymentsPanel() {
       <div className="mt-4 border-t border-border pt-4">
         <button
           type="button"
-          onClick={() => toast.info("Add payment method — coming soon")}
+          onClick={() => toast.info("Add payment method - coming soon")}
           className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-xs font-medium hover:bg-surface"
         >
           <Plus className="h-3 w-3" />
@@ -666,7 +666,7 @@ function SecurityPanel() {
           </p>
           <button
             type="button"
-            onClick={() => toast.info("2FA setup — coming soon")}
+            onClick={() => toast.info("2FA setup - coming soon")}
             className="mt-2 inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1 text-[11px] font-medium hover:bg-surface"
           >
             <Shield className="h-3 w-3" />
@@ -700,7 +700,7 @@ function SecurityPanel() {
           </p>
           <button
             type="button"
-            onClick={() => toast.info("Audit log — coming soon")}
+            onClick={() => toast.info("Audit log - coming soon")}
             className="mt-2 inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1 text-[11px] font-medium hover:bg-surface"
           >
             View log
@@ -722,7 +722,7 @@ function BillingPanel() {
       <div className="rounded-md border border-accent/40 bg-accent/10 p-4">
         <div className="flex items-center justify-between">
           <div>
-            <div className="text-sm font-bold">Andy's OS — Heavy Duty Plan</div>
+            <div className="text-sm font-bold">Andy's OS - Heavy Duty Plan</div>
             <div className="mt-0.5 text-[11px] text-muted-foreground">
               5 service advisors · unlimited techs · AI features included
             </div>
@@ -740,7 +740,7 @@ function BillingPanel() {
         <div className="mt-3 border-t border-accent/30 pt-3">
           <button
             type="button"
-            onClick={() => toast.info("Plan management — coming soon")}
+            onClick={() => toast.info("Plan management - coming soon")}
             className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-xs font-medium hover:bg-surface"
           >
             Update plan

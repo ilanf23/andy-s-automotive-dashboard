@@ -43,7 +43,7 @@ const ISSUES: Issue[] = [
     icon: Clock,
     title: "Labor 28% below shop average",
     detail: "Front brake job estimated at 2.5 hrs. Your shop's average for this job on E-450 ambulances is 4.1 hrs (last 4 jobs).",
-    suggestion: "Likely missing the rotor turn — check if rotors were inspected. Should probably be 4.0 hrs.",
+    suggestion: "Likely missing the rotor turn - check if rotors were inspected. Should probably be 4.0 hrs.",
   },
   {
     id: "i3",
@@ -105,7 +105,7 @@ export function PreROQualityCheckModal({ open, onOpenChange, roId }: Props) {
     toast.success(`RO #${roId} posted`, {
       description:
         unresolvedHigh.length > 0
-          ? `Posted with ${unresolvedHigh.length} unresolved issue${unresolvedHigh.length === 1 ? "" : "s"} — review recommended`
+          ? `Posted with ${unresolvedHigh.length} unresolved issue${unresolvedHigh.length === 1 ? "" : "s"} - review recommended`
           : "Clean audit · posted to A/R",
     });
     onOpenChange(false);
@@ -156,7 +156,7 @@ export function PreROQualityCheckModal({ open, onOpenChange, roId }: Props) {
               )}
             >
               <CheckCircle className="h-3 w-3" />
-              {unresolvedHigh.length === 0 ? "Post — all clear" : "Post anyway"}
+              {unresolvedHigh.length === 0 ? "Post - all clear" : "Post anyway"}
             </button>
           </>
         ) : null

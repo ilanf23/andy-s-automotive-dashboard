@@ -11,20 +11,20 @@ export type InspectionTemplate = {
 };
 
 const dvi37Items: InspectionTemplateItem[] = [
-  { category: "Lights", name: "Headlights — low/high beam" },
+  { category: "Lights", name: "Headlights - low/high beam" },
   { category: "Lights", name: "Brake lights" },
   { category: "Lights", name: "Turn signals (all corners)" },
   { category: "Lights", name: "Marker lights" },
   { category: "Lights", name: "Emergency / hazard lighting" },
 
-  { category: "Tires", name: "Front tires — tread depth" },
-  { category: "Tires", name: "Rear tires — tread depth" },
+  { category: "Tires", name: "Front tires - tread depth" },
+  { category: "Tires", name: "Rear tires - tread depth" },
   { category: "Tires", name: "Tire pressure (all positions)" },
   { category: "Tires", name: "Spare tire condition" },
 
-  { category: "Brakes", name: "Brake pads — front" },
-  { category: "Brakes", name: "Brake pads — rear" },
-  { category: "Brakes", name: "Brake rotors — front" },
+  { category: "Brakes", name: "Brake pads - front" },
+  { category: "Brakes", name: "Brake pads - rear" },
+  { category: "Brakes", name: "Brake rotors - front" },
   { category: "Brakes", name: "Brake fluid" },
 
   { category: "Fluids", name: "Engine oil (level & condition)" },

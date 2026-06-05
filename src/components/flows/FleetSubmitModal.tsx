@@ -13,7 +13,7 @@ import { AIThinkingPanel, SourcePill, AIBubble } from "@/components/ai/AIPrimiti
 type Phase = "preview" | "mapping" | "submitting" | "success";
 
 const MAPPING = [
-  { ours: "Front brake job — pads + rotor turn", theirs: "Brake Service · BR-001 · category 14", note: "Auto-mapped from job code" },
+  { ours: "Front brake job - pads + rotor turn", theirs: "Brake Service · BR-001 · category 14", note: "Auto-mapped from job code" },
   { ours: "Driver-side rear marker light LED", theirs: "Lighting Repair · LT-007 · category 22", note: "Matches Whelen Vertex SKU" },
   { ours: "Cabin air filter replacement", theirs: "Preventive Maintenance · PM-CAB · category 9", note: "Standard PM line" },
   { ours: "Rear ABS sensor (LH)", theirs: "Electrical · EL-022 · category 18", note: "Mapped by part class" },
@@ -70,7 +70,7 @@ export function FleetSubmitModal({
     if (phase !== "success") return;
     const t = setTimeout(() => {
       toast.success(`${estimateId} submitted to ${platform}`, {
-        description: "Med Trust dispatch notified — awaiting fleet manager approval",
+        description: "Med Trust dispatch notified - awaiting fleet manager approval",
       });
       onOpenChange(false);
     }, 1500);
@@ -193,7 +193,7 @@ export function FleetSubmitModal({
                   Med Trust's negotiated rate applied: $138/hr (vs your shop default $148/hr)
                 </p>
                 <p className="mt-0.5 text-[10px] text-brand-green-soft/80">
-                  This is the rate on their master service agreement. AI applied automatically — no manual override needed.
+                  This is the rate on their master service agreement. AI applied automatically - no manual override needed.
                 </p>
               </div>
             </div>

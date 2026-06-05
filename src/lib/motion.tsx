@@ -9,7 +9,7 @@ import {
 import clsx from "clsx";
 
 // ============================================================================
-// useScrollReveal — fade + slide in when element enters viewport
+// useScrollReveal - fade + slide in when element enters viewport
 // ============================================================================
 
 export function useScrollReveal(options?: {
@@ -47,7 +47,7 @@ export function useScrollReveal(options?: {
 }
 
 // ============================================================================
-// <Reveal /> — drop-in wrapper that fades + slides children when in view
+// <Reveal /> - drop-in wrapper that fades + slides children when in view
 // ============================================================================
 
 type RevealProps = {
@@ -112,7 +112,7 @@ export function Reveal({
 }
 
 // ============================================================================
-// AnimatedCounter — counts up from 0 to target when scrolled into view
+// AnimatedCounter - counts up from 0 to target when scrolled into view
 // ============================================================================
 
 type CounterProps = {
@@ -175,7 +175,7 @@ export function AnimatedCounter({
 }
 
 // ============================================================================
-// useParallax — translate Y based on scroll position
+// useParallax - translate Y based on scroll position
 // ============================================================================
 
 export function useParallax(speed = 0.4) {
@@ -210,7 +210,7 @@ export function useParallax(speed = 0.4) {
 }
 
 // ============================================================================
-// <Parallax /> — wrapper that applies translateY
+// <Parallax /> - wrapper that applies translateY
 // ============================================================================
 
 export function Parallax({
@@ -238,7 +238,7 @@ export function Parallax({
 }
 
 // ============================================================================
-// <Marquee /> — infinite horizontal scroll (for logo strips)
+// <Marquee /> - infinite horizontal scroll (for logo strips)
 // ============================================================================
 
 export function Marquee({
@@ -287,7 +287,7 @@ export function Marquee({
 }
 
 // ============================================================================
-// useMousePosition — for magnetic / cursor-tracking effects
+// useMousePosition - for magnetic / cursor-tracking effects
 // ============================================================================
 
 export function useMagneticHover(strength = 0.25) {

@@ -55,7 +55,7 @@
   --radius: 0.5rem;
 
   /* ----------------------------------------------------------------------
-     Brand tokens — Andy's ATS is RED + YELLOW + GREEN.
+     Brand tokens - Andy's ATS is RED + YELLOW + GREEN.
      Traffic-light / auto-inspection palette:
        Red    → primary brand, urgent, fail
        Yellow → caution, attention, highlight
@@ -166,7 +166,7 @@
 }
 
 /* ============================================================================
-   Marketing site palette — scoped to .marketing-theme on PublicLayout
+   Marketing site palette - scoped to .marketing-theme on PublicLayout
    Auto-shop signage palette: BLACK + RED + YELLOW + GREEN.
      Red    → primary brand, hot CTAs, urgent
      Yellow → highlights, caution, attention-grabbers
@@ -176,7 +176,7 @@
    ============================================================================ */
 
 .marketing-theme {
-  /* Surfaces — pure black */
+  /* Surfaces - pure black */
   --mkt-ink: #0a0a0a;          /* pure black hero / footer */
   --mkt-ink-soft: #1a1a1a;     /* sub-surface dark */
   --mkt-paper: #FFFFFF;        /* light section bg */
@@ -184,7 +184,7 @@
   --mkt-border-dark: rgba(255,255,255,0.10);
   --mkt-border-light: rgba(10,10,10,0.10);
 
-  /* Red — primary brand color.
+  /* Red - primary brand color.
      --mkt-gold name kept for backwards compatibility with existing components
      (which assume white text contrast against this background). */
   --mkt-gold: #E10600;
@@ -194,12 +194,12 @@
   --mkt-red-soft: #FF3D2E;
   --mkt-red-deep: #991B1B;
 
-  /* Yellow — caution / highlight / "attention" accent */
+  /* Yellow - caution / highlight / "attention" accent */
   --mkt-yellow: #FACC15;
   --mkt-yellow-soft: #FDE047;
   --mkt-yellow-deep: #A16207;
 
-  /* Green — forward action, "ready", success states */
+  /* Green - forward action, "ready", success states */
   --mkt-green: #16A34A;
   --mkt-green-soft: #22C55E;
   --mkt-green-deep: #15803D;
@@ -218,7 +218,7 @@
   --mkt-font-body: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
 }
 
-/* Marketing theme typography baseline — friendlier font for the whole marketing site */
+/* Marketing theme typography baseline - friendlier font for the whole marketing site */
 .marketing-theme {
   font-family: var(--mkt-font-body);
   font-feature-settings: "ss01";

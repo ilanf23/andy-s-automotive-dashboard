@@ -24,24 +24,24 @@ export const Route = createFileRoute("/copilot")({
   component: CopilotPage,
 });
 
-// Recent conversations — hardcoded for demo
+// Recent conversations - hardcoded for demo
 const RECENT_CHATS = [
   { id: "c1", title: "Build estimate for MT-47", time: "2m ago", active: true },
   { id: "c2", title: "Why is City Form RO stuck?", time: "1h ago" },
   { id: "c3", title: "Schedule Reliable Ducks", time: "3h ago" },
   { id: "c4", title: "Top customers by LTV", time: "Yesterday" },
-  { id: "c5", title: "Labor GP — real numbers", time: "Yesterday" },
+  { id: "c5", title: "Labor GP - real numbers", time: "Yesterday" },
   { id: "c6", title: "Send Northpoint demand letter", time: "2 days ago" },
 ];
 
 const TOOL_CAPABILITIES = [
   { icon: Database, label: "Read RO / estimate / inspection / customer / vehicle", group: "Read" },
-  { icon: Database, label: "Query analytics — sales, labor, parts, AR, fleet", group: "Read" },
+  { icon: Database, label: "Query analytics - sales, labor, parts, AR, fleet", group: "Read" },
   { icon: Database, label: "Search shop history + Mitchell1 + vendor catalogs", group: "Read" },
   { icon: Wrench, label: "Create RO, estimate, appointment, payment", group: "Write" },
   { icon: Activity, label: "Update RO status, apply estimate lines, assign tech", group: "Write" },
   { icon: MessageSquare, label: "Send SMS, email, fleet platform submission", group: "Communicate" },
-  { icon: FileText, label: "Draft documents — demand letters, contracts, statements", group: "Communicate" },
+  { icon: FileText, label: "Draft documents - demand letters, contracts, statements", group: "Communicate" },
 ];
 
 function CopilotPage() {
@@ -51,7 +51,7 @@ function CopilotPage() {
   return (
     <div className="grid h-[calc(100vh-7rem)] grid-cols-[260px_1fr_320px] gap-0 overflow-hidden rounded-lg border border-border bg-background -mx-4 -my-6 md:-mx-6">
       {/* ====================================================================== */}
-      {/* LEFT — Chat history rail                                                */}
+      {/* LEFT - Chat history rail                                                */}
       {/* ====================================================================== */}
       <aside className="flex min-h-0 flex-col border-r border-border bg-surface/40">
         <div className="border-b border-border p-3">
@@ -108,7 +108,7 @@ function CopilotPage() {
           </ul>
         </div>
 
-        {/* Footer — capabilities summary */}
+        {/* Footer - capabilities summary */}
         <div className="border-t border-border bg-background px-3 py-2.5">
           <div className="flex items-center gap-1.5">
             <Zap className="h-3 w-3 text-brand-green-soft" />
@@ -123,14 +123,14 @@ function CopilotPage() {
       </aside>
 
       {/* ====================================================================== */}
-      {/* CENTER — Chat thread                                                    */}
+      {/* CENTER - Chat thread                                                    */}
       {/* ====================================================================== */}
       <div className="min-h-0">
         <CopilotChat key={chatKey} onContextChange={setContext} />
       </div>
 
       {/* ====================================================================== */}
-      {/* RIGHT — Context panel                                                   */}
+      {/* RIGHT - Context panel                                                   */}
       {/* ====================================================================== */}
       <aside className="flex min-h-0 flex-col border-l border-border bg-surface/40">
         <div className="border-b border-border bg-background px-4 py-2.5">
@@ -148,7 +148,7 @@ function CopilotPage() {
 }
 
 // ============================================================================
-// Context card — shown in the right panel when AI is working on an entity
+// Context card - shown in the right panel when AI is working on an entity
 // ============================================================================
 
 function ContextCard({ context }: { context: ContextEntity }) {
@@ -260,7 +260,7 @@ function ContextCard({ context }: { context: ContextEntity }) {
 }
 
 // ============================================================================
-// Tool access panel — shown when no context is active
+// Tool access panel - shown when no context is active
 // ============================================================================
 
 function ToolAccessPanel() {

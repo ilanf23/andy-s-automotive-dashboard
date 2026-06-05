@@ -1,5 +1,5 @@
 // ============================================================================
-// Copilot chat — type definitions
+// Copilot chat - type definitions
 // ============================================================================
 
 export type ApprovalPreview = {
@@ -7,7 +7,7 @@ export type ApprovalPreview = {
   description: string;
   /** Key/value rows shown in the preview body */
   details?: { label: string; value: string; mono?: boolean }[];
-  /** Free-form body (e.g., a drafted letter) — rendered as a code-styled block */
+  /** Free-form body (e.g., a drafted letter) - rendered as a code-styled block */
   body?: string;
   /** Visual tone */
   tone?: "default" | "danger" | "success";
@@ -34,7 +34,7 @@ export type ToolCall = {
   tool: string;
   args: Record<string, unknown>;
   result: string;
-  /** Milliseconds to "run" — used by the visual animation */
+  /** Milliseconds to "run" - used by the visual animation */
   durationMs?: number;
 };
 
@@ -44,7 +44,7 @@ export type ReasoningBlock = {
 };
 
 // ============================================================================
-// Message parts — what an assistant message can contain
+// Message parts - what an assistant message can contain
 // ============================================================================
 
 export type MessagePart =
@@ -75,7 +75,7 @@ export type Message = {
 };
 
 // ============================================================================
-// Scenario step — a single action to execute over the course of a scenario
+// Scenario step - a single action to execute over the course of a scenario
 // ============================================================================
 
 export type ScenarioStep =
@@ -106,7 +106,7 @@ export type Scenario = {
 };
 
 // ============================================================================
-// Context panel — what's shown on the right while a scenario is running
+// Context panel - what's shown on the right while a scenario is running
 // ============================================================================
 
 export type ContextEntity = {

@@ -16,7 +16,7 @@ type Props = {
  * Shared search modal that surfaces the mock labor guide / parts catalog.
  *
  * In production this would proxy live results from Mitchell 1 / AllData /
- * WorldPac. For the demo we filter the local catalog client-side — instant on
+ * WorldPac. For the demo we filter the local catalog client-side - instant on
  * 30–40 rows with no library overhead.
  */
 export function CatalogSearchModal({
@@ -200,7 +200,7 @@ export function CatalogSearchModal({
             Showing {resultCount} of {sourceCount} entries
           </div>
           <div className="text-[10px] italic text-muted-foreground/80">
-            Demo catalog — connects to Mitchell 1 / AllData / WorldPac in production.
+            Demo catalog - connects to Mitchell 1 / AllData / WorldPac in production.
           </div>
         </div>
       </div>

@@ -110,7 +110,7 @@ const initialThreads: Thread[] = [
     customer: "Wes Carmichael · Reliable Ducks",
     vehicle: "RD-12 · 2020 Peterbilt 337",
     channel: "Email",
-    preview: "Re: scheduled service — confirmed for next Tuesday 8am",
+    preview: "Re: scheduled service - confirmed for next Tuesday 8am",
     time: "1d",
     unread: 0,
     status: "resolved",
@@ -122,7 +122,7 @@ const initialConversations: Record<string, Message[]> = {
     {
       id: "t1-m1",
       from: "customer",
-      text: "Hey Cameron — I dropped off MT-47 this morning for the brake service.",
+      text: "Hey Cameron - I dropped off MT-47 this morning for the brake service.",
       time: "Yesterday 8:14 AM",
     },
     {
@@ -142,7 +142,7 @@ const initialConversations: Record<string, Message[]> = {
     {
       id: "t1-m4",
       from: "customer",
-      text: "Reviewing with fleet manager — back to you by EOD.",
+      text: "Reviewing with fleet manager - back to you by EOD.",
       time: "Yesterday 11:12 AM",
     },
     {
@@ -167,7 +167,7 @@ const initialConversations: Record<string, Message[]> = {
     {
       id: "t1-m8",
       from: "customer",
-      text: "Also — what's the cheapest option on the brake pads you quoted? Trying to keep this RO under $2k.",
+      text: "Also - what's the cheapest option on the brake pads you quoted? Trying to keep this RO under $2k.",
       time: "8m ago",
     },
   ],
@@ -175,20 +175,20 @@ const initialConversations: Record<string, Message[]> = {
     {
       id: "t2-m1",
       from: "shop",
-      text: "Hi Pat — estimate EST-4847 is ready for CF-304. Total comes to $3,284 covering the DPF regen, fuel filter, and front rotors. PDF attached.",
+      text: "Hi Pat - estimate EST-4847 is ready for CF-304. Total comes to $3,284 covering the DPF regen, fuel filter, and front rotors. PDF attached.",
       time: "Yesterday 2:30 PM",
       status: "read",
     },
     {
       id: "t2-m2",
       from: "customer",
-      text: "Looking it over now. Quick question — is the DPF regen something we could push to next service interval?",
+      text: "Looking it over now. Quick question - is the DPF regen something we could push to next service interval?",
       time: "Yesterday 3:15 PM",
     },
     {
       id: "t2-m3",
       from: "shop",
-      text: "Not really — codes are showing 92% soot load. If we push it the truck will derate within ~500 miles and you'll be down hard.",
+      text: "Not really - codes are showing 92% soot load. If we push it the truck will derate within ~500 miles and you'll be down hard.",
       time: "Yesterday 3:22 PM",
       status: "read",
     },
@@ -203,20 +203,20 @@ const initialConversations: Record<string, Message[]> = {
     {
       id: "t3-m1",
       from: "shop",
-      text: "Hi Sarah — your RAV4 is ready for pickup. Brakes, alignment, and the 60k service all wrapped up. Total was $842.",
+      text: "Hi Sarah - your RAV4 is ready for pickup. Brakes, alignment, and the 60k service all wrapped up. Total was $842.",
       time: "Thursday 4:15 PM",
       status: "read",
     },
     {
       id: "t3-m2",
       from: "customer",
-      text: "Awesome, thank you! I'm tied up Friday — can I grab it Saturday morning?",
+      text: "Awesome, thank you! I'm tied up Friday - can I grab it Saturday morning?",
       time: "Thursday 5:02 PM",
     },
     {
       id: "t3-m3",
       from: "shop",
-      text: "Saturday works — we open at 8. Keys will be at the front desk.",
+      text: "Saturday works - we open at 8. Keys will be at the front desk.",
       time: "Thursday 5:08 PM",
       status: "read",
     },
@@ -231,13 +231,13 @@ const initialConversations: Record<string, Message[]> = {
     {
       id: "t4-m1",
       from: "customer",
-      text: "Hi — FSCJ-09 is due for its annual DOT inspection. Can we get it scheduled this week?",
+      text: "Hi - FSCJ-09 is due for its annual DOT inspection. Can we get it scheduled this week?",
       time: "Monday 9:14 AM",
     },
     {
       id: "t4-m2",
       from: "shop",
-      text: "Yes — Thursday at 7 AM works. Plan on 3-4 hours. We'll need the current DOT paperwork on file.",
+      text: "Yes - Thursday at 7 AM works. Plan on 3-4 hours. We'll need the current DOT paperwork on file.",
       time: "Monday 10:02 AM",
       status: "read",
     },
@@ -250,14 +250,14 @@ const initialConversations: Record<string, Message[]> = {
     {
       id: "t4-m4",
       from: "shop",
-      text: "Inspection passed — no defects. Need the signed paperwork back to you?",
+      text: "Inspection passed - no defects. Need the signed paperwork back to you?",
       time: "Thursday 11:40 AM",
       status: "read",
     },
     {
       id: "t4-m5",
       from: "customer",
-      text: "Need DOT inspection paperwork emailed by 5pm Friday — auditor is on-site Monday.",
+      text: "Need DOT inspection paperwork emailed by 5pm Friday - auditor is on-site Monday.",
       time: "2h ago",
     },
   ],
@@ -265,7 +265,7 @@ const initialConversations: Record<string, Message[]> = {
     {
       id: "t5-m1",
       from: "shop",
-      text: "Hi Marcus — estimate for your F-150 front brake job is ready. Two pad options: Bosch QuietCast at $189/set or factory Motorcraft at $312/set. Rotors are still in spec.",
+      text: "Hi Marcus - estimate for your F-150 front brake job is ready. Two pad options: Bosch QuietCast at $189/set or factory Motorcraft at $312/set. Rotors are still in spec.",
       time: "Today 10:14 AM",
       status: "read",
     },
@@ -294,7 +294,7 @@ const initialConversations: Record<string, Message[]> = {
     {
       id: "t7-m1",
       from: "shop",
-      text: "Hi Wes — RD-12 is due for its scheduled service. We have openings Tuesday or Thursday next week.",
+      text: "Hi Wes - RD-12 is due for its scheduled service. We have openings Tuesday or Thursday next week.",
       time: "Yesterday 1:22 PM",
       status: "read",
     },
@@ -314,7 +314,7 @@ const initialConversations: Record<string, Message[]> = {
     {
       id: "t7-m4",
       from: "customer",
-      text: "Re: scheduled service — confirmed for next Tuesday 8am",
+      text: "Re: scheduled service - confirmed for next Tuesday 8am",
       time: "1d ago",
     },
   ],
@@ -324,9 +324,9 @@ const filters = ["All", "Unread", "Open", "Awaiting Customer", "Resolved"] as co
 
 const channelFilters = ["all", "SMS", "Email", "In-app"] as const;
 const templates = [
-  "Ready for pickup — vehicle is done.",
-  "Estimate approved — beginning work today.",
-  "Past due reminder — please call us.",
+  "Ready for pickup - vehicle is done.",
+  "Estimate approved - beginning work today.",
+  "Past due reminder - please call us.",
 ];
 const emojis = ["😀", "👍", "🔧", "✅", "⚠️"];
 
@@ -613,7 +613,7 @@ function MessagesPage() {
                   <button
                     onClick={() =>
                       toast.info("Email composer", {
-                        description: "Switching channel — coming soon",
+                        description: "Switching channel - coming soon",
                       })
                     }
                     className="rounded-md p-1.5 text-muted-foreground hover:bg-surface hover:text-foreground"
@@ -624,7 +624,7 @@ function MessagesPage() {
                   <button
                     onClick={() =>
                       toast.info(
-                        "More actions: Resolve, Assign, Mute, Archive — coming soon",
+                        "More actions: Resolve, Assign, Mute, Archive - coming soon",
                       )
                     }
                     className="rounded-md p-1.5 text-muted-foreground hover:bg-surface hover:text-foreground"

@@ -77,7 +77,7 @@ export function CopilotChat({ onContextChange }: Props) {
   }, [messages]);
 
   // Tell the parent route that context changed (used by the right-rail panel).
-  // The real copilot doesn't push entity context — just leave it null for now.
+  // The real copilot doesn't push entity context - just leave it null for now.
   useEffect(() => {
     onContextChange?.(null);
   }, [onContextChange]);
@@ -179,7 +179,7 @@ export function CopilotChat({ onContextChange }: Props) {
 
       try {
         let iter = 0;
-        // Tool-calling loop — keep round-tripping until the model stops
+        // Tool-calling loop - keep round-tripping until the model stops
         // requesting tools or we hit the safety limit.
         while (iter++ < MAX_TOOL_ITERATIONS) {
           const snapshot = buildSnapshot();
@@ -317,7 +317,7 @@ export function CopilotChat({ onContextChange }: Props) {
         appendPart(assistantId, {
           kind: "text",
           id: newId(),
-          text: `Sorry — I hit an error: ${msg}`,
+          text: `Sorry - I hit an error: ${msg}`,
         });
         toast.error("Copilot error", { description: msg });
       } finally {
@@ -365,7 +365,7 @@ export function CopilotChat({ onContextChange }: Props) {
         </button>
       </div>
 
-      {/* Body — message list */}
+      {/* Body - message list */}
       <div className="min-h-0 flex-1 overflow-y-auto bg-surface/30 px-4 py-5">
         {!hasMessages && <EmptyState onPick={handleSend} />}
         {hasMessages && (
@@ -447,7 +447,7 @@ export function CopilotChat({ onContextChange }: Props) {
 }
 
 // ============================================================================
-// Empty state — first-load suggestions
+// Empty state - first-load suggestions
 // ============================================================================
 
 function EmptyState({ onPick }: { onPick: (text: string) => void }) {
@@ -455,7 +455,7 @@ function EmptyState({ onPick }: { onPick: (text: string) => void }) {
     {
       group: "Take action",
       items: [
-        "Create a new RO for Med Trust on MT-47 — brake job complaint",
+        "Create a new RO for Med Trust on MT-47 - brake job complaint",
         "Mark RO 4847 as ready for pickup",
         "Take a $1,500 ACH payment from City Form on RO 4842",
       ],
@@ -485,7 +485,7 @@ function EmptyState({ onPick }: { onPick: (text: string) => void }) {
           <Sparkles className="h-7 w-7" />
         </div>
         <h2 className="mt-4 text-xl font-semibold tracking-tight">
-          Hey Cameron — what's on your plate today?
+          Hey Cameron - what's on your plate today?
         </h2>
         <p className="mt-1.5 text-xs text-muted-foreground">
           I have full read access to your shop. Anything that costs money or touches a customer, I'll pause and ask you first.
@@ -519,7 +519,7 @@ function EmptyState({ onPick }: { onPick: (text: string) => void }) {
 }
 
 // ============================================================================
-// MessageRow — renders a single conversation turn
+// MessageRow - renders a single conversation turn
 // ============================================================================
 
 function MessageRow({

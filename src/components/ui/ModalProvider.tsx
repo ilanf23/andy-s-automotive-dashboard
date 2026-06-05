@@ -14,7 +14,7 @@ import { FleetSubmitModal } from "@/components/flows/FleetSubmitModal";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 
 // ============================================================================
-// Modal registry — each entry has a name + payload shape
+// Modal registry - each entry has a name + payload shape
 // ============================================================================
 
 type ModalRegistry = {
@@ -27,6 +27,8 @@ type ModalRegistry = {
   };
   "take-payment": {
     roId: string;
+    totalDue?: number;
+    balance?: number;
   };
   "ai-estimate-builder": {
     roId: string;
@@ -125,6 +127,8 @@ export function ModalProvider({ children }: { children: React.ReactNode }) {
           open
           onOpenChange={(o) => !o && close()}
           roId={active.payload.roId}
+          totalDue={active.payload.totalDue}
+          balance={active.payload.balance}
         />
       )}
       {active?.name === "ai-estimate-builder" && (

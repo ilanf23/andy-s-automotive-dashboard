@@ -31,7 +31,7 @@ const HERO_MATCHES: Match[] = [
   {
     id: "m1",
     partNumber: "WHN-VTX-AMB",
-    description: "Whelen Vertex amber LED marker — surface mount",
+    description: "Whelen Vertex amber LED marker - surface mount",
     vendor: "Worldpac",
     price: 42.5,
     stockCount: 6,
@@ -45,7 +45,7 @@ const HERO_MATCHES: Match[] = [
   {
     id: "m2",
     partNumber: "WHN-VTX-CLR",
-    description: "Whelen Vertex amber LED marker — flush mount",
+    description: "Whelen Vertex amber LED marker - flush mount",
     vendor: "Worldpac",
     price: 38.9,
     stockCount: 2,
@@ -54,7 +54,7 @@ const HERO_MATCHES: Match[] = [
     confidencePercent: 71,
     sources: ["worldpac", "ai-inferred"],
     reasoning:
-      "Flush-mount variant of the same Whelen Vertex line. Cheaper but requires recess in the body — confirm mount style before ordering.",
+      "Flush-mount variant of the same Whelen Vertex line. Cheaper but requires recess in the body - confirm mount style before ordering.",
   },
   {
     id: "m3",
@@ -68,12 +68,12 @@ const HERO_MATCHES: Match[] = [
     confidencePercent: 48,
     sources: ["napa", "ai-inferred"],
     reasoning:
-      "Generic alternative — cheaper but not OEM ambulance grade. Your shop has not used this part on Med Trust vehicles before. Color/lens shape similar but durability rating lower (IP65 vs IP67 on Whelen).",
+      "Generic alternative - cheaper but not OEM ambulance grade. Your shop has not used this part on Med Trust vehicles before. Color/lens shape similar but durability rating lower (IP65 vs IP67 on Whelen).",
   },
 ];
 
 const THINKING_STEPS = [
-  "Reading image — extracting part features",
+  "Reading image - extracting part features",
   "Matching against 12,000 vendor parts",
   "Filtering for 2019 Ford E-450 fitment",
   "Cross-referencing your shop's purchase history",
@@ -129,7 +129,7 @@ export function PartsIdentifierModal({ open, onOpenChange }: Props) {
       title="Parts Identifier"
       description={
         phase === "input"
-          ? "Snap a photo or scan VIN — AI returns exact part matches with stock"
+          ? "Snap a photo or scan VIN - AI returns exact part matches with stock"
           : phase === "thinking"
             ? "Analyzing…"
             : "3 matches found"
@@ -184,7 +184,7 @@ export function PartsIdentifierModal({ open, onOpenChange }: Props) {
                 type="text"
                 value={vinFilter}
                 onChange={(e) => setVinFilter(e.target.value)}
-                placeholder="VIN — e.g., 1FDXE4FS7KDC42718"
+                placeholder="VIN - e.g., 1FDXE4FS7KDC42718"
                 className="flex-1 rounded-md border border-border bg-background px-3 py-1.5 text-xs outline-none focus:border-brand-green focus:ring-2 focus:ring-brand-green/20"
               />
               <select
