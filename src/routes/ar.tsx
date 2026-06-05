@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { format, parseISO, differenceInDays } from "date-fns";
+import { deriveOpenInvoices, type OpenInvoice } from "@/lib/financials";
 import {
   Send,
   Download,
@@ -27,51 +27,13 @@ export const Route = createFileRoute("/ar")({
 
 type TabKey = "open" | "past-due" | "payments" | "statements";
 
-type Invoice = {
-  id: string;
-  roId: string;
-  customerId: string;
-  customer: string;
-  customerType: "Fleet" | "Retail";
-  amount: number;
-  paid: number;
-  balance: number;
-  issued: string;
-  due: string;
-  daysPastDue: number;
-};
-
 function ARPage() {
   const [activeTab, setActiveTab] = useState<TabKey>("open");
   const [search, setSearch] = useState("");
   const { repairOrders } = useShopState();
   const { open: openModal } = useModals();
 
-  const invoices: Invoice[] = useMemo(() => {
-    const custMap = new Map(customers.map((c) => [c.id, c]));
-    return customers
-      .filter((c) => c.openBalance > 0)
-      .map((c, i) => {
-        const issued = `2026-0${(i % 4) + 2}-${(i * 3) % 28 + 1}`;
-        const due = `2026-0${(i % 4) + 3}-${(i * 3) % 28 + 1}`;
-        const today = parseISO("2026-05-20");
-        const dueDate = parseISO(due);
-        const daysPastDue = Math.max(0, differenceInDays(today, dueDate));
-        return {
-          id: `INV-${4800 + i}`,
-          roId: `${4830 + i}`,
-          customerId: c.id,
-          customer: c.name,
-          customerType: c.type,
-          amount: c.openBalance,
-          paid: 0,
-          balance: c.openBalance,
-          issued,
-          due,
-          daysPastDue,
-        };
-      });
-  }, []);
+  const invoices: OpenInvoice[] = useMemo(() => deriveOpenInvoices(), []);
 
   // Aging buckets
   const buckets = useMemo(() => {
