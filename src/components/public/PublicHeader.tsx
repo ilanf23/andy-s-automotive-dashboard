@@ -73,16 +73,6 @@ export function PublicHeader() {
 
         {/* Right side */}
         <div className="ml-auto flex items-center gap-3 md:gap-4">
-          <a
-            href="tel:+19042075191"
-            className="hidden items-center gap-2.5 text-[15px] font-semibold text-[var(--mkt-ink)] transition-colors hover:text-[var(--mkt-gold)] lg:inline-flex"
-          >
-            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--mkt-gold)]/10 text-[var(--mkt-gold)]">
-              <Phone className="h-4 w-4" strokeWidth={2.5} />
-            </span>
-            <span className="tabular-nums">(904) 207-5191</span>
-          </a>
-
           {isAuthenticated ? (
             <Link
               to="/dashboard"
@@ -100,15 +90,18 @@ export function PublicHeader() {
               >
                 Log In
               </Link>
-              <Link
-                to="/contact"
-                className="group hidden items-center gap-2 rounded-full bg-[var(--mkt-gold)] px-6 py-3 text-[14px] font-semibold text-white shadow-md shadow-[var(--mkt-gold)]/25 transition-all hover:bg-[var(--mkt-ink)] hover:shadow-[var(--mkt-ink)]/25 sm:inline-flex"
-              >
-                Get Started
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-              </Link>
             </>
           )}
+
+          <a
+            href="tel:+19042075191"
+            className="hidden items-center gap-2.5 text-[15px] font-semibold text-[var(--mkt-ink)] transition-colors hover:text-[var(--mkt-gold)] lg:inline-flex"
+          >
+            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--mkt-gold)]/10 text-[var(--mkt-gold)]">
+              <Phone className="h-4 w-4" strokeWidth={2.5} />
+            </span>
+            <span className="tabular-nums">(904) 207-5191</span>
+          </a>
 
           {/* Mobile menu trigger */}
           <button
@@ -148,14 +141,6 @@ export function PublicHeader() {
               <Phone className="h-4 w-4 text-[var(--mkt-gold)]" />
               (904) 207-5191
             </a>
-            <Link
-              to="/contact"
-              onClick={() => setMobileOpen(false)}
-              className="inline-flex items-center justify-center gap-2 rounded-2xl bg-[var(--mkt-gold)] px-4 py-3.5 text-base font-semibold text-white shadow-md shadow-[var(--mkt-gold)]/25"
-            >
-              Get Started
-              <ArrowRight className="h-4 w-4" />
-            </Link>
             <Link
               to="/login"
               onClick={() => setMobileOpen(false)}

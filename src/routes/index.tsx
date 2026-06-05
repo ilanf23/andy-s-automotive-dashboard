@@ -199,13 +199,6 @@ function Hero() {
               <Reveal delay={320}>
                 <div className="mt-[2.875rem] flex flex-wrap items-center justify-center gap-x-[1.725rem] gap-y-3">
                   <Link
-                    to="/contact"
-                    className="group inline-flex items-center gap-2 rounded-md bg-[var(--mkt-gold)] px-[2rem] py-[1rem] text-[16px] font-black uppercase tracking-wider text-white shadow-2xl shadow-[var(--mkt-gold)]/30 transition-all hover:shadow-[var(--mkt-gold)]/50"
-                  >
-                    Get Started
-                    <ArrowRight className="h-[1.15rem] w-[1.15rem] transition-transform group-hover:translate-x-1" />
-                  </Link>
-                  <Link
                     to="/login"
                     className="group inline-flex items-center gap-2 rounded-md border-2 border-white/30 bg-white/5 px-[1.65rem] py-[0.85rem] text-[16px] font-black uppercase tracking-wider text-white transition-colors hover:border-[var(--mkt-gold)] hover:text-[var(--mkt-gold)]"
                   >
@@ -1595,13 +1588,6 @@ function FinalCTA() {
               <Phone className="h-4 w-4" strokeWidth={3} />
               <span className="tabular-nums">(904) 207-5191</span>
             </a>
-            <Link
-              to="/contact"
-              className="group inline-flex items-center gap-2 rounded-md border-2 border-[var(--mkt-ink)] bg-transparent px-6 py-4 text-sm font-black uppercase tracking-wider text-[var(--mkt-ink)] transition-all hover:bg-[var(--mkt-ink)] hover:text-[var(--mkt-gold)]"
-            >
-              Get Started
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Link>
           </div>
         </Reveal>
 
