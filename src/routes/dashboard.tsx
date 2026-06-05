@@ -28,7 +28,12 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { PageShell, SectionHeader } from "@/components/shop/PageShell";
-import { MetricTile } from "@/components/shop/MetricTile";
+import { KpiStrip } from "@/components/shop/KpiStrip";
+import { KpiCustomizer } from "@/components/shop/KpiCustomizer";
+import {
+  ToggleGroup,
+  ToggleGroupItem,
+} from "@/components/ui/toggle-group";
 import { CarCountChart, type CarCountBucket } from "@/components/shop/CarCountChart";
 import { HoursChart, type HoursBucket } from "@/components/shop/HoursChart";
 import {
@@ -493,86 +498,33 @@ function Dashboard() {
       })()}
 
       {/* ======================================================== */}
-      {/* TOP: KPI Strip - 6 shop metrics                            */}
+      {/* TOP: Customizable KPI Strip                                */}
       {/* ======================================================== */}
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-        {(
-          [
-            {
-              label: "Sales Today",
-              value: "$14,820",
-              delta: "+18% vs yest.",
-              deltaDirection: "up" as const,
-              icon: DollarSign,
-              accent: "success" as const,
-            },
-            {
-              label: "ARO",
-              value: "$1,847",
-              subValue: "avg",
-              delta: "+$104 MTD",
-              deltaDirection: "up" as const,
-              icon: Gauge,
-              accent: "ink" as const,
-            },
-            {
-              label: "ELR",
-              value: "$148",
-              subValue: "/hr",
-              delta: "target $155",
-              deltaDirection: "down" as const,
-              icon: TrendingUp,
-              accent: "warning" as const,
-            },
-            {
-              label: "GP %",
-              value: "56.4%",
-              subValue: "GP $8,290",
-              delta: "+1.2pts",
-              deltaDirection: "up" as const,
-              icon: Percent,
-              accent: "success" as const,
-            },
-            {
-              label: "Hours Sold",
-              value: "47.2",
-              subValue: "/ 40.0 billed",
-              delta: "118% eff.",
-              deltaDirection: "up" as const,
-              icon: Clock,
-              accent: "ink" as const,
-            },
-            {
-              label: "Cars In Shop",
-              value: String(carsInShop),
-              subValue: `of 12 bays`,
-              delta: `${openROs} open ROs`,
-              deltaDirection: "flat" as const,
-              icon: Truck,
-              accent: "default" as const,
-            },
-          ]
-        ).map((kpi) => (
-          <button
-            key={kpi.label}
-            type="button"
-            onClick={() => {
-              toast.info(`${kpi.label} drill-down`);
-              navigate({ to: "/reports" });
+      <div className="space-y-3">
+        <div className="flex items-center justify-between gap-2">
+          <ToggleGroup
+            type="single"
+            value={dateRange}
+            onValueChange={(v) => {
+              if (v === "Today" || v === "Week" || v === "Month") {
+                setDateRange(v);
+              }
             }}
-            className="text-left transition-transform hover:-translate-y-0.5"
+            className="rounded-md border border-border p-0.5"
           >
-            <MetricTile
-              label={kpi.label}
-              value={kpi.value}
-              subValue={kpi.subValue}
-              delta={kpi.delta}
-              deltaDirection={kpi.deltaDirection}
-              icon={kpi.icon}
-              accent={kpi.accent}
-            />
-          </button>
-        ))}
+            <ToggleGroupItem value="Today" className="h-7 px-3 text-[11px]">
+              Today
+            </ToggleGroupItem>
+            <ToggleGroupItem value="Week" className="h-7 px-3 text-[11px]">
+              Week
+            </ToggleGroupItem>
+            <ToggleGroupItem value="Month" className="h-7 px-3 text-[11px]">
+              Month
+            </ToggleGroupItem>
+          </ToggleGroup>
+          <KpiCustomizer />
+        </div>
+        <KpiStrip timeframe={dateRange} />
       </div>
 
       {/* ======================================================== */}
@@ -605,20 +557,6 @@ function Dashboard() {
                 className="rounded-md border border-border bg-background px-2.5 py-1.5 text-[11px] font-medium text-foreground hover:bg-surface"
               >
                 All Techs
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  const next: "Today" | "Week" | "Month" =
-                    dateRange === "Today" ? "Week" : dateRange === "Week" ? "Month" : "Today";
-                  setDateRange(next);
-                  toast.info(`Date range: ${next}`, {
-                    description: "Filter applied to the job board",
-                  });
-                }}
-                className="rounded-md border border-border bg-background px-2.5 py-1.5 text-[11px] font-medium text-foreground hover:bg-surface"
-              >
-                {dateRange}
               </button>
               <button
                 type="button"
