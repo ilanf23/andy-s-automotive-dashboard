@@ -1,6 +1,10 @@
 import { test, expect } from "vitest";
 import { KPI_REGISTRY, getKpiById } from "@/lib/kpi-registry";
-import { getPeriodFinancials, getPreviousPeriodFinancials } from "@/lib/kpi-engine";
+import {
+  getPeriodFinancials,
+  getPreviousPeriodFinancials,
+  type PeriodFinancials,
+} from "@/lib/kpi-engine";
 
 test("registry has all 12 KPIs with unique ids", () => {
   expect(KPI_REGISTRY).toHaveLength(12);
@@ -61,5 +65,35 @@ test("delta direction reflects current vs previous", () => {
     (prev.laborRevenue - prev.laborCost) +
     (prev.tireRevenue - prev.tireCost) +
     (prev.batteryRevenue - prev.batteryCost);
-  expect(r.deltaDirection).toBe(currGP >= prevGP ? "up" : "down");
+  expect(r.deltaDirection).toBe(
+    currGP > prevGP ? "up" : currGP < prevGP ? "down" : "flat",
+  );
+});
+
+test("cost-per-build-hr inverts direction (lower cost is an improvement)", () => {
+  // Build full PeriodFinancials that differ only in parts cost (drives totalCost).
+  const make = (partsCost: number): PeriodFinancials => ({
+    partsRevenue: 5000,
+    partsCost,
+    tireRevenue: 1000,
+    tireCost: 800,
+    batteryRevenue: 500,
+    batteryCost: 350,
+    laborRevenue: 6000,
+    laborCost: 2000,
+    soldHours: 40,
+    actualHours: 36,
+    buildHours: 100,
+    roCount: 8,
+    writtenRoCount: 10,
+    revenue: 12500,
+    writtenRevenue: 15000,
+  });
+  const lo = make(1000); // cheaper
+  const hi = make(2000); // pricier
+  const kpi = getKpiById("cost-per-build-hr")!;
+  // current cheaper than previous => cost fell => "up" (good)
+  expect(kpi.compute(lo, hi).deltaDirection).toBe("up");
+  // current pricier than previous => cost rose => "down" (bad)
+  expect(kpi.compute(hi, lo).deltaDirection).toBe("down");
 });

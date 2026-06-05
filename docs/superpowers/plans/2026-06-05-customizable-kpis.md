@@ -597,11 +597,12 @@ export const KPI_REGISTRY: KpiDef[] = [
     compute: (c, p) => {
       const cur = totalCost(c) / c.buildHours;
       const pre = totalCost(p) / p.buildHours;
-      // lower cost-per-hour is better, so invert the direction
+      // Lower cost-per-hour is better, so invert both the direction AND the
+      // delta sign: a cost drop reads as a positive "▲ +x%" improvement.
       return {
         value: usd(cur),
         subValue: "/build hr",
-        delta: pctChangeDelta(cur, pre),
+        delta: pctChangeDelta(pre, cur),
         deltaDirection: dir(pre, cur),
       };
     },
