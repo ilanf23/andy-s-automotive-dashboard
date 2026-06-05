@@ -9,6 +9,10 @@ describe("deriveOpenInvoices", () => {
     expect(invoices).toHaveLength(expectedCount);
     expect(invoices.every((i) => i.balance > 0)).toBe(true);
   });
+  it("every open invoice has a finite, non-negative daysPastDue", () => {
+    const invoices = deriveOpenInvoices();
+    expect(invoices.every((i) => Number.isFinite(i.daysPastDue) && i.daysPastDue >= 0)).toBe(true);
+  });
 });
 
 describe("selectFinancials", () => {

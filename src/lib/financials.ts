@@ -44,8 +44,9 @@ export function deriveOpenInvoices(): OpenInvoice[] {
   return seedCustomers
     .filter((c) => c.openBalance > 0)
     .map((c, i) => {
-      const issued = `2026-0${(i % 4) + 2}-${((i * 3) % 28) + 1}`;
-      const due = `2026-0${(i % 4) + 3}-${((i * 3) % 28) + 1}`;
+      const day = String(((i * 3) % 28) + 1).padStart(2, "0");
+      const issued = `2026-0${(i % 4) + 2}-${day}`;
+      const due = `2026-0${(i % 4) + 3}-${day}`;
       const daysPastDue = Math.max(0, differenceInDays(today, parseISO(due)));
       return {
         id: `INV-${4800 + i}`,
@@ -93,9 +94,11 @@ export function selectFinancials(): FinancialSummary {
     .slice(0, 5)
     .map((i) => ({ customerId: i.customerId, name: i.customer, openBalance: i.balance }));
   const st = getShopState();
+  const todayStr = new Date().toISOString().slice(0, 10);
+  const todayPayments = st.payments.filter((p) => p.at.startsWith(todayStr));
   const payments = {
-    countToday: st.payments.length,
-    totalToday: st.payments.reduce((s, p) => s + (p.amount ?? 0), 0),
+    countToday: todayPayments.length,
+    totalToday: todayPayments.reduce((s, p) => s + (p.amount ?? 0), 0),
   };
   const openROValue = st.repairOrders
     .filter((r) => r.status !== "completed")
